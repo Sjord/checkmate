@@ -1,0 +1,469 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 267, 170
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Checkmate MP3 checker 0.11",IDC_STATIC,0,23,267,8,SS_CENTERIMAGE
+    CTEXT           "Based on mpck 0.10",IDC_STATIC,0,34,267,8,
+                    SS_CENTERIMAGE
+    CONTROL         114,IDC_STATIC,"Static",SS_BITMAP,0,0,267,19
+    CTEXT           "(C) 2005 Sjoerd Langkemper",IDC_STATIC,0,45,267,8,
+                    SS_CENTERIMAGE
+    CTEXT           "sjoerd-checkmate@linuxonly.nl",IDC_STATIC,0,56,267,8,
+                    SS_CENTERIMAGE
+    CTEXT           "http://checkmate.linuxonly.nl/",IDC_STATIC,0,67,267,8,
+                    SS_CENTERIMAGE
+    RTEXT           "Enter",IDC_STATIC,44,85,63,8,SS_CENTERIMAGE
+    RTEXT           "Backspace",IDC_STATIC,44,97,63,8,SS_CENTERIMAGE
+    RTEXT           "Delete",IDC_STATIC,44,109,63,8,SS_CENTERIMAGE
+    LTEXT           "Scan file/open directory",IDC_STATIC,112,85,155,8,
+                    SS_CENTERIMAGE
+    LTEXT           "Up one directory",IDC_STATIC,112,97,155,8,
+                    SS_CENTERIMAGE
+    LTEXT           "Delete file",IDC_STATIC,112,109,155,8,SS_CENTERIMAGE
+    LTEXT           "Refresh screen",IDC_STATIC,112,133,155,8,SS_CENTERIMAGE
+    RTEXT           "F5",IDC_STATIC,44,133,63,8,SS_CENTERIMAGE
+    RTEXT           "F6",IDC_STATIC,44,145,63,8,SS_CENTERIMAGE
+    RTEXT           "F7",IDC_STATIC,44,157,63,8,SS_CENTERIMAGE
+    LTEXT           "Scan file",IDC_STATIC,112,145,155,8,SS_CENTERIMAGE
+    LTEXT           "Open file in default application",IDC_STATIC,112,157,
+                    155,8,SS_CENTERIMAGE
+    RTEXT           "F2",IDC_STATIC,44,121,63,8,SS_CENTERIMAGE
+    LTEXT           "Rename file",IDC_STATIC,112,121,155,8,SS_CENTERIMAGE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        VERTGUIDE, 107
+        VERTGUIDE, 112
+        BOTTOMMARGIN, 165
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MP3CHECKER          ICON    DISCARDABLE     "mp3checker.ico"
+IDI_DIR                 ICON    DISCARDABLE     "dir.ico"
+IDI_DIRBAD              ICON    DISCARDABLE     "dirbad.ico"
+IDI_DIRGOOD             ICON    DISCARDABLE     "dirgood.ico"
+IDI_DIRUNKNOWN          ICON    DISCARDABLE     "dirunknown.ico"
+IDI_FILE                ICON    DISCARDABLE     "file.ico"
+IDI_FILEBAD             ICON    DISCARDABLE     "filebad.ico"
+IDI_FILEGOOD            ICON    DISCARDABLE     "filegood.ico"
+IDI_FILEUNKNOWN         ICON    DISCARDABLE     "fileunknown.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR ACCELERATORS DISCARDABLE 
+BEGIN
+    "A",            ID_ACCEL_SELECTALL,     VIRTKEY, CONTROL, NOINVERT
+    VK_F2,          ID_ACCEL_RENAME,        VIRTKEY, NOINVERT
+    VK_F5,          ID_ACCEL_REFRESH,       VIRTKEY, NOINVERT
+    VK_RETURN,      ID_ACCEL_PROPERTIES,    VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ABOUTLOGO           BITMAP  DISCARDABLE     "mp3checker.bmp"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,0,0,5
+ PRODUCTVERSION 0,0,0,5
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "Sjoerd Langkemper\0"
+            VALUE "FileDescription", "Checkmate MP3 checker\0"
+            VALUE "FileVersion", "0, 0, 0, 5\0"
+            VALUE "InternalName", "Checkmate MP3 checker\0"
+            VALUE "LegalCopyright", "Copyright © 2004\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "mp3checker.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "Checkmate MP3 checker\0"
+            VALUE "ProductVersion", "0, 0, 0, 5\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 262, 74
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Scanning"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,105,53,50,14
+    CONTROL         "Progress1",IDC_PROGRESSBAR,"msctls_progress32",
+                    WS_BORDER,7,35,248,13
+    LTEXT           "Scanning file:",IDC_STATIC,7,7,248,8
+    EDITTEXT        IDC_FILENAME,7,17,248,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 255
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_HEADMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Open",                       ID_FILE_DEFOPEN, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Scan\tEnter",                ID_FILE_SCAN, GRAYED
+        MENUITEM "&Delete\tDel",                ID_FILE_DELETE, GRAYED
+        MENUITEM "&Rename\tF2",                 ID_FILE_RENAME, GRAYED
+        MENUITEM "&Properties\tAlt+Enter",      ID_FILE_PROPERTIES, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Exit\tAlt+F4",               ID_FILE_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Refresh\tF5",                ID_VIEW_REFRESH
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About",                      ID_HELP_ABOUT
+    END
+END
+
+IDR_FILEPOPUP MENU DISCARDABLE 
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Open",                       ID_POPUP_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "&Scan",                       ID_POPUP_SCAN
+        MENUITEM "&Delete",                     ID_POPUP_DELETE
+        MENUITEM "&Rename",                     ID_POPUP_RENAME
+        MENUITEM "&Properties",                 ID_POPUP_PROPERTIES
+        , INACTIVE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CDELETE             "Are you sure you want to remove this files?"
+    IDS_CDELETECAPTION      "Confirm deletion"
+    IDS_FDELETE             "Failed to remove some files."
+    IDS_FDELETECAPTION      "Removal failed"
+    IDS_FREGISTERCLASS      "Registering the class failed."
+    IDS_FREGISTERCLASSCAPTION "Registering failed"
+    IDS_FCREATEWINDOW       "Failed to create window."
+    IDS_FCREATEWINDOWCAPTION "Window creation failed"
+    IDS_DIRNOTFOUND         "De specified directory does not exist or is not readable."
+    IDS_DIRNOTFOUNDCAPTION  "Directory not found"
+    IDS_FILENAME            "Filename"
+    IDS_RESULT              "Result"
+    IDS_VERSION             "Version"
+    IDS_LAYER               "Layer"
+    IDS_BITRATE             "Bitrate"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SAMPLERATE          "Samplerate"
+    IDS_FRAMES              "Frames"
+    IDS_TIME                "Time"
+    IDS_SIZE                "Size"
+    IDS_NOMP3               "No MP3"
+    IDS_BROKEN              "Broken"
+    IDS_OK                  "OK"
+    IDS_LOCATION            "Location:"
+    IDS_RENAMEFAILED        "Renaming this file or directory failed."
+    IDS_RENAMEFAILEDCAPTION "Rename failed"
+    IDS_VBR                 "VBR"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Dutch (Netherlands) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
+#ifdef _WIN32
+LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 262, 74
+STYLE DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Scanning"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Annuleren",IDCANCEL,105,53,50,14
+    CONTROL         "Progress1",IDC_PROGRESSBAR,"msctls_progress32",
+                    WS_BORDER,7,35,248,13
+    LTEXT           "Bestand controleren:",IDC_STATIC,7,7,248,8
+    EDITTEXT        IDC_FILENAME,7,17,248,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 255
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_HEADMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Bestand"
+    BEGIN
+        MENUITEM "&Openen",                     ID_FILE_DEFOPEN
+        , GRAYED, MENUBARBREAK
+        MENUITEM SEPARATOR
+        MENUITEM "&Controleren\tEnter",         ID_FILE_SCAN, GRAYED
+        MENUITEM "&Verwijderen\tDel",           ID_FILE_DELETE, GRAYED
+        MENUITEM "&Naam wijzigen\tF2",          ID_FILE_RENAME, GRAYED
+        MENUITEM "&Eigenschappen\tAlt+Enter",   ID_FILE_PROPERTIES, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&Afsluiten\tAlt+F4",          ID_FILE_EXIT
+    END
+    POPUP "Bee&ld"
+    BEGIN
+        MENUITEM "&Vernieuwen\tF5",             ID_VIEW_REFRESH
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Informatie",                 ID_HELP_ABOUT
+    END
+END
+
+IDR_FILEPOPUP MENU DISCARDABLE 
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Openen",                     ID_POPUP_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "&Controleren",                ID_POPUP_SCAN
+        MENUITEM "&Verwijderen",                ID_POPUP_DELETE
+        MENUITEM "&Naam wijzigen",              ID_POPUP_RENAME
+        MENUITEM "&Eigenschappen",              ID_POPUP_PROPERTIES
+    END
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CDELETE             "Weet u zeker dat u deze bestanden wilt verwijderen?"
+    IDS_CDELETECAPTION      "Bevestigen verwijderen van bestanden"
+    IDS_FDELETE             "Het verwijderen van sommige bestanden is mislukt."
+    IDS_FDELETECAPTION      "Verwijderen mislukt"
+    IDS_FREGISTERCLASS      "Het registreren van de class is mislukt."
+    IDS_FREGISTERCLASSCAPTION "Registreren mislukt"
+    IDS_FCREATEWINDOW       "Window maken mislukt."
+    IDS_FCREATEWINDOWCAPTION "Window maken mislukt"
+    IDS_DIRNOTFOUND         "De gespecificeerde directory kon niet worden gevonden of is onleesbaar."
+    IDS_DIRNOTFOUNDCAPTION  "Directory niet gevonden"
+    IDS_FILENAME            "Bestandsnaam"
+    IDS_RESULT              "Resultaat"
+    IDS_VERSION             "Versie"
+    IDS_LAYER               "Layer"
+    IDS_BITRATE             "Bitrate"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SAMPLERATE          "Samplerate"
+    IDS_FRAMES              "Frames"
+    IDS_TIME                "Tijd"
+    IDS_SIZE                "Grootte"
+    IDS_NOMP3               "Geen MP3"
+    IDS_BROKEN              "Kapot"
+    IDS_OK                  "Goed"
+    IDS_LOCATION            "Locatie:"
+    IDS_RENAMEFAILED        "De naam van dit bestand wijzigen is mislukt."
+    IDS_RENAMEFAILEDCAPTION "Naam wijzigen mislukt"
+    IDS_VBR                 "VBR"
+END
+
+#endif    // Dutch (Netherlands) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

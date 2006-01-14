@@ -1,0 +1,11 @@
+This is just a quick and dirty attempt to get
+GNU getopt library under FreeBSD.
+
+It's very small, so I don't yet know, must we create
+shared version or not.
+
+03.05.99
+--------
+
+Ok, I create shared library. It's Right Thing (tm) :)
+

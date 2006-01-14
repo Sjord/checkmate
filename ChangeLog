@@ -1,0 +1,51 @@
+version 0.10
+	* Millisecond timing precision
+	* Does not crash when a file can not be read
+
+version 0.09
+	* Exit status now makes sense
+	* CRC now works for all versions
+
+version 0.08
+	* improved error messages
+	* fixed CRC (may not work for all layers/versions)
+	* added --namecheck flag, which checks for strange characters in
+	  filenames
+
+version 0.07
+	* added average bitrate statistic
+	* fixed bug which made mpck crash on empty files
+	* added -B switch, to report bad files only
+
+version 0.06
+	* code cleanup
+	* with -b or -f (partial checking) now doesn't run check_end, hence
+	  never touches the end of the file
+	* implemented buffered reading
+
+version 0.05
+	* included libgnugetopt-1.2, for systems without getopt_long
+	* added -m switch, to set a limit on the length of filenames
+	* now checks filenames for strange characters
+
+version 0.04
+	* ported to MS Windows
+	* renamed to mpck
+
+version 0.03
+	* Program searches for last frame, in order to determine where to stop
+	  scanning
+	* readframe does not read frames anymore; it just moves the file
+	  pointer
+	* program now reads CRCs, but doesn't do anything with them
+
+version 0.02
+	* Speed improvements
+	* Solved some segfaults and divide by zero errors
+	* Frame time and total time now work
+	* Samples per frame is now correct
+	* Frame length is now correct
+	* Documentation updates
+
+version 0.01 
+	* Initial release 

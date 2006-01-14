@@ -1,0 +1,15 @@
+mp3check history
+
+In march 2003, I was tired of downloading broken MP3s and decided to search for a program which can check them. I found such a program, mp3_check, and it was good.
+
+But the ever eminent quest for more features came to a high. I wanted to know how long all the songs in a given directory where in total. I made a quick hack. mp3_check now gave me the total length of all the files in a directory, and it was good.
+
+While I was hacking mp3_check, I noticed that the code was not as structured as should be and some improvements could be made. I made some improvements to the code, and it was good.
+
+But the lack of features, the slowness of the program and no posibility to extend the code kept hanging in my head. I had sleepless nights. I felt bad, I had nightmares and woke up screaming in the middle of the night. One night, I couldn't take it anymore and decided that a complete rewrite of this program was needed to get things in order.
+
+So I started the next day, optimizing functions, cleaning up structs, testing, debugging and testing again. In the beginning, I made slow progress. Sometimes my program would stop working for no reason at all. One time, even the compiler segfaulted on my code. The code that I worked for, the code that I stayed up for, the code which would solve all the problems in the world, crashed the compiler. I almost gave up, but the thought of the greater good kept me motivated.
+
+After hard work and great pain, I finally released mp3check version 0.01 to
+you on the 30th of april, 2003. On the 31st of august I renamed mp3check to
+mpck, because mp3check was a too common name.

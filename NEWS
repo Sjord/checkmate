@@ -1,0 +1,53 @@
+mpck
+
+0.10 (12-01-2005)
+	It has been a while since the last release, mainly because I wanted
+	to catch some bugs instead of introducing new features. As it seems
+	there are not many bugs and I am happy to hear some feature requests.
+
+0.09 (15-02-2004)
+	The exit status is now meaningful. I am not sure if mpck should return
+	something other than zero if it encounters a bad file. It then did
+	it's job, without errors, so the exit status should be zero. However,
+	for shell scripts it could be handy.
+
+0.08 (26-11-2003)
+	The way errors are reported is somewhat changed, so mpck now also prints
+	what is wrong in the file. I will not introduce new features in
+	mpck till 0.10, only fix bugs.
+
+0.07 (18-11-2003)
+	I tried to fork mpck for speed improvement, but it didn't work.
+	Too bad. So only some small fixes in this release.
+
+0.06 (05-10-2003)
+	I have implemented buffered I/O, so that reading files is quicker. This
+	is optimized for harddisk speeds, it can have a negative effect on
+	network access etc.
+
+0.05 (04-09-2003)
+	I recently looked over the features of mp3check (Ryan Gordon) and I
+	think it is not too hard to make mpck a replacement for mp3check.
+	So I did some work on filename checking, but it is not yet
+	finished.
+
+0.04 (01-09-2003)
+	These CRC codes are giving me a headache.
+	I have ported mp3check to Windows and renamed it mpck, inspired by
+	fsck, the file system checker utility.
+
+0.03 (26/08/2003)
+	I split checkfile in check_begin and check_end. Mp3check now first
+	searches for the last frame (check_end), so that check_begin nows where
+	to stop.
+
+0.02 (02/05/2003)
+	GDB is cool!!! The GNU Debugger has helped out with most segfaults
+	and floating point exceptions. Learn it! Use it!
+	I made macro's of some functions to speed things up, but running
+	mp3check on Ogg Vorbis files still take ages. ;)
+
+0.01 (30/04/2003)
+	What purpose has the NEWS file? Is the ChangeLog file not enough
+	already?
+

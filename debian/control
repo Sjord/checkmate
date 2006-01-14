@@ -1,0 +1,12 @@
+Source: mpck
+Section: sound
+Priority: optional
+Maintainer: Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>
+Build-Depends: debhelper (>= 4.0.0)
+Standards-Version: 3.6.0
+
+Package: mpck
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: checks whether a MP3 file conforms to the MP3 standards 
+ Mpck checks frame header validity and consistancy, and CRC checksums. Furthermore, it provides statistics as bitrate, samplerate, play length, etcetera.

@@ -1,0 +1,9 @@
+mpck installation notes
+
+In order to install mpck, do something like the following: 
+
+    ./configure [--help --foo --bar]
+    make
+    make install
+
+

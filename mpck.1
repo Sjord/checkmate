@@ -1,0 +1,125 @@
+.TH mpck 1
+.SH NAME
+mpck \(em check MPEG audio files
+.SH SYNOPSIS
+.ll +8
+.B mpck 
+.RB [ 
+options
+]
+[
+.I "file \&..."
+]
+.ll -8
+.br
+.B mpck 
+.RB [ " \-h | \-V " ]
+.SH DESCRIPTION
+.I mpck 
+checks mp3s.
+It scans the file to see if the frames are where they are supposed to be, 
+if the frame headers are correct and if the headers are consistent throughout
+the file. It gives some statistics on the file, and a conclusion whether the
+file is good or bad.
+.SH OPTIONS
+.TP
+.B \-b --bytes BYTES
+Scan only the first
+.B BYTES
+bytes.
+.TP
+.B \-B --badonly
+Print statistics only for bad files.
+.TP
+.B \-e --extention=EXT
+Scan only files ending in 
+.B .EXT
+.TP
+.B \-f --frames FRAMES
+Scan only the first
+.B FRAMES
+frames.
+.TP
+.B \-h --help
+Display a help screen and quit.
+.TP
+.B \-m --maxname=NUM
+Report bad for a file which has more than num characters in its filename.
+.TP
+.B \-n --namecheck
+Check for strange characters in a filename. This reports bad for a file with
+a filename consisting of characters other than [A-Za-z0-9 ._-].
+.TP
+.B \-q --quiet
+Print only
+.B good
+or
+.B bad
+for each file.
+.TP
+.B \-r
+Short for -R -e mp3
+.TP
+.B \-R --recursive
+Treat each directory recursively, checking all files in the directory. Normal
+operation is to ignore directories.
+.TP
+.B \-v --verbose
+Be verbose. Use twice for
+.I super-duper-mega-power-ultra-verbosity
+which gives you information about each frame. Use with care.
+.TP
+.B \-V --version
+Print version and copyright information and exit.
+.SH EXIT STATUS
+.TP
+mpck returns one of these values:
+.TP
+.B 0
+Everything went OK and no broken files were found.
+.TP
+.B 1
+Everything went OK, but at least one broken file was found.
+.TP
+.B 2 (ENOENT)
+File or directory not found, stat failed.
+.TP
+.B 4 (EINTR)
+The program received a SIGINT.
+.TP
+.B 5 (EIO)
+Read error.
+.TP
+.B 12 (ENOMEM)
+Malloc failed due to memory shortage.
+.TP
+.B 21 (EISDIR)
+The given file is a directory.
+.TP
+.B 22 (EINVAL)
+Invalid argument, no filename supplied. 
+.TP
+.B 36 (ENAMETOOLONG)
+File extention or file name is too long.
+.SH BUGS
+.PP
+The -b and -f options make the statistics go all wrong. This is not really
+a bug, the program can only acquire statistics to the limit indicated by
+-b or -f.
+Mpck cannot read from stdin. CRC and ID3 support is buggy.
+.SH AUTHOR
+.TP
+Written by Sjoerd Langkemper <sjoerd dash mpck at linuxonly dot nl>
+.SH COPYRIGHT
+.PP
+Copyright \(co 2003 Sjoerd Langkemper.
+This is free software; see the source for copying conditions.  There is
+NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
+.SH SEE ALSO
+.PP
+The website
+.IP
+http://mpck.linuxonly.nl/
+.PP
+should provide you with latest versions, up-to-date manuals and more!

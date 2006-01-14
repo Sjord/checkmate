@@ -1,0 +1,62 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: mpck - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP96.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\bufio.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkfile.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkframe.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\crc.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\filename.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\id3.c"
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\print.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP96.tmp" 
+Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP97.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "../../libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\main.c"
+]
+Creating command line "cl.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP97.tmp" 
+Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP98.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/mpck.pdb" /debug /machine:I386 /out:"Debug/mpck.exe" /pdbtype:sept 
+".\Debug\bufio.obj"
+".\Debug\checkfile.obj"
+".\Debug\checkframe.obj"
+".\Debug\crc.obj"
+".\Debug\filename.obj"
+".\Debug\getopt.obj"
+".\Debug\getopt_long.obj"
+".\Debug\id3.obj"
+".\Debug\main.obj"
+".\Debug\print.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP98.tmp"
+<h3>Output Window</h3>
+Compiling...
+bufio.c
+checkfile.c
+checkframe.c
+crc.c
+filename.c
+id3.c
+print.c
+Compiling...
+main.c
+d:\development\checkmate-0.11\mpck\main.c(117) : warning C4013: 'wildcard_check_arg' undefined; assuming extern returning int
+Linking...
+
+
+
+<h3>Results</h3>
+mpck.exe - 0 error(s), 1 warning(s)
+</pre>
+</body>
+</html>
