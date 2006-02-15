@@ -1,3 +1,11 @@
+version 0.12
+	* Major cleanup of mpck.
+	* Removed some bugs which caused false positives.
+
+version 0.11
+	* Renamed package with wimpck and mpck to Checkmate.
+	* Renamed wimpck to Checkmate MP3 checker.
+
 version 0.10
 	* Millisecond timing precision
 	* Does not crash when a file can not be read

@@ -6,84 +6,38 @@
 --------------------Configuration: mp3checker - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating command line "rc.exe /l 0x413 /fo"Debug/mp3checker.res" /i "\Development\checkmate-0.11\mp3checker\windows" /d "_DEBUG" "D:\Development\checkmate-0.11\mp3checker\windows\mp3checker.rc"" 
-Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP84.tmp" with contents
-[
-/nologo /MLd /W3 /Gm /GX /ZI /Od /I "..\..\mpck" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/mp3checker.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\bufio.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkfile.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkframe.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\crc.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mp3checker\windows\fileinfo.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\filename.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\id3.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mp3checker\windows\listview.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\print.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mp3checker\windows\rebar.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mp3checker\windows\vector.c"
-"D:\Development\checkmate-0.11\mp3checker\windows\mp3checker.c"
-"D:\Development\checkmate-0.11\mp3checker\windows\sort.c"
-]
-Creating command line "cl.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP84.tmp" 
-Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP85.tmp" with contents
+Creating temporary file "C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP40.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/mp3checker.pdb" /debug /machine:I386 /out:"Debug/mp3checker.exe" /pdbtype:sept 
+".\Debug\fileinfo.obj"
+".\Debug\listview.obj"
+".\Debug\mp3checker.obj"
+".\Debug\progress.obj"
+".\Debug\rebar.obj"
+".\Debug\sort.obj"
+".\Debug\vector.obj"
 ".\Debug\bufio.obj"
+".\Debug\checkarguments.obj"
 ".\Debug\checkfile.obj"
 ".\Debug\checkframe.obj"
 ".\Debug\crc.obj"
-".\Debug\fileinfo.obj"
+".\Debug\file.obj"
 ".\Debug\filename.obj"
+".\Debug\frame.obj"
 ".\Debug\id3.obj"
-".\Debug\listview.obj"
+".\Debug\options.obj"
 ".\Debug\print.obj"
-".\Debug\rebar.obj"
-".\Debug\vector.obj"
-".\Debug\mp3checker.obj"
+".\Debug\total.obj"
 ".\Debug\mp3checker.res"
-".\Debug\sort.obj"
 ]
-Creating command line "link.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP85.tmp"
+Creating command line "link.exe @C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP40.tmp"
 <h3>Output Window</h3>
-Compiling resources...
-Compiling...
-bufio.c
-checkfile.c
-checkframe.c
-crc.c
-fileinfo.c
-filename.c
-id3.c
-listview.c
-d:\development\checkmate-0.11\mp3checker\windows\listview.c(165) : warning C4307: '+' : integral constant overflow
-d:\development\checkmate-0.11\mp3checker\windows\listview.c(319) : warning C4013: 'strversion' undefined; assuming extern returning int
-d:\development\checkmate-0.11\mp3checker\windows\listview.c(319) : warning C4047: '=' : 'char *' differs in levels of indirection from 'int '
-d:\development\checkmate-0.11\mp3checker\windows\listview.c(518) : warning C4047: '=' : 'int ' differs in levels of indirection from 'void *'
-print.c
-rebar.c
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(67) : warning C4047: 'function' : 'long ' differs in levels of indirection from 'char [4]'
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(67) : warning C4024: 'SendMessageA' : different types for formal and actual parameter 4
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(87) : warning C4047: 'function' : 'struct HMENU__ *' differs in levels of indirection from 'const int '
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(87) : warning C4024: 'CreateWindowExA' : different types for formal and actual parameter 10
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(90) : warning C4047: '=' : 'struct HFONT__ *' differs in levels of indirection from 'long '
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(91) : warning C4047: 'function' : 'unsigned int ' differs in levels of indirection from 'struct HFONT__ *'
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(91) : warning C4024: 'SendMessageA' : different types for formal and actual parameter 3
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(95) : warning C4047: '=' : 'long (__stdcall *)(struct HWND__ *,unsigned int ,unsigned int ,long )' differs in levels of indirection from 'long '
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(96) : warning C4047: 'function' : 'long ' differs in levels of indirection from 'long (__stdcall *)(struct HWND__ *,unsigned int ,unsigned int ,long )'
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(96) : warning C4024: 'SetWindowLongA' : different types for formal and actual parameter 3
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(115) : warning C4047: 'function' : 'struct HMENU__ *' differs in levels of indirection from 'const int '
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(115) : warning C4024: 'CreateWindowExA' : different types for formal and actual parameter 10
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(254) : warning C4047: 'function' : 'long ' differs in levels of indirection from 'char *'
-d:\development\checkmate-0.11\mp3checker\windows\rebar.c(254) : warning C4024: 'SendMessageA' : different types for formal and actual parameter 4
-vector.c
-mp3checker.c
-sort.c
 Linking...
 
 
 
 <h3>Results</h3>
-mp3checker.exe - 0 error(s), 18 warning(s)
+mp3checker.exe - 0 error(s), 0 warning(s)
 </pre>
 </body>
 </html>

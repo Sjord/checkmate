@@ -1,7 +1,7 @@
 /*
  *   This file is part of Checkmate, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2005  Sjoerd Langkemper
+ *   Copyright (C)  2006  Sjoerd Langkemper
  *   
  *   Checkmate is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,22 +24,43 @@
  */
 
 #include "mpck.h"
+#include "total.h"
+#include "options.h"
+
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
+#ifdef HAVE_STRING_H
 #include <string.h>
+#endif
 
-static total_info _total;
-static total_info * total;
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 
-void
-total_init() {
-	total=&_total;
-	init_total_info(total);
+total_info *
+total_create() 
+{
+	total_info * total;
+	
+	total = (total_info *) malloc(sizeof(total_info));
+	if (total == NULL) return NULL;
+	return total;
+}
+
+void total_destroy(total)
+	total_info * total;
+{
+	free(total);
 }
 
 /*
  * puts stats from file (bitrate, file count) into the total stats
  */
 int
-total_update(file)
+total_update(total, file)
+	total_info       * total;
 	const file_info  * file;
 {
 	/* don't do stats for files which aren't MP3s */
@@ -48,8 +69,8 @@ total_update(file)
 	total->filecount++;
 
 	if (!file->errors) total->goodcount++;
-	total->time+=file->time;
-	total->totalbitrate+=file->bitrate;
+	total->time += file->time;
+	total->totalbitrate += file->bitrate;
 	if ((!total->minbitrate)||(file->bitrate < total->minbitrate)) {
 		total->minbitrate=file->bitrate;
 	}
@@ -60,9 +81,11 @@ total_update(file)
 }
 
 void
-total_print()
+total_print(total)
+	const total_info * total;
 {
 	if (total->filecount<2) return;
+	if (options_get_quiet()) return;
 	printf("TOTAL:\n");
 	printf("    %-30s%d\n", "number of files", total->filecount);
 	printf("        %-26s%d\n", GOODFILE, total->goodcount);
@@ -77,7 +100,15 @@ total_print()
 }
 	
 int
-total_allgood() {
-	return total->goodcount==total->filecount;
+total_allgood(total) 
+	const total_info * total;
+{
+	return total->goodcount == total->filecount;
 }
 
+void
+total_clear(total) 
+	total_info * total;
+{
+	memset(total, 0, sizeof(total_info));
+}

@@ -25,6 +25,7 @@
 
 #include "listview.h"
 #include "mpck.h"
+#include "file.h"
 
 /* structs */
 

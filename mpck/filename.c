@@ -24,24 +24,31 @@
  */
 
 #include "mpck.h"
+#include "file.h"
+#include "options.h"
 #include <string.h>
 
 /*
- * @return true if filename is ending in .extention
- * extention is something like "mp3", not starting with a dot
+ * @return true if filename is ending in .extension
+ * extension is something like "mp3", not starting with a dot
  * filename only matches if it ends in ".mp3" (thus with a dot)
  */
-int extention_match(filename, extention)
+int extension_match(filename)
 	const char * filename;
-	const char * extention;
 {
 	char * lastdot;
+	char * extension = options_get_extension();
+
+	if (extension == NULL) {
+		/* extension was not set */
+		return TRUE;
+	}
 	
-	lastdot=strrchr(filename, EXTENTION_MARK); /* search for last dot */
-	if (lastdot==NULL) return FALSE;
+	lastdot=strrchr(filename, EXTENSION_MARK); /* search for last dot */
+	if (lastdot == NULL) return FALSE;
 
 	lastdot++;	/* remove the dot */
-	if (strcmp(lastdot, extention)==0) {
+	if (strcmp(lastdot, extension) == 0) {
 		return TRUE;
 	} else {
 		return FALSE;
@@ -52,23 +59,23 @@ static int
 goodchar(ch)
 	int ch;
 {
-	if ((ch>='a')&&(ch<='z')) return TRUE;
-	if ((ch>='A')&&(ch<='Z')) return TRUE;
-	if ((ch>='0')&&(ch<='9')) return TRUE;
-	if (ch==' ') return TRUE;
-	if (ch=='.') return TRUE;
-	if (ch=='-') return TRUE;
-	if (ch=='_') return TRUE;
-	// FIXME use DIRSEP
-	if (ch=='/') return TRUE;
-	if (ch=='\\') return TRUE;
+	if ((ch>='a') && (ch<='z')) return TRUE;
+	if ((ch>='A') && (ch<='Z')) return TRUE;
+	if ((ch>='0') && (ch<='9')) return TRUE;
+	if (ch == ' ') return TRUE;
+	if (ch == '.') return TRUE;
+	if (ch == '-') return TRUE;
+	if (ch == '_') return TRUE;
+	if (ch == DIRSEP) return TRUE;
 	return FALSE;
 }
 
-static int check_filename_length(filename, maxname)
+static int check_filename_length(filename)
 	const char * filename;
 {	
 	int fnlen; 	/* filename length */
+	int maxname = options_get_maxname();
+	if (maxname == 0) return TRUE;
 
 	fnlen=strlen(filename);
 	
@@ -96,30 +103,28 @@ static int check_filename_chars(filename)
 }
 
 void
-check_filename(file, maxname, namecheck)
+check_filename(file)
 	file_info * 	file;
-	int		maxname;
-	int		namecheck;
 {
 	char * filename;
 
 	/* strip directory name */
 	filename=strrchr(file->filename, DIRSEP);
-	if (filename==NULL) {
+	if (filename == NULL) {
 		filename=file->filename;
 	} else {
 		/* strip slash */
 		filename++;
 	}
 
-	if (!check_filename_length(filename, maxname)) {
-		file->errors|=ERR_LONGFNAME;
+	if (!check_filename_length(filename)) {
+		file->errors |= ERR_LONGFNAME;
 	}
-	if ((namecheck)&&(!check_filename_chars(filename))) {
-		file->errors|=ERR_BADFNAME;
+	if ((options_get_namecheck()) && (!check_filename_chars(filename))) {
+		file->errors |= ERR_BADFNAME;
 	}
 	
-	if (strcmp(filename, PROGNAME)==0) printf("    I'm fine, thank you!\n");
+	if (strcmp(filename, PROGNAME) == 0) printf("    I'm fine, thank you!\n");
 }	
 
 

@@ -1,7 +1,7 @@
 /*
  *   This file is part of mpck, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2003  Sjoerd Langkemper
+ *   Copyright (C)  2006  Sjoerd Langkemper
  *   
  *   mpck is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,10 +29,12 @@
  *   255 (%11111111) encoded as a 16 bit synchsafe integer is 383
  *   (%00000001 01111111).
  * 
+ * This is used in ID3 v2 tags, so that MP3 players do not see it as a
+ * MP3 frame.
+ *
  */
 
-#define SVAL_SS(buf, pos) (PVAL(buf,pos)<<7|PVAL(buf,(pos)+1))
-#define IVAL_SS(buf, pos) (SVAL_SS(buf,pos)<<14|SVAL_SS(buf,(pos)+2))
-
-#define CVAL(buf,pos) (((unsigned char *)(buf))[pos])
-#define PVAL(buf,pos) ((unsigned)CVAL(buf,pos))
+#define UCP(ptr)      (unsigned char *)(ptr)
+#define INT_SS(buf)   (SHORT_SS(UCP(buf)) << 14 | SHORT_SS(UCP(buf) + 2))
+#define SHORT_SS(buf) (CHAR_SS(UCP(buf)) << 7 | CHAR_SS(UCP(buf) + 1))
+#define CHAR_SS(buf)  (*UCP(buf))

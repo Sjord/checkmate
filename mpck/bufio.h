@@ -19,7 +19,7 @@ typedef struct {
 	FILE * fp;
 	char * buffer;
 	char * bufpnt;
-	int buflen;
+	size_t buflen;
 	size_t filesize;
 } CFILE;
 

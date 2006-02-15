@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\mpck",..\..\mpck" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /I " /c
+# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /I "..\..\mpck" ,..\..\mpck" /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x413 /d "NDEBUG"
@@ -96,6 +96,10 @@ SOURCE=..\..\mpck\bufio.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\checkarguments.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\checkfile.c
 # End Source File
 # Begin Source File
@@ -108,11 +112,19 @@ SOURCE=..\..\mpck\crc.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\file.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mp3checker\windows\fileinfo.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\mpck\filename.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\frame.c
 # End Source File
 # Begin Source File
 
@@ -132,7 +144,15 @@ SOURCE=..\..\mp3checker\windows\mp3checker.rc
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\options.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\print.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\progress.c
 # End Source File
 # Begin Source File
 
@@ -141,6 +161,10 @@ SOURCE=..\..\mp3checker\windows\rebar.c
 # Begin Source File
 
 SOURCE=..\..\mp3checker\windows\sort.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\total.c
 # End Source File
 # Begin Source File
 
@@ -156,7 +180,39 @@ SOURCE=..\..\mpck\bufio.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\checkarguments.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\checkfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\checkframe.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\crc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\file.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mp3checker\windows\fileinfo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\filename.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\id3.h
 # End Source File
 # Begin Source File
 
@@ -164,11 +220,31 @@ SOURCE=..\..\mp3checker\windows\listview.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\matrices.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mp3checker\windows\mp3checker.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\mp3errors.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\mpck.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\options.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\print.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\progress.h
 # End Source File
 # Begin Source File
 
@@ -184,12 +260,56 @@ SOURCE=..\..\mp3checker\windows\sort.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\synchsafe.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\total.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mp3checker\windows\vector.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\dir.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\dirbad.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\dirgood.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\dirunknown.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\file.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\filebad.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\filegood.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\fileunknown.ico
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mp3checker\windows\mp3checker.ico
+# End Source File
 # End Group
 # End Target
 # End Project

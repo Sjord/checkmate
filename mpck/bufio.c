@@ -23,11 +23,21 @@
  * 
  */
 
-#include <stdio.h>
 #include "mpck.h" 
 #include "bufio.h"
-#include <string.h>
+#include <stdio.h>
+
+#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+
+#ifdef HAVE_STRINGS_H
+#include <strings.h>
+#endif
 
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
@@ -36,7 +46,16 @@
 #define USE_BUFFERED_IO
 #ifdef USE_BUFFERED_IO
 
-#define reminbuf(c) (c->buffer+c->buflen-c->bufpnt)
+#define reminbuf(c) (size_t)(c->buffer + c->buflen - c->bufpnt)
+
+/* some sys/stat.h do not define these macro's */
+#ifndef S_ISDIR
+#define S_ISDIR(mode) (((mode) & S_IFDIR)==(S_IFDIR))
+#endif /* S_ISDIR */
+
+#ifndef S_ISREG
+#define S_ISREG(mode) (((mode) & S_IFREG)==(S_IFREG))
+#endif /* S_ISREG */
 
 static int buffered;
 
@@ -46,7 +65,7 @@ static size_t _cfilesize(const char * filename) {
 	int statres;
 
 	statres=stat(filename, ss);
-	if (statres!=0) return -1;	
+	if (statres != 0) return -1;	
 
 	return ss->st_size;
 }
@@ -61,7 +80,7 @@ int cisdirectory(const char * filename) {
 	int statres;
 
 	statres=stat(filename, ss);
-	if (statres!=0) return -1;	
+	if (statres != 0) return -1;	
 
 	return S_ISDIR(ss->st_mode);
 }
@@ -69,22 +88,22 @@ int cisdirectory(const char * filename) {
 CFILE * cfopen(const char * filename, char * mode) {
 	size_t filesize;
 	CFILE *c;
-	int nread;
+	size_t nread;
 	
 	filesize=_cfilesize(filename);
-	if (filesize==-1) return NULL;
+	if (filesize == -1) return NULL;
 	c=(CFILE *)malloc(sizeof(CFILE)+filesize);
-	if (c==NULL) {
+	if (c == NULL) {
 		buffered=FALSE;
 		c=(CFILE *)malloc(sizeof(CFILE));
-		if (c==NULL) return NULL;
+		if (c == NULL) return NULL;
 	} else {
 		buffered=TRUE;
 	}
 
 	memset(c, 0, sizeof(CFILE));
 	c->fp=fopen(filename, mode);
-	if (c->fp==NULL) {
+	if (c->fp == NULL) {
 		free(c);
 		return NULL;
 	}
@@ -105,7 +124,7 @@ size_t cfread(char * outbuf, size_t size, CFILE * c) {
 		size_t readnow;
 		readnow=MIN(reminbuf(c), size); 
 		memcpy(outbuf, c->bufpnt, readnow);
-		c->bufpnt+=readnow;
+		c->bufpnt += readnow;
 		return readnow;
 	} else {
 		return fread(outbuf, 1, size, c->fp);
@@ -124,11 +143,11 @@ int cfsetpos(CFILE * c, size_t pos) {
 
 int cfseek(CFILE * c, long offset, int whence) {
 	if (buffered) {
-		if (whence==SEEK_SET) return cfsetpos(c, offset);
-		if (whence==SEEK_CUR) {
+		if (whence == SEEK_SET) return cfsetpos(c, offset);
+		if (whence == SEEK_CUR) {
 			return cfsetpos(c, cftell(c)+offset);
 		}
-		if (whence==SEEK_END) {
+		if (whence == SEEK_END) {
 			return cfsetpos(c, c->buflen+offset);
 		}
 		return -1;
@@ -147,7 +166,7 @@ size_t cftell(CFILE * c) {
 
 int cfeof(CFILE * c) {
 	if (buffered) {
-		return reminbuf(c)==0;
+		return reminbuf(c) == 0;
 	} else {
 		return feof(c->fp);
 	}
@@ -155,7 +174,7 @@ int cfeof(CFILE * c) {
 
 int cfclose(CFILE * c) {
 	int res=TRUE;
-	if (c->fp!=NULL) res=fclose(c->fp);
+	if (c->fp != NULL) res=fclose(c->fp);
 	free(c);
 	return res;
 }
@@ -164,9 +183,9 @@ int cfclose(CFILE * c) {
 
 CFILE * cfopen(const char * filename, char * mode) {
 	CFILE *c=(CFILE *)malloc(sizeof(CFILE));
-	if (c==NULL) return NULL;
+	if (c == NULL) return NULL;
 	c->fp=fopen(filename, "rb");
-	if (c->fp==NULL) {
+	if (c->fp == NULL) {
 		free(c);
 		return NULL;
 	}

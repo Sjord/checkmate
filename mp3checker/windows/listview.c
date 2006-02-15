@@ -316,7 +316,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 	if (fi->info->ismp3file) {
 		/* version */
 		lv.iSubItem=2;
-		lv.pszText=strversion(fi->info->version);
+		lv.pszText=file_strversion(fi->info);
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
@@ -476,19 +476,8 @@ BOOL LV_ScanFile(int item, int * filetype) {
 
 	file->info=HeapAlloc(GetProcessHeap(), 0, sizeof(file_info));
 	if (file->info==NULL) return FALSE;
-	init_file_info(file->info);
 
-	file->info->fp=cfopen(file->filename, "r");
-	if (file->info->fp==NULL) return FALSE;
-	file->info->filename=file->filename;
-	file->info->length=file->filesize;
-
-	check_end(file->info);
-	check_begin(file->info);
-	check_filename(file->info);
-	final_file_stats(file->info);
-
-	cfclose(file->info->fp);
+	checkfile(file->filename, file->info);
 
 	/* update filetype */
 	file->filetype|=FILE_SCANNED;

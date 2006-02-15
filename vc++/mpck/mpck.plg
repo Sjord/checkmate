@@ -6,57 +6,75 @@
 --------------------Configuration: mpck - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP96.tmp" with contents
+Creating temporary file "C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP24.tmp" with contents
 [
-/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\bufio.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkfile.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\checkframe.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\crc.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\filename.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\id3.c"
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\print.c"
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "..\..\libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkarguments.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkfile.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkframe.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\crc.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\file.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\filename.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\frame.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\id3.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\main.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\options.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\print.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\total.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\bufio.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt.c"
+"C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt_long.c"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP96.tmp" 
-Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP97.tmp" with contents
-[
-/nologo /MLd /W3 /Gm /GX /ZI /Od /I "../../libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"D:\DEVELOPMENT\CHECKMATE-0.11\mpck\main.c"
-]
-Creating command line "cl.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP97.tmp" 
-Creating temporary file "C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP98.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP24.tmp" 
+Creating temporary file "C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP25.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/mpck.pdb" /debug /machine:I386 /out:"Debug/mpck.exe" /pdbtype:sept 
-".\Debug\bufio.obj"
+".\Debug\checkarguments.obj"
 ".\Debug\checkfile.obj"
 ".\Debug\checkframe.obj"
 ".\Debug\crc.obj"
+".\Debug\file.obj"
 ".\Debug\filename.obj"
-".\Debug\getopt.obj"
-".\Debug\getopt_long.obj"
+".\Debug\frame.obj"
 ".\Debug\id3.obj"
 ".\Debug\main.obj"
+".\Debug\options.obj"
 ".\Debug\print.obj"
+".\Debug\total.obj"
+".\Debug\bufio.obj"
+".\Debug\getopt.obj"
+".\Debug\getopt_long.obj"
 ]
-Creating command line "link.exe @C:\DOCUME~1\sjoerd.ECL\LOCALS~1\Temp\RSP98.tmp"
+Creating command line "link.exe @C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP25.tmp"
 <h3>Output Window</h3>
 Compiling...
-bufio.c
+checkarguments.c
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\mpck\checkarguments.c(102) : warning C4013: 'wildcard_checkfile' undefined; assuming extern returning int
 checkfile.c
 checkframe.c
 crc.c
+file.c
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\mpck\file.c(264) : warning C4013: 'print_scanning' undefined; assuming extern returning int
 filename.c
+frame.c
 id3.c
-print.c
-Compiling...
 main.c
-d:\development\checkmate-0.11\mpck\main.c(117) : warning C4013: 'wildcard_check_arg' undefined; assuming extern returning int
+options.c
+print.c
+total.c
+bufio.c
+getopt.c
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt.c(581) : warning C4013: 'strcmp' undefined; assuming extern returning int
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt.c(657) : warning C4013: 'strncmp' undefined; assuming extern returning int
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt.c(660) : warning C4013: 'strlen' undefined; assuming extern returning int
+c:\documents and settings\sjoerd\mijn documenten\checkmate.cleanup\libgnugetopt-1.2\getopt.c(848) : warning C4018: '==' : signed/unsigned mismatch
+getopt_long.c
 Linking...
 
 
 
 <h3>Results</h3>
-mpck.exe - 0 error(s), 1 warning(s)
+mpck.exe - 0 error(s), 6 warning(s)
 </pre>
 </body>
 </html>

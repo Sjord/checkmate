@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\libgnugetopt-1.2" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x413 /d "NDEBUG"
 # ADD RSC /l 0x413 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x413 /d "_DEBUG"
 # ADD RSC /l 0x413 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -89,6 +89,10 @@ SOURCE=..\..\mpck\bufio.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\checkarguments.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\checkfile.c
 # End Source File
 # Begin Source File
@@ -101,7 +105,15 @@ SOURCE=..\..\mpck\crc.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\file.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\filename.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\frame.c
 # End Source File
 # Begin Source File
 
@@ -118,11 +130,18 @@ SOURCE=..\..\mpck\id3.c
 # Begin Source File
 
 SOURCE=..\..\mpck\main.c
-# ADD CPP /I "../../libgnugetopt-1.2"
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\options.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\mpck\print.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\total.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -134,7 +153,39 @@ SOURCE=..\..\mpck\bufio.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\errordescs.h
+SOURCE=..\..\mpck\checkarguments.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\checkfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\checkframe.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\crc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\filename.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\frame.h
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\libgnugetopt-1.2\getopt.h"
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\id3.h
 # End Source File
 # Begin Source File
 
@@ -142,15 +193,27 @@ SOURCE=..\..\mpck\matrices.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\mp3errors.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\mpck.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\proto.h
+SOURCE=..\..\mpck\options.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\print.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\mpck\synchsafe.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\total.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

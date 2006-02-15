@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([checkmate], [0.11], [sjoerd-mpck@linuxonly.nl])
-AM_INIT_AUTOMAKE([checkmate], [0.11])
+AC_INIT([checkmate], [0.12], [sjoerd-mpck@linuxonly.nl])
+AM_INIT_AUTOMAKE([checkmate], [0.12])
 AM_CONFIG_HEADER(config.h)
 
 AC_CONFIG_SRCDIR([mpck/main.c])
@@ -31,5 +31,5 @@ AM_CONDITIONAL(COMPILE_GETOPT_LIB, test x$GETOPT_LONG_LIB != x)
 
 AC_PROG_RANLIB
 
-AC_CONFIG_FILES([Makefile mpck/Makefile libgnugetopt-1.2/Makefile bitrate/Makefile])
+AC_CONFIG_FILES([Makefile mpck/Makefile libgnugetopt-1.2/Makefile])
 AC_OUTPUT

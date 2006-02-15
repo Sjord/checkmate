@@ -1,7 +1,7 @@
 /*
  *   This file is part of mpck, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2003  Sjoerd Langkemper
+ *   Copyright (C)  2006  Sjoerd Langkemper
  *   
  *   mpck is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -24,79 +24,42 @@
  */
 
 #include "mpck.h"
-#include <stdio.h>
-#include <stdlib.h> // malloc
+#include "file.h"
 #include "synchsafe.h"
 
 extern int verbose;
 
+/* Skips an id3v1 tag. The first three characters have already been read. */
 int
-read_id3v1_tag(file)
+skip_id3v1_tag(file)
 	file_info * file;
 {
-	char buf[31];
-	int res=0;
-	CFILE * fp=file->fp;
-	
-	res+=cfread(buf, 30, fp); 	// title
-	res+=cfread(buf, 30, fp); 	// artist
-	res+=cfread(buf, 30, fp); 	// album
-	res+=cfread(buf, 4, fp);  	// year
-	res+=cfread(buf, 30, fp);	// comment (and maybe track #)
-	res+=cfread(buf, 1, fp);	// genre
-	
-	if (res<125) offseterror(file, " error while reading id3v1 tag");
-
-	file->id3=file->id3 | ID3V1;
-	
-	return 0;
+	file->id3 |= ID3V1;
+	cfseek(file->fp, 125, SEEK_CUR);
+	return TRUE;
 }
 
-/* parses an id3v2 tag. The first three letters "ID3" have already been read. */
+/* Skips an id3v2 tag. The first three characters have already been read. */
 int
-read_id3v2_tag(file)
+skip_id3v2_tag(file)
 	file_info * file;
 {
 	char buf[8];
-	char * pnt;
 	int res;
-	CFILE * fp=file->fp;
 	
-	int version, revision;		// version of ID3v2 tag
-	int flags;			// flags
-	int size;			// size of tag without header
+	int version, revision;		/* version of ID3v2 tag 	*/
+	int flags;			/* flags			*/
+	int size;			/* size of tag without header	*/
 
-	res=cfread(buf, 7, fp);	// read rest of header
-	if (res==0) return FALSE;
+	res=cfread(buf, 7, file->fp);	/* read rest of header		*/
+	if (res == 0) return FALSE;
 	version  = (int)(buf[0]);
 	revision = (int)(buf[1]);
 	flags    = (int)(buf[2]);
-	size     = IVAL_SS(buf, 3);
+	size     = INT_SS(buf+3);
 
-	if (version==0xff) {
-		if (verbose) offseterror(file, "ID3v2 tag has version 255");
-		return FALSE;
-	}
-	if (revision==0xff) {
-		if (verbose) offseterror(file, "ID3v2 tag has revision 255");
-		return FALSE;
-	}
-	if (flags==0xff) {
-		if (verbose) offseterror(file, "ID3v2 tag has flags 255");
-		return FALSE;
-	}
-	if ((size>65535)||(size<0)) {
-		if (verbose) offseterror(file, "ID3v2 size seems incorrect");
-		return FALSE;
-	}
-	// TODO: Check for 0xff in the /size/ bytes
-
-	// FIXME: Read the whole tag
-	pnt=malloc(size);
-	cfread(pnt, size, fp);
-	free(pnt);
-	
-	file->id3=file->id3 | ID3V2;
+	file->id3 |= ID3V2;
+	cfseek(file->fp, size, SEEK_CUR);
 	
 	return 0;
 }

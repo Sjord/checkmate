@@ -1,7 +1,7 @@
 /*
  *   This file is part of Checkmate, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2005  Sjoerd Langkemper
+ *   Copyright (C)  2006  Sjoerd Langkemper
  *   
  *   Checkmate is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,25 +19,21 @@
  *
  *****************************************************************************
  *
- *   checkframe.c - functions for checking MP3 frames 
+ *   checkframe.c - checks an MP3 frame
  * 
  */
 
-#include <errno.h>
 #include "mpck.h"
+#include "file.h"
+#include "frame.h"
+#include "print.h"
+#include "id3.h"
+#include "crc.h"
+#include "options.h"
 #include "matrices.h"
-#include <stdio.h>
 
-#ifdef HAVE_MEMORY_H
-#include <memory.h>
-#endif
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
+#ifdef HAVE_ERRNO_H
+#include <errno.h>
 #endif
 
 /* samplerate in Hz of frame fi with headervalue h */
@@ -52,24 +48,57 @@
 /* the layer for headervalue h */
 #define layer(h) 	   (4-(h))
 
-extern int verbose;
-
 /* framelength(fi) calculates the length (in bytes) of a frame */
 static int framelength(file, fi)
 	const file_info  * file;
 	const frame_info * fi;
 {
 	/* if this is the last frame, it has a different length */
-	if ((file->lastframe_offset==fi->offset)&&(file->lastframe_offset)) {
+	if ((file->lastframe_offset == fi->offset) && (file->lastframe_offset)) {
 		return file->lastframe_length;
 	}
 
 	/* else, just compute the frame length */
-	if (fi->layer==LAYER_1) {
+	if (fi->layer == LAYER_1) {
 		return 4*fi->padding+(48*fi->bitrate)/fi->samplerate;
 	} else {
 		return fi->padding+fi->samples*fi->bitrate/(8*fi->samplerate);
 	}
+}
+
+static void
+alienbytes(file, num)
+        file_info * file;
+        int num;
+{
+        if (file->frames == 0)
+                file->alien_before += num;
+        else
+                file->alien_after += num;
+}
+
+/* checks for consistency */
+static int
+checkconsistency(file, frame)
+	const file_info * file;
+	const frame_info * frame;
+{
+	int verbose = options_get_verbose();
+
+	if ((file->version == 0) && (file->layer == 0)) {
+		/* this is the first frame, nothing to check */
+		return TRUE;
+	}
+
+	if (file->version != frame->version) {
+		if (verbose) offseterror(file, " version differs from previous frame");
+		return FALSE;
+	}
+	if (file->layer != frame->layer) {
+		if (verbose) offseterror(file, " layer differs from previous frame");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /* returns bitrate in bps */
@@ -84,206 +113,185 @@ static int
 mpegver(headervalue) 
 	int headervalue;
 {
-	if (headervalue==3) return MPEG_VER_10;
-	if (headervalue==2) return MPEG_VER_20;
-	if (headervalue==0) return MPEG_VER_25;
+	if (headervalue == 3) return MPEG_VER_10;
+	if (headervalue == 2) return MPEG_VER_20;
+	if (headervalue == 0) return MPEG_VER_25;
 	return MPEG_VER_INVALID;
 }
 
-void
-parseframe(file, fi, buf)
+static void
+parseframe(file, fr, buf)
 	const file_info  * file;
-	frame_info * fi;
+	frame_info * fr;
 	char * buf;
 {
 	int res;
 	
-	fi->version	=mpegver((buf[1]&24)>>3);	/* bits 12,13	*/
-	fi->layer   	=layer((buf[1]&6)>>1);		/* bits 14,15	*/
-	fi->crc16   	=!(buf[1]&1);			/* bit  16	*/
-	fi->bitrate   	=bitrate((buf[2]&240)>>4, fi);	/* bits 17-20	*/
-	fi->samplerate 	=samplerate((buf[2]&12)>>2, fi);/* bits 21,22	*/
-	fi->padding    	=(buf[2]&2)  >>1;		/* bit  23	*/
-	fi->private    	=(buf[2]&1);			/* bit  24	*/
-	fi->stereo     	=(buf[3]&192)>>6;		/* bits 25,26	*/
-	fi->jointstereo	=(buf[3]&48) >>4;		/* bits 27,28	*/
-	fi->copyright  	=(buf[3]&8)  >>3;		/* bit  29	*/
-	fi->original	=(buf[3]&4)  >>2;		/* bit  30	*/
-	fi->emphasis   	=(buf[3]&3);			/* bits 31,32	*/
+	fr->version	=mpegver((buf[1]&24)>>3);	/* bits 12,13	*/
+	fr->layer   	=layer((buf[1]&6)>>1);		/* bits 14,15	*/
+	fr->crc16   	=!(buf[1]&1);			/* bit  16	*/
+	fr->bitrate   	=bitrate((buf[2]&240)>>4, fr);	/* bits 17-20	*/
+	fr->samplerate 	=samplerate((buf[2]&12)>>2, fr);/* bits 21,22	*/
+	fr->padding    	=(buf[2]&2)  >>1;		/* bit  23	*/
+	fr->private    	=(buf[2]&1);			/* bit  24	*/
+	fr->stereo     	=(buf[3]&192)>>6;		/* bits 25,26	*/
+	fr->jointstereo	=(buf[3]&48) >>4;		/* bits 27,28	*/
+	fr->copyright  	=(buf[3]&8)  >>3;		/* bit  29	*/
+	fr->original	=(buf[3]&4)  >>2;		/* bit  30	*/
+	fr->emphasis   	=(buf[3]&3);			/* bits 31,32	*/
 	
-	fi->offset	=cftell(file->fp)-4;
+	fr->offset	=cftell(file->fp)-4;
 
-	if (fi->crc16) {
+	if (fr->crc16) {
 		res=cfread(buf, 2, file->fp);
 		if (!res) offseterror(file, " CRC read error");
-		fi->crc16=(buf[0]&0xff)<<8;
-		fi->crc16+=(buf[1]&0xff);
+		fr->crc16=(buf[0]&0xff)<<8;
+		fr->crc16 += (buf[1]&0xff);
 	}
-}
 
-
-void
-calcframestats(file, fi) 
-	const file_info  * file;
-	frame_info * fi;
-{
-	fi->samples	=framesamples(fi);
-	fi->length	=framelength(file, fi);
-	fi->time	=frametime(fi);
+	if (fr->samplerate > 0) {
+		fr->samples	=framesamples(fr);
+		fr->length	=framelength(file, fr);
+		fr->time	=frametime(fr);
+	}
 }
 
 /* checks the validity of struct frame_info fi */
 int
-checkvalidity(file, fi)
+checkvalidity(file, frame)
 	const file_info * file;
-	const frame_info * fi;
+	const frame_info * frame;
 {
+	int verbose = options_get_verbose();
+
 	/* These values are not valid */
-	if (fi->version==MPEG_VER_INVALID) {
+	if (frame->version == MPEG_VER_INVALID) {
 		if (verbose) offseterror(file, " unknown version");
 		return FALSE;
 	}
-	if (fi->layer==4) {
+	if (frame->layer == 4) {
 		if (verbose) offseterror(file, " unknown layer (1-3 allowed)");
 		return FALSE;
 	}
-	if (fi->bitrate<8000) {
+	if (frame->bitrate < 8000) {
 		if (verbose) offseterror(file, " unknown bitrate");
 		return FALSE;
 	}
-	if (fi->samplerate<8000) {
+	if (frame->samplerate < 8000) {
 		if (verbose) offseterror(file, " unknown samplerate");
 		return FALSE;
 	}
 	return TRUE;
 }
 
-/* checks for consistency */
+/*
+ * FIXME: return the number of bytes which could not be interpreted.
+ */
 int
-checkconsistency(file, fi)
-	const file_info * file;
-	const frame_info * fi;
+findframe(file, frame)
+	file_info 	* file;
+	frame_info 	* frame;
 {
-	if ((file->version==0)&&(file->layer==0)) {
-		/* this is the first frame, nothing to check */
-		return TRUE;
-	}
-
-	if (file->version!=fi->version) {
-		if (verbose) offseterror(file, " version differs from previous frame");
-		return FALSE;
-	}
-	if (file->layer != fi->layer) {
-		if (verbose) offseterror(file, " layer differs from previous frame");
-		return FALSE;
-	}
-	return TRUE;
-}
-
-/* puts data from frame_info in file_info */
-int
-parse_file_stats(file, fi)
-	file_info * file;
-	const frame_info * fi;
-{
-	file->frames++;
-	file->lengthcount+=fi->length;
-	if (file->bitrate!=fi->bitrate) {
-		if ((!file->vbr)&&(file->bitrate)&&(fi->bitrate)) {
-			file->vbr=TRUE;
+	int res;
+	char buf[5];
+	char * ptr;
+	
+	do {
+		ptr = buf;
+		res = cfread(ptr, 1, file->fp);
+		if (res <= 0) {
+			if (cfeof(file->fp)) {
+				return FALSE;
+			} else {
+				offseterror(file, "read error");
+			}
+			continue;
 		}
-	}
-	file->bitratecount+=fi->bitrate;
-	file->bitrate=fi->bitrate;
-	file->version=fi->version;
-	file->layer=fi->layer;
-	file->samplerate=fi->samplerate;
-	file->stereo=fi->stereo;
-	file->samples=fi->samples;
 
-	file->alien_between+=file->alien_after;
-	file->alien_after=0;
-	return TRUE;
+		if ((*ptr & 0xff) == 0xff) {
+			res = cfread(++ptr, 1, file->fp);
+			if ((*ptr & 0xe0) == 0xe0) { /* possible MP3 frame header */
+				res = cfread(++ptr, 2, file->fp);
+				if (res < 2) continue;
+				parseframe(file, frame, buf);
+				return TRUE;
+			}
+		} else if (*ptr == 'T') {	/* TAG -> ID3v1 tag */
+			res = cfread(++ptr, 2, file->fp);
+			if (res < 2) continue;
+			if (*ptr++ == 'A' && *ptr++ == 'G') {
+				skip_id3v1_tag(file);
+			} else {
+				alienbytes(file, 3);
+			}
+		} else if (*ptr == 'I') {	/* ID3 -> ID3v2 tag */
+			res = cfread(++ptr, 2, file->fp);
+			if (res < 2) continue;
+			if (*ptr++ == 'D' && *ptr++ == '3') {
+				skip_id3v2_tag(file);
+			} else {
+				alienbytes(file, 3);
+			}
+		} else {
+			alienbytes(file, 1);
+		}
+	} while (!cfeof(file->fp));
+	return FALSE;
 }
 
-/* move the file pointer past the current frame */
-static int
-skipframe(file, fi)
+static int checkcrc16(file, frame)
 	const file_info * file;
-	const frame_info * fi;
-{
-	cfseek(file->fp, fi->offset+fi->length, SEEK_SET);
-	return TRUE;
-}
-
-static int checkcrc16(file, fi)
-	const file_info * file;
-	frame_info * fi;
+	frame_info * frame;
 {
 	char buf[34];
 	int res;
 	int len;
 	int stdlen;
-	
-	if (fi->version==MPEG_VER_10) {
-		stdlen=(fi->stereo==MONO ? 17 : 32);
+
+	if (frame->version == MPEG_VER_10) {
+		stdlen=(frame->stereo == MONO ? 17 : 32);
 	} else {
-		stdlen=(fi->stereo==MONO ?  9 : 17);
+		stdlen=(frame->stereo == MONO ?  9 : 17);
 	}
-	
-	cfseek(file->fp, fi->offset+2, SEEK_SET);
+
+	cfseek(file->fp, frame->offset+2, SEEK_SET);
 	res=cfread(buf, 2, file->fp);
 	if (!res) {
 		return FALSE;
 	}
 
-	cfseek(file->fp, fi->offset+6, SEEK_SET);
-	len=MIN(stdlen, fi->length-6);
-	res=cfread(buf+2, len, file->fp);
+	cfseek(file->fp, frame->offset+6, SEEK_SET);
+	len = MIN(stdlen, frame->length-6);
+	res = cfread(buf+2, len, file->fp);
 	if (res<len) {
 		return FALSE;
 	}
 
-	cfseek(file->fp, fi->offset+fi->length, SEEK_SET);
+	cfseek(file->fp, frame->offset + frame->length, SEEK_SET);
 
-	return fi->crc16==crc16(buf, len+2);
+	return frame->crc16 == crc16((unsigned char *)buf, len+2);
 }
-	
+
 int
-checkframe(file, buf)
-	file_info	*file;
-	char		*buf;
+checkframe(file, frame)
+	file_info  * file;
+	frame_info * frame;
 {
-	frame_info _fi;
-	frame_info *fi=&_fi;
-	init_frame_info(fi);
-
-	parseframe(file, fi, buf);
-
-	if (!checkvalidity(file, fi)) {
-		file->errors|=ERR_INVALID;
+	if (!checkvalidity(file, frame)) {
+		file->errors |= ERR_INVALID;
 		return FALSE;
 	}
 	
-	calcframestats(file, fi);
-	
-	if (!checkconsistency(file, fi)) {
-		file->errors|=ERR_INCONSISTENT;
+	if (!checkconsistency(file, frame)) {
+		file->errors |= ERR_INCONSISTENT;
 		return FALSE;
 	}
 
-	if (fi->crc16) {
-		if (!checkcrc16(file, fi)) {
-			file->errors|=ERR_FRAMECRC;
+	if (frame->crc16) {
+		if (!checkcrc16(file, frame)) {
+			file->errors |= ERR_FRAMECRC;
 			return FALSE;
 		}
-	} else {
-		skipframe(file, fi);
 	}
-	
-	if (verbose>1) print_frame_info(fi, file);
-	parse_file_stats(file, fi);
-
 	return TRUE;
 }
-

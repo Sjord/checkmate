@@ -1,5 +1,13 @@
 mpck
 
+0.12 (15-02-2006)
+	I did a big cleanup of mpck. The interface is now a lot cleaner, which
+	makes it possible to use it as a library.
+
+0.11
+	I renamed the package of wimpck and mpck to Checkmate, to make it look
+	(sound) user-friendly. Lukas <luke2@zoznam.sk> 
+
 0.10 (12-01-2005)
 	It has been a while since the last release, mainly because I wanted
 	to catch some bugs instead of introducing new features. As it seems

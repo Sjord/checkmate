@@ -1,5 +1,34 @@
 ## Automake
 
 bin_PROGRAMS = mpck
-mpck_SOURCES = checkfile.c checkframe.c crc.c id3.c main.c print.c synchsafe.h filename.c bufio.c mpck.h proto.h bufio.h matrices.h errordescs.h total.c files.c
+mpck_SOURCES = \
+	bufio.c \
+	bufio.h \
+	checkarguments.c \
+	checkarguments.h \
+	checkfile.c \
+	checkfile.h \
+	checkframe.c \
+	checkframe.h \
+	crc.c \
+	crc.h \
+	file.c \
+	file.h \
+	filename.c \
+	filename.h \
+	frame.c \
+	frame.h \
+	id3.c \
+	id3.h \
+	main.c \
+	matrices.h \
+	mp3errors.h \
+	mpck.h \
+	options.c \
+	options.h \
+	print.c \
+	print.h \
+	synchsafe.h \
+	total.c \
+	total.h
 mpck_LDADD = @GETOPT_LONG_LIB@
