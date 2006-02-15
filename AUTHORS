@@ -1,9 +1,12 @@
-mpck developers
+Checkmate developers
 
-Sjoerd - sjoerd-mpck%linuxonly nl
+Sjoerd - sjoerd-checkmate%linuxonly nl
 
 With help from:
 * Erwin Eggenberger - eeggenberger%spunklab com
+* Lukas "Luke" XXX - luke2%zoznam.sk
+* Natch - natch%natch.net
+* Rich Bramante - rich_bramante%yahoo.com
 * Itzchak Rehberg - izzysoft%qumran org
   RPM packages
 * Pascal Bleser - guru%linuxbe org
@@ -12,5 +15,3 @@ With help from:
   Arch Linux package
 * Daniel Salber - damir.perisa%bluewin ch
   Fink packages
-* Lukas "Luke" XXX - luke2%zoznam.sk
-  Feedback
