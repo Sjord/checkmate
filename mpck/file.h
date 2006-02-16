@@ -27,6 +27,7 @@
 #define __FILE_H__
 
 #include "frame.h"
+#include "bufio.h"
 
 /* structure which holds information for all files */
 typedef struct _file_info file_info;
