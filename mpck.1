@@ -23,22 +23,12 @@ the file. It gives some statistics on the file, and a conclusion whether the
 file is good or bad.
 .SH OPTIONS
 .TP
-.B \-b --bytes BYTES
-Scan only the first
-.B BYTES
-bytes.
-.TP
 .B \-B --badonly
 Print statistics only for bad files.
 .TP
 .B \-e --extention=EXT
 Scan only files ending in 
 .B .EXT
-.TP
-.B \-f --frames FRAMES
-Scan only the first
-.B FRAMES
-frames.
 .TP
 .B \-h --help
 Display a help screen and quit.
@@ -65,9 +55,7 @@ Treat each directory recursively, checking all files in the directory. Normal
 operation is to ignore directories.
 .TP
 .B \-v --verbose
-Be verbose. Use twice for
-.I super-duper-mega-power-ultra-verbosity
-which gives you information about each frame. Use with care.
+Be verbose. 
 .TP
 .B \-V --version
 Print version and copyright information and exit.
@@ -101,18 +89,12 @@ Invalid argument, no filename supplied.
 .TP
 .B 36 (ENAMETOOLONG)
 File extention or file name is too long.
-.SH BUGS
-.PP
-The -b and -f options make the statistics go all wrong. This is not really
-a bug, the program can only acquire statistics to the limit indicated by
--b or -f.
-Mpck cannot read from stdin. CRC and ID3 support is buggy.
 .SH AUTHOR
 .TP
-Written by Sjoerd Langkemper <sjoerd dash mpck at linuxonly dot nl>
+Written by Sjoerd Langkemper <sjoerd-checkmate@linuxonly.nl>
 .SH COPYRIGHT
 .PP
-Copyright \(co 2003 Sjoerd Langkemper.
+Copyright \(co 2006 Sjoerd Langkemper.
 This is free software; see the source for copying conditions.  There is
 NO  warranty;  not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.
@@ -120,6 +102,6 @@ PURPOSE.
 .PP
 The website
 .IP
-http://mpck.linuxonly.nl/
+http://checkmate.linuxonly.nl/
 .PP
 should provide you with latest versions, up-to-date manuals and more!
