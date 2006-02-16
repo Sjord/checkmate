@@ -2,10 +2,11 @@ Checkmate readme
 
 --=[ DESCRIPTION ]=--
 
-mpck reads MP3 files and tries to determine if they are correct (e.g. not
-damaged). Furthermore, it displays statistics like the bitrate. It is fast
-(0.6 sec per file on a my 800Mhz computer), supports recursive checking
-directories and runs on both Linux and Windows.
+Checkmate mpck checks mp3s. It scans the file to see if the frames are
+where they are supposed to be, if the frame headers are correct  and  if 
+the headers are consistent throughout the file. It gives some statistics
+on the file like bitrate and length, and a conclusion whether the file is
+good or bad.
 
 MP3 checker is a Microsoft Windows interface for mpck. It also scans MP3
 files and has a Explorer-like display which shows which files where
