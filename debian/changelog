@@ -1,12 +1,5 @@
-mpck (0.12-1) unstable; urgency=low
-
-  * New version
-
- -- Sjoerd <sjoerd-mpck@linuxonly.nl>  Mon, 22 Mar 2004 16:13:52 +0100
-
-mpck (0.09-1) unstable; urgency=low
+checkmate (0.12-1) unstable; urgency=low
 
   * Initial Release.
 
- -- Sjoerd <sjoerd-mpck@linuxonly.nl>  Mon, 22 Mar 2004 16:13:52 +0100
-
+ -- Sjoerd Langkemper <sjoerd-debian@linuxonly.nl>  Thu, 16 Feb 2006 21:00:09 +0100

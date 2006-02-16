@@ -1,12 +1,15 @@
-Source: mpck
+Source: checkmate
 Section: sound
 Priority: optional
-Maintainer: Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>
+Maintainer: Sjoerd Langkemper <sjoerd-debian@linuxonly.nl>
 Build-Depends: debhelper (>= 4.0.0)
-Standards-Version: 3.6.0
+Standards-Version: 3.6.2
 
 Package: mpck
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: checks whether a MP3 file conforms to the MP3 standards 
- Mpck checks frame header validity and consistancy, and CRC checksums. Furthermore, it provides statistics as bitrate, samplerate, play length, etcetera.
+Description: checks MP3 files
+ Mpck scans the MP3 file to see if the frames are where they are supposed 
+ to be, if the frame headers are correct  and  if  the headers are consistent 
+ throughout the file. It gives some statistics on the file like bitrate and 
+ length, and a conclusion whether the file is good or bad.
