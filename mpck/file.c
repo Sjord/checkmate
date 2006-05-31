@@ -195,13 +195,15 @@ file_update(file, frame)
                 }
         }
         file->bitratecount += frame->bitrate;
-	/* FIXME set only once */
-        file->bitrate = frame->bitrate;
-        file->version = frame->version;
-        file->layer = frame->layer;
-        file->samplerate = frame->samplerate;
-        file->stereo = frame->stereo;
-        file->samples = frame->samples;
+
+	file->version = frame->version;
+	file->layer = frame->layer;
+	if (file->bitrate == 0) {
+	        file->bitrate = frame->bitrate;
+	        file->samplerate = frame->samplerate;
+	        file->stereo = frame->stereo;
+	        file->samples = frame->samples;
+	}
 
         file->alien_between += file->alien_after;
         file->alien_after = 0;
