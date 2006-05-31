@@ -101,6 +101,16 @@ checkconsistency(file, frame)
 	return TRUE;
 }
 
+/* sets consistency data to current frame */
+static inline void
+setconsistent(file, frame)
+	file_info * file;
+	const frame_info * frame;
+{
+	file->version = frame->version;
+	file->layer = frame->layer;
+}
+
 /* returns bitrate in bps */
 static int bitrate(headervalue, fi)
 	int headervalue;	/* value of the bitrate as in the header */
@@ -282,16 +292,17 @@ checkframe(file, frame)
 		return FALSE;
 	}
 	
-	if (!checkconsistency(file, frame)) {
-		file->errors |= ERR_INCONSISTENT;
-		return FALSE;
-	}
-
 	if (frame->crc16) {
 		if (!checkcrc16(file, frame)) {
 			file->errors |= ERR_FRAMECRC;
 			return FALSE;
 		}
+	}
+
+	if (!checkconsistency(file, frame)) {
+		file->errors |= ERR_INCONSISTENT;
+		setconsistent(file, frame);
+		return FALSE;
 	}
 	return TRUE;
 }
