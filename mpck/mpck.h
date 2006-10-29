@@ -59,7 +59,7 @@
 #ifdef PACKAGE_VERSION 
 #define VERSION PACKAGE_VERSION
 #else
-#define VERSION "0.12"
+#define VERSION "0.14"
 #endif /* PACKAGE_VERSION */
 #endif /* VERSION */
 

@@ -147,7 +147,7 @@ wildcard_checkfile(wildcardpath, total)
 	file = file_create();
 	do {
 		strncpy(filepart, FindFileData.cFileName, MAXPATH);
-		if (filepart[0] != '.' && extension_match(filepart)) {
+		if (filepart[0] != '.') {
 			checkargument(realfilename, total, file);
 		}
 		res=FindNextFile(hFind, &FindFileData);
@@ -218,7 +218,6 @@ recursivecheck(dirname, total)
 	file = file_create();
 	while ((ent=readdir(dir)) != NULL) {
 		if (ent->d_name[0] == '.') continue; /* hidden files, . and .. */
-		if (! extension_match(ent->d_name)) continue;
 		strncpy(filename+dirlen+1, ent->d_name, 255);
 		if (cisdirectory(filename)) {
 			recursivecheck(filename, total);
