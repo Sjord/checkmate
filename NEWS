@@ -1,5 +1,17 @@
 mpck
 
+0.15 (29-10-2006)
+	Kevin Williams reported that he got read errors on some files. This
+	was because of a bug in a ID3 tag searching function. It would only
+	occur if the file has a T or an I in the last two bytes.
+
+0.14 (21-05-2006)
+	Some files would falsely report "No MP3", because the first frame was
+	bad. Mpck would think that all following frames were inconsistent,
+	finding only one frame in the whole file. This is solved by checking
+	consistency with the previous frame instead of the first frame.
+	I decided to skip version 0.13.
+
 0.12 (15-02-2006)
 	I did a big cleanup of mpck. The interface is now a lot cleaner, which
 	makes it possible to use it as a library.

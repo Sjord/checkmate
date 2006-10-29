@@ -1,3 +1,14 @@
+version 0.15
+	* Directories are not checked for extension, so that the recursive
+	  scanning works better. Thanks to Geert-Jan de Laat.
+	* Don't crash when the file ends with letters which identify an
+	  ID3 tag. Thanks to Kevin Williams.
+
+version 0.14
+	* Consistency is now checked in reference to the previous frame,
+	  instead of the first frame. This solves some false "No MP3 file"
+	  reports.
+
 version 0.12
 	* Major cleanup of mpck.
 	* Removed some bugs which caused false positives.
