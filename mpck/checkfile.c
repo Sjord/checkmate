@@ -69,11 +69,11 @@ lastframelength(file, frame)
 			offseterror(file, "read error");
 			continue;
 		}
-
 		if (*ptr == 'T') {
 			res = cfread(++ptr, 2, file->fp);
-			if (res < 2) continue;
-			if (*ptr++ == 'A' && *ptr++ == 'G') {
+			if (res < 2) {
+				i += res;
+			} else if (*ptr++ == 'A' && *ptr++ == 'G') {
 				frame->length = i;
 				break;
 			}
@@ -81,8 +81,9 @@ lastframelength(file, frame)
 		}
 		if (*ptr == 'I') {
 			res = cfread(++ptr, 2, file->fp);
-			if (res < 2) continue;
-			if (*ptr++ == 'D' && *ptr++ == '3') {
+			if (res < 2) {
+				i += res;
+			} else if (*ptr++ == 'D' && *ptr++ == '3') {
 				frame->length = i;
 				break;
 			}
