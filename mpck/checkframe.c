@@ -102,7 +102,7 @@ checkconsistency(file, frame)
 }
 
 /* sets consistency data to current frame */
-static inline void
+static void
 setconsistent(file, frame)
 	file_info * file;
 	const frame_info * frame;
