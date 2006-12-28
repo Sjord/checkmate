@@ -38,6 +38,7 @@
 #include "vector.h"
 
 #define CVECTORS 26
+#define FI_HASH(filename) abs(filename[0]%(CVECTORS))
 
 /* FIXME this is not the right way to do this: */
 /* e.g. not thread-safe */
@@ -68,12 +69,12 @@ void FI_AddFile(FileInfo * fi) {
 }
 
 /* returns info about the file with this filename and in this directory */
-FileInfo * FI_GetFile(char * filename, char * dirname) {
+FileInfo * FI_GetFile(TCHAR * filename, TCHAR * dirname) {
 	Vector * v;
 	FileInfo * fi;
 	int i=0;
 
-	v=fileinfo[filename[0]%CVECTORS];
+	v=fileinfo[FI_HASH(filename)];
 	while (fi=(FileInfo *)Vector_Get(v, i++)) {
 		if ((stricmp(filename, fi->filename)==0)
 			&&(stricmp(dirname, fi->dirname)==0)) {
