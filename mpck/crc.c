@@ -55,3 +55,35 @@ crc16(data, length)
 	return crc & 0xffff;
 }
 
+static int
+crc_update_bits(int value, int crc, int nbits)
+{
+    int i;
+    value <<= 8;
+    for (i = 0; i < nbits; i++) {
+	value <<= 1;
+	crc <<= 1;
+
+	if (((crc ^ value) & 0x10000))
+	    crc ^= CRC16_POLYNOMIAL;
+    }
+    return crc;
+}
+
+
+int crc16bits(data, nbits)
+	unsigned char * data;
+	int nbits;
+{
+	int i;
+	int crc=0xffff;
+	int nbytes = nbits >> 3;
+	nbits = nbits & 7;
+
+	for (i=0; i<nbytes; i++) 
+		crc=crc_update_bits(data[i], crc, 8);
+
+	// i++;
+	crc=crc_update_bits(data[i], crc, nbits);
+	return crc & 0xffff;
+}
