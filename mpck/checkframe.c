@@ -184,6 +184,7 @@ checkvalidity(file, frame)
 		return FALSE;
 	}
 	if (frame->bitrate < 8000) {
+		// FIXME this ignores the freeform bitrate
 		if (verbose) offseterror(file, " unknown bitrate");
 		return FALSE;
 	}
@@ -249,6 +250,26 @@ findframe(file, frame)
 	return FALSE;
 }
 
+static int crcdatalength(file, frame)
+	const file_info * file;
+	frame_info * frame;
+{
+	int nbits;
+	if (frame->layer == 2) {
+		return crcdatalength2(file, frame);
+	}
+	if (frame->version == MPEG_VER_10) {
+		if (frame->layer == 1) {
+			return (frame->stereo == MONO ? 128 : 256);
+		}
+		if (frame->layer == 3) {
+			return (frame->stereo == MONO ? 17 * 8 : 32 * 8);
+		}
+	} else {
+		return (frame->stereo == MONO ?  9 * 8 : 17 * 8);
+	}
+}
+
 static int checkcrc16(file, frame)
 	const file_info * file;
 	frame_info * frame;
@@ -256,22 +277,24 @@ static int checkcrc16(file, frame)
 	char buf[34];
 	int res;
 	int len;
-	int stdlen;
+	int nbits;
+	int nbytes;
+	int i;
 
-	if (frame->version == MPEG_VER_10) {
-		stdlen=(frame->stereo == MONO ? 17 : 32);
-	} else {
-		stdlen=(frame->stereo == MONO ?  9 : 17);
-	}
+	nbits = crcdatalength(file, frame);
+	nbytes = nbits >> 3;
+	if (nbits & 7) nbytes += 1;
 
+	// read header
 	cfseek(file->fp, frame->offset+2, SEEK_SET);
 	res=cfread(buf, 2, file->fp);
 	if (!res) {
 		return FALSE;
 	}
 
+	// read data
 	cfseek(file->fp, frame->offset+6, SEEK_SET);
-	len = MIN(stdlen, frame->length-6);
+	len = MIN(nbytes, frame->length-6);
 	res = cfread(buf+2, len, file->fp);
 	if (res<len) {
 		return FALSE;
@@ -279,7 +302,7 @@ static int checkcrc16(file, frame)
 
 	cfseek(file->fp, frame->offset + frame->length, SEEK_SET);
 
-	return frame->crc16 == crc16((unsigned char *)buf, len+2);
+	return frame->crc16 == crc16bits((unsigned char *)buf, nbits + 16);
 }
 
 int
