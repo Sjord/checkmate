@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "bitfile.h"
 
 // shamelessly copied from layer12.c, libmad
 /* possible quantization per subband table */
@@ -41,49 +42,8 @@ struct {
 // sb = subband
 
 #define nchannels(fi) 	(fi->stereo == 3 ? 1 : 2) // FIXME constant for single channel
-#define BYTEBITS 8
 
-static int readbits(file, length) 
-	const file_info * file;
-	int length;
-{
-	static char currentchar;
-	int startbyte;
-	int result;
-	int bitoffset;
-	int left;
-	char ch;
-	unsigned int mask;
-	static int startbit = 0;
-
-	result = 0;
-	do {
-		startbyte = startbit / BYTEBITS;
-		bitoffset = startbit % BYTEBITS;
-		if (bitoffset == 0) {
-			cfread(&currentchar, 1, file->fp);
-		}
-		mask = (1 << length) - 1;
-		left = BYTEBITS - bitoffset - length;
-		if (left > 0) {
-			// 'left' bits remain in this byte
-			ch = currentchar >> left;
-			startbit += length;
-			length = 0;
-		} else {
-			// abs(left) bits are in the next byte
-			left = abs(left);
-			ch = currentchar << left;
-			startbit += length - left;
-			length = left;
-		}
-		result |= ch & mask;
-	} while (length);
-	return result;
-}
-
-
-static int crcdatalength2(file, frame)
+int crcdatalength2(file, frame)
 	const file_info * file;
 	frame_info * frame;
 {
@@ -95,10 +55,12 @@ static int crcdatalength2(file, frame)
 	int bitrate_per_channel;
 	int bits = 0;
 	int i;
+	int j;
+	BITFILE * bitfile;
 
 	nchannels = nchannels(frame);
 
-	if (frame->version == MPEG_VER_25) {
+	if (frame->version != MPEG_VER_10) {
 		index = 4;
 	} else {
 		bitrate_per_channel = frame->bitrate / nchannels;
@@ -120,59 +82,35 @@ static int crcdatalength2(file, frame)
 	}
 	if (bound > sblimit) bound = sblimit;
 
+	// printf("index: %d sblimit: %d bound: %d\n", index, sblimit, bound);
+	// printf("pos: %d offset: %d\n", cftell(file->fp), frame->offset);
+
+	bitfile = bitfile_new(file->fp);
+
 	for (sb = 0; sb < sblimit; sb++) { // my for loop
 		nbal = bitalloc_table[offsets[sb]].nbal;
 
 		if (sb < bound) {
 			for (i = 0; i < nchannels; i++) {
 				bits += nbal;
-				if (readbits(file, nbal)) bits += 2;
+				j = bitfile_readbits(bitfile, nbal);
+				// printf("%d read bits: %d (%d)\n", sb, j, nbal);
+				if (j) {
+					bits += 2;
+				}
 			}
 		} else {
 			bits += nbal;
-			if (readbits(file, nbal)) bits += 2 * nchannels;
+			// printf("%d+", nbal);
+			j = bitfile_readbits(bitfile, nbal);
+			// printf("%d read bits: %d (%d)\n", sb, j, nbal);
+			if (j) {
+				bits += 2 * nchannels;
+			}
 		}
 	}
+	bitfile_destroy(bitfile);
+	// printf("\n");
 	return bits;
 }
-
-/*
-	for (sb = 0; sb < bound; ++sb) {
-		nbal = bitalloc_table[offsets[sb]].nbal;
-
-		for (channel = 0; channel < nchannels; ++channel)
-			// allocation[channel][sb] = mad_bit_read(&stream->ptr, nbal);
-			printf("Reading %d bits\n", nbal);
-	}
-  for (sb = bound; sb < sblimit; ++sb) {
-    nbal = bitalloc_table[offsets[sb]].nbal;
-
-    allocation[0][sb] =
-    allocation[1][sb] = mad_bit_read(&stream->ptr, nbal);
-  }
-
-  /* decode scalefactor selection info */
-/*
-  for (sb = 0; sb < sblimit; ++sb) {
-    for (channel = 0; channel < nchannels; ++channel) {
-      if (allocation[channel][sb])
-	scfsi[channel][sb] = mad_bit_read(&stream->ptr, 2);
-    }
-  }
-
-  /* check CRC word */
-/*
-  if (header->flags & MAD_FLAG_PROTECTION) {
-    header->crc_check =
-      mad_bit_crc(start, mad_bit_length(&start, &stream->ptr),
-		  header->crc_check);
-
-    if (header->crc_check != header->crc_target &&
-	!(frame->options & MAD_OPTION_IGNORECRC)) {
-      stream->error = MAD_ERROR_BADCRC;
-      return -1;
-    }
-  }
-*/
-	
 
