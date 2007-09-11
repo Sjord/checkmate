@@ -30,5 +30,7 @@ mpck_SOURCES = \
 	print.h \
 	synchsafe.h \
 	total.c \
-	total.h
+	total.h \
+	bitfile.c \
+	bitfile.h
 mpck_LDADD = @GETOPT_LONG_LIB@
