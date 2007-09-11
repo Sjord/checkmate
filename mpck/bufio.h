@@ -3,8 +3,6 @@
 
 #include <stdio.h>
 
-#define CBUFSIZE 4194304 // 4 MB 
-
 #ifndef FALSE
 #define FALSE 0
 #endif
