@@ -60,7 +60,7 @@ static int framelength(file, fi)
 
 	/* else, just compute the frame length */
 	if (fi->layer == LAYER_1) {
-		return 4*fi->padding+(48*fi->bitrate)/fi->samplerate;
+		return 4*fi->padding+4*((12*fi->bitrate)/fi->samplerate);
 	} else {
 		return fi->padding+fi->samples*fi->bitrate/(8*fi->samplerate);
 	}
