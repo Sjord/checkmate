@@ -92,6 +92,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\mpck\bitfile.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\bufio.c
 # End Source File
 # Begin Source File
@@ -129,6 +133,10 @@ SOURCE=..\..\mpck\frame.c
 # Begin Source File
 
 SOURCE=..\..\mpck\id3.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\layer2.c
 # End Source File
 # Begin Source File
 
@@ -174,6 +182,10 @@ SOURCE=..\..\mp3checker\windows\vector.c
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\mpck\bitfile.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\mpck\bufio.h
