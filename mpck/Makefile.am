@@ -33,5 +33,6 @@ mpck_SOURCES = \
 	total.h \
 	bitfile.c \
 	bitfile.h \
-	layer2.c
+	layer2.c \
+	layer2.h
 mpck_LDADD = @GETOPT_LONG_LIB@

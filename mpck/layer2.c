@@ -43,17 +43,14 @@ struct {
 
 // sb = subband
 
-#define nchannels(fi) 	(fi->stereo == 3 ? 1 : 2) // FIXME constant for single channel
+#define nchannels(fi) 	(fi->stereo == MONO ? 1 : 2) // FIXME constant for single channel
 
 int crcdatalength2(file, frame)
 	const file_info * file;
 	frame_info * frame;
 {
-	// struct mad_header *header = &frame->header;
-	// struct mad_bitptr start;
-	unsigned int index, sblimit, nbal, nchannels, bound, gr, channel, s, sb;
+	unsigned int index, sblimit, nbal, nchannels, bound, sb;
 	unsigned char const *offsets;
-	unsigned char allocation[2][32], scfsi[2][32], scalefactor[2][32][3];
 	int bitrate_per_channel;
 	int bits = 0;
 	int i;
@@ -79,40 +76,33 @@ int crcdatalength2(file, frame)
 	offsets = sbquant_table[index].offsets;
 
 	bound = 32;
-	if (frame->stereo == 1) { // FIXME look up constant for joint stereo
+	if (frame->stereo == JOINT) {
 		bound = 4 + 4 * frame->jointstereo;
 	}
 	if (bound > sblimit) bound = sblimit;
 
-	// printf("index: %d sblimit: %d bound: %d\n", index, sblimit, bound);
-	// printf("pos: %d offset: %d\n", cftell(file->fp), frame->offset);
-
 	bitfile = bitfile_new(file->fp);
 
-	for (sb = 0; sb < sblimit; sb++) { // my for loop
+	for (sb = 0; sb < sblimit; sb++) {
 		nbal = bitalloc_table[offsets[sb]].nbal;
 
 		if (sb < bound) {
 			for (i = 0; i < nchannels; i++) {
 				bits += nbal;
 				j = bitfile_readbits(bitfile, nbal);
-				// printf("%d read bits: %d (%d)\n", sb, j, nbal);
 				if (j) {
 					bits += 2;
 				}
 			}
 		} else {
 			bits += nbal;
-			// printf("%d+", nbal);
 			j = bitfile_readbits(bitfile, nbal);
-			// printf("%d read bits: %d (%d)\n", sb, j, nbal);
 			if (j) {
 				bits += 2 * nchannels;
 			}
 		}
 	}
 	bitfile_destroy(bitfile);
-	// printf("\n");
 	return bits;
 }
 

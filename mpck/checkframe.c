@@ -31,6 +31,7 @@
 #include "crc.h"
 #include "options.h"
 #include "matrices.h"
+#include "layer2.h"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
@@ -254,32 +255,33 @@ static int crcdatalength(file, frame)
 	const file_info * file;
 	frame_info * frame;
 {
-	int nbits;
 	if (frame->layer == 2) {
 		return crcdatalength2(file, frame);
 	}
 	if (frame->version == MPEG_VER_10) {
-		if (frame->layer == 1) {
-			return (frame->stereo == MONO ? 128 : 256);
-		}
 		if (frame->layer == 3) {
 			return (frame->stereo == MONO ? 17 * 8 : 32 * 8);
+		}
+		if (frame->layer == 1) {
+			return (frame->stereo == MONO ? 128 : 256);
 		}
 	} else {
 		return (frame->stereo == MONO ?  9 * 8 : 17 * 8);
 	}
+	return 0; // never reached, but supress warning
 }
 
 static int checkcrc16(file, frame)
 	const file_info * file;
 	frame_info * frame;
 {
-	char buf[34];
+	// This buffer needs to hold the header and all other CRC bytes.
+	// header is 2 bytes, crcdatalength2 returns max. 39 bytes.
+	char buf[41];
 	int res;
 	int len;
 	int nbits;
 	int nbytes;
-	int i;
 
 	nbits = crcdatalength(file, frame);
 	nbytes = nbits >> 3;

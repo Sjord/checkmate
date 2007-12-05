@@ -26,3 +26,4 @@
 #define CRC16_POLYNOMIAL 0x8005
 
 int crc16(unsigned char *data, int length);
+int crc16bits(unsigned char *data, int nbits);
