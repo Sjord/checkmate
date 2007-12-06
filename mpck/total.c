@@ -46,6 +46,7 @@ total_create()
 	
 	total = (total_info *) malloc(sizeof(total_info));
 	if (total == NULL) return NULL;
+	memset(total, 0, sizeof(total_info));
 	return total;
 }
 
