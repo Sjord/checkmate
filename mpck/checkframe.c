@@ -222,6 +222,7 @@ findframe(file, frame)
 
 		if ((*ptr & 0xff) == 0xff) {
 			res = cfread(++ptr, 1, file->fp);
+			if (res < 1) continue;
 			if ((*ptr & 0xe0) == 0xe0) { /* possible MP3 frame header */
 				res = cfread(++ptr, 2, file->fp);
 				if (res < 2) continue;
