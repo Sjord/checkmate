@@ -1,5 +1,20 @@
 mpck
 
+0.18 (08-12-2007)
+	Eric Blanpied supplied me with a file which causes mpck to crash.
+	This is valuable input for me and I used it to solve various bugs.
+	Nice to have some of my users involved.
+
+0.17 (11-09-2007)
+	As Andrew Kuklewicz reported, the CRC of MP2 files was still not
+	correct. This time I actually tested the code against MP1 and MP2
+	files.
+
+0.16 (12-01-2007)
+	Karl Student found a bug where Checkmate MP3 checker crashes when
+	the first character of a file is non-ASCII. This does not affect
+	mpck.
+
 0.15 (29-10-2006)
 	Kevin Williams reported that he got read errors on some files. This
 	was because of a bug in a ID3 tag searching function. It would only

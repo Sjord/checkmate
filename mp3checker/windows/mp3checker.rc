@@ -30,9 +30,9 @@ IDD_ABOUT DIALOG DISCARDABLE  0, 0, 267, 170
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "Checkmate MP3 checker 0.16",IDC_STATIC,0,23,267,8,
+    CTEXT           "Checkmate MP3 checker 0.18",IDC_STATIC,0,23,267,8,
                     SS_CENTERIMAGE
-    CTEXT           "Based on mpck 0.15",IDC_STATIC,0,34,267,8,
+    CTEXT           "Based on mpck 0.18",IDC_STATIC,0,34,267,8,
                     SS_CENTERIMAGE
     CONTROL         114,IDC_STATIC,"Static",SS_BITMAP,0,0,267,19
     CTEXT           "(C) 2006 Sjoerd Langkemper",IDC_STATIC,0,45,267,8,

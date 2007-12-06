@@ -1,3 +1,16 @@
+version 0.18
+	* Fixed various bugs and memory leaks.
+
+version 0.17
+	* The length of layer 1 (MP1) frames are now correctly calculated,
+	  making Checkmate also work with MP1 files.
+	* The CRC of layer 2 (MP2) files are now correct. Thanks to Andrew
+	  Kuklewicz for the reporting of this bug.
+
+version 0.16
+	* MP3 checker does not crash anymore when files or directories start
+	  with non-ASCII characters
+
 version 0.15
 	* Directories are not checked for extension, so that the recursive
 	  scanning works better. Thanks to Geert-Jan de Laat.

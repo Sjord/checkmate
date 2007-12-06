@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([checkmate], [0.15], [sjoerd-mpck@linuxonly.nl])
-AM_INIT_AUTOMAKE([checkmate], [0.15])
+AC_INIT([checkmate], [0.18], [sjoerd-mpck@linuxonly.nl])
+AM_INIT_AUTOMAKE([checkmate], [0.18])
 AM_CONFIG_HEADER(config.h)
 
 AC_CONFIG_SRCDIR([mpck/main.c])
