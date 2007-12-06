@@ -279,7 +279,6 @@ static int checkcrc16(file, frame)
 	// header is 2 bytes, crcdatalength2 returns max. 39 bytes.
 	char buf[41];
 	int res;
-	int len;
 	int nbits;
 	int nbytes;
 
@@ -296,9 +295,12 @@ static int checkcrc16(file, frame)
 
 	// read data
 	cfseek(file->fp, frame->offset+6, SEEK_SET);
-	len = MIN(nbytes, frame->length-6);
-	res = cfread(buf+2, len, file->fp);
-	if (res<len) {
+	if (nbytes > frame->length - 6) {
+		nbytes = frame->length - 6;
+		nbits = nbytes * 8;
+	}
+	res = cfread(buf+2, nbytes, file->fp);
+	if (res<nbytes) {
 		return FALSE;
 	}
 
