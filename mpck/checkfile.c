@@ -114,6 +114,7 @@ static int findlastframe(file)
 	file->lastframe_length = lastframelength(file, frame);
 	file->alien_before = 0;
 
+	frame_destroy(frame);
 	cfseek(file->fp, oldpos, SEEK_SET);
 	return TRUE;
 }
