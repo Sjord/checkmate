@@ -46,9 +46,9 @@ file_strversion(file)
 {
 	char * result;
 	int version = file->version;
-	if (version == MPEG_VER_10) result="MPEG v1.0";
-	else if (version == MPEG_VER_20) result="MPEG v2.0";
-	else if (version == MPEG_VER_25) result="MPEG v2.5";
+	if (version == MPEG_VER_10) result="v1.0";
+	else if (version == MPEG_VER_20) result="v2.0";
+	else if (version == MPEG_VER_25) result="v2.5";
 	return result;
 }
 
@@ -86,7 +86,7 @@ static void
 file_print_basic(file)
 	const file_info * file;
 {
-	printf("    %-30s%s\n", "version", 	file_strversion(file));
+	printf("    %-30sMPEG %s\n", "version", 	file_strversion(file));
 	printf("    %-30s%d\n", "layer",	file->layer);
 	file_print_bitrate(file);
 	printf("    %-30s%d Hz\n", "samplerate", file->samplerate);
@@ -250,8 +250,8 @@ file_clear(file)
 	memset(file, 0, sizeof(file_info));
 }
 
-void
-file_print(file)
+static void
+file_print_human(file)
 	const file_info * file;
 {
 	int verbose = options_get_verbose();
@@ -284,4 +284,63 @@ file_print(file)
 		printf("\n");
 	}
 }
+
+static void
+file_print_xml(file)
+	const file_info * file;
+{
+	printf("<file>\n");
+	printf("\t<filename>%s</filename>\n", file->filename);
+	printf("\t<size>%d</size>\n", file->length);
+	if (file->ismp3file) {
+		printf("\t<MPEG>\n");
+		printf("\t\t<version>%s</version>\n", file_strversion(file));
+		printf("\t\t<layer>%d</layer>\n", file->layer);
+		printf("\t\t<bitrate>%d</bitrate>\n", file->bitrate);
+		if (file->stereo) printf("\t\t<stereo />\n");
+		printf("\t\t<samplerate>%d</samplerate>\n", file->samplerate);
+		printf("\t\t<samples>%d</samples>\n", file->samples);
+		if (file->vbr) printf("\t\t<vbr />\n");
+		printf("\t\t<frames>%d</frames>\n", file->frames);
+		if (file->id3 & ID3V1) printf("\t\t<id3v1 />\n");
+		if (file->id3 & ID3V2) printf("\t\t<id3v2 />\n");
+		printf("\t\t<time>%d:%02d.%03d</time>\n", file->time / 60, file->time % 60, file->msec);
+		printf("\t</MPEG>\n");
+	}
+	printf("\t<result>\n");
+	if (file->alien_total) {
+		printf("\t\t<unidentified>\n");
+		printf("\t\t\t<before>%d</before>\n", file->alien_before);
+		printf("\t\t\t<between>%d</between>\n", file->alien_between);
+		printf("\t\t\t<after>%d</after>\n", file->alien_after);
+		printf("\t\t\t<total>%d</total>\n", file->alien_total);
+		printf("\t\t</unidentified>\n");
+	}
+	if (file->errors) {
+		printf("\t\t<errors>\n");
+		int x;
+		for (x=0; x < errordescs_siz; x++) {
+			if (file->errors & errordescs[x].errflag) {
+				printf("\t\t\t<error>\n");
+				printf("\t\t\t\t<code>%s</code>\n", errordescs[x].shortdesc);
+				printf("\t\t\t\t<description>%s</description>\n", errordescs[x].longdesc);
+				printf("\t\t\t</error>\n");
+			}
+		}
+		printf("\t\t</errors>\n");
+	}
+	if (file->ismp3file && !file->errors) {
+		printf("\t\t<ok />\n");
+	}
+	printf("\t</result>\n");
+	printf("</file>\n");
+}
+
+void
+file_print(file)
+	const file_info * file;
+{
+	file_print_xml(file);
+}
+
 
