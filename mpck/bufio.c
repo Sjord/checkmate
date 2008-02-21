@@ -46,7 +46,7 @@
 #define USE_BUFFERED_IO
 #ifdef USE_BUFFERED_IO
 
-#define reminbuf(c) (size_t)(c->buffer + c->buflen - c->bufpnt)
+#define reminbuf(c) (size_t)(c->bufend - c->bufpnt)
 
 /* some sys/stat.h do not define these macro's */
 #ifndef S_ISDIR
@@ -92,7 +92,8 @@ CFILE * cfopen(const char * filename, char * mode) {
 	
 	filesize=_cfilesize(filename);
 	if (filesize == -1) return NULL;
-	c=(CFILE *)malloc(sizeof(CFILE)+filesize);
+	// we malloc an extra int because of what cfread does
+	c=(CFILE *)malloc(sizeof(CFILE)+filesize+sizeof(int));
 	if (c == NULL) {
 		buffered=FALSE;
 		c=(CFILE *)malloc(sizeof(CFILE));
@@ -113,6 +114,7 @@ CFILE * cfopen(const char * filename, char * mode) {
 	c->buffer=(char *)(c+1);
 	c->bufpnt=c->buffer;
 	c->buflen=filesize;
+	c->bufend=c->buffer+filesize;
 	nread=fread(c->buffer, 1, filesize, c->fp);
 	fclose(c->fp);
 	c->fp=NULL;
@@ -123,7 +125,10 @@ size_t cfread(char * outbuf, size_t size, CFILE * c) {
 	if (buffered) {
 		size_t readnow;
 		readnow=MIN(reminbuf(c), size); 
-		memcpy(outbuf, c->bufpnt, readnow);
+		// We assume that size is 1 or 2, so it is faster to assign than to do
+		// memcpy(outbuf, c->bufpnt, readnow);
+		// This means we read beyond the end of the buffer. Hope it doesn't matter.
+		* (int *)outbuf = * (int *)c->bufpnt;
 		c->bufpnt += readnow;
 		return readnow;
 	} else {

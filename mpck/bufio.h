@@ -17,6 +17,7 @@ typedef struct {
 	FILE * fp;
 	char * buffer;
 	char * bufpnt;
+	char * bufend;
 	size_t buflen;
 	size_t filesize;
 } CFILE;
