@@ -125,10 +125,13 @@ size_t cfread(char * outbuf, size_t size, CFILE * c) {
 	if (buffered) {
 		size_t readnow;
 		readnow=MIN(reminbuf(c), size); 
-		// We assume that size is 1 or 2, so it is faster to assign than to do
-		// memcpy(outbuf, c->bufpnt, readnow);
+		// Most of the time, size is small and we do a fast assignment.
 		// This means we read beyond the end of the buffer. Hope it doesn't matter.
-		* (int *)outbuf = * (int *)c->bufpnt;
+		if (size <= sizeof(int)) {
+			* (int *)outbuf = * (int *)c->bufpnt;
+		} else {
+			memcpy(outbuf, c->bufpnt, readnow);
+		}
 		c->bufpnt += readnow;
 		return readnow;
 	} else {
