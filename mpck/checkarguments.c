@@ -87,29 +87,20 @@ checkargument(filename, total, file)
 }
 
 #ifdef _WIN32
-/* WIN32 checkarguments calls wildcard_checkfile for each argument.
+
+/* checks whether FindFileData is a directory.
  * only if _WIN32 is defined
  */
-int
-checkarguments(argv, total)
-	char		**argv;
-	total_info 	* total;
+static int
+fisdirectory(FindFileData)
+	WIN32_FIND_DATA * FindFileData;
 {
-	int res=TRUE;
-
-	total_clear(total);
-	do {
-		res=res && wildcard_checkfile(*argv, total);
-		argv++;
-	} while (*argv);
-
-	return res;
+	return FindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
 }
 
 /* wildcard_checkfile 
  * only if _WIN32 is defined
  */
-// FIXME recursively scan directories if required
 int
 wildcard_checkfile(wildcardpath, total)
 	char 		* wildcardpath;
@@ -148,7 +139,11 @@ wildcard_checkfile(wildcardpath, total)
 	do {
 		strncpy(filepart, FindFileData.cFileName, MAXPATH);
 		if (filepart[0] != '.') {
-			checkargument(realfilename, total, file);
+			if (options_get_recursive() && fisdirectory(&FindFileData)) {
+				recursivecheck(realfilename, total);
+			} else {
+				checkargument(realfilename, total, file);
+			}
 		}
 		res=FindNextFile(hFind, &FindFileData);
 		if (res == 0) res=GetLastError();
@@ -158,6 +153,25 @@ wildcard_checkfile(wildcardpath, total)
 	FindClose(hFind);
 	free(realfilename);
 	return TRUE;
+}
+
+/* WIN32 checkarguments calls wildcard_checkfile for each argument.
+ * only if _WIN32 is defined
+ */
+int
+checkarguments(argv, total)
+	char		**argv;
+	total_info 	* total;
+{
+	int res=TRUE;
+
+	total_clear(total);
+	do {
+		res=res && wildcard_checkfile(*argv, total);
+		argv++;
+	} while (*argv);
+
+	return res;
 }
 
 /* only if _WIN32 is defined 
