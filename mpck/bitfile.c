@@ -23,7 +23,6 @@ int bitfile_readbits(BITFILE * b, size_t length) {
 	int left;
 	char ch;
 	unsigned int mask;
-	int startbit;
 
 	result = 0;
 	do {

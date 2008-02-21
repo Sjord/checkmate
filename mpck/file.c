@@ -27,6 +27,7 @@
 #include "file.h"
 #include "mp3errors.h"
 #include "options.h"
+#include "print.h"
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -340,7 +341,7 @@ void
 file_print(file)
 	const file_info * file;
 {
-	file_print_xml(file);
+	file_print_human(file);
 }
 
 
