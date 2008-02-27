@@ -318,8 +318,8 @@ file_print_xml(file)
 		printf("\t\t</unidentified>\n");
 	}
 	if (file->errors) {
-		printf("\t\t<errors>\n");
 		int x;
+		printf("\t\t<errors>\n");
 		for (x=0; x < errordescs_siz; x++) {
 			if (file->errors & errordescs[x].errflag) {
 				printf("\t\t\t<error>\n");
