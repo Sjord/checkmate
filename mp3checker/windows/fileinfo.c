@@ -64,7 +64,7 @@ void FI_Destroy() {
 
 void FI_AddFile(FileInfo * fi) {
 	Vector * v;
-	v=fileinfo[fi->filename[0]%CVECTORS];
+	v=fileinfo[FI_HASH(fi->filename)];
 	Vector_Add(v, fi);
 }
 
