@@ -55,13 +55,14 @@ print_usage(void)
 	printf("Verbosity:\n");
 	printf("   -v, --verbose        print some extra info\n");
 	printf("   -q, --quiet          print only %s or %s per file\n", GOODFILE, BADFILE);
-	printf("   -B, --badonly	only report bad files\n");
+	printf("   -B, --badonly        only report bad files\n");
 	printf("Other options:\n");
 	printf("   -R, --recursive      check directories recursively\n");  
 	printf("   -e, --extention=EXT  only check files ending on .EXT\n");
-	printf("   -r			short for -R -e mp3\n");
-	printf("   -m, --maxname=NUM 	report bad for filenames which exceed NUM characters\n");
-	printf("   -n, --namecheck	check for strange characters in the filename\n");
+	printf("   -r                   short for -R -e mp3\n");
+	printf("   -m, --maxname=NUM    report bad for filenames which exceed NUM characters\n");
+	printf("   -n, --namecheck      check for strange characters in the filename\n");
+	printf("   -x, --xmloutput      output results in XML\n");
 	printf("   -h, --help           print this help, then exit\n");
 	printf("   -V, --version        print version information\n");
 }

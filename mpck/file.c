@@ -341,7 +341,11 @@ void
 file_print(file)
 	const file_info * file;
 {
-	file_print_human(file);
+	if (options_get_xmloutput()) {
+		file_print_xml(file);
+	} else {
+		file_print_human(file);
+	}
 }
 
 

@@ -73,10 +73,11 @@ parse_options(argc, argv)
 		{"maxname",   1, 0, 'm'},
 		{"badonly",   0, 0, 'B'},
 		{"namecheck", 0, 0, 'n'},
+		{"xmloutput", 0, 0, 'x'},
 		{NULL, 0, 0, 0}
 	};
 
-	while ((ch = getopt_long(argc, argv, "Vv::hqRre:m:Bn", long_options, &option_index)) >32) {
+	while ((ch = getopt_long(argc, argv, "Vv::hqRre:m:Bnx", long_options, &option_index)) >32) {
 		switch (ch) {
 			case 'R':
 				/* recursion */
@@ -126,6 +127,10 @@ parse_options(argc, argv)
 			case 'n':
 				/* Check for strange chars in filenames */
 				options_set_namecheck(TRUE);
+				break;
+			case 'x':
+				/* Print XML output */
+				options_set_xmloutput(TRUE);
 				break;
 			case '?':
 				error(" ambiguous match or an extraneous parameter");

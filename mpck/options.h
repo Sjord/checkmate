@@ -64,3 +64,4 @@ INT_OPTION(maxname);
 INT_OPTION(quiet);
 INT_OPTION(badonly);
 INT_OPTION(namecheck);
+INT_OPTION(xmloutput);

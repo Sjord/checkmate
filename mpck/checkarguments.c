@@ -76,7 +76,7 @@ checkargument(filename, total, file)
 {
 	int res;
 	if (extension_match(filename)) {
-		if (!options_get_quiet() && !options_get_badonly()) {
+		if (!options_get_quiet() && !options_get_badonly() && !options_get_xmloutput()) {
 			print_scanning(filename);
 		}
 		res = checkfile(filename, file);
