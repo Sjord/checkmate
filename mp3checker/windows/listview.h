@@ -35,7 +35,7 @@ BOOL LV_DeleteSelected(void);
 int LV_GetSelectedCount(void);
 BOOL LV_StartRename(void);
 BOOL LV_Refresh(void);
-BOOL LV_RenameFile(int index, char * newname);
+BOOL LV_RenameFile(int index, TCHAR * newname);
 BOOL LV_Resize(int width, int height);
 BOOL LV_ActivateSelected(void);
 BOOL LV_Activate(int item);
@@ -55,8 +55,3 @@ typedef struct {
 	int  alignment;
 	int  width;
 } ColInfo;
-
-typedef struct {
-	char name[255];
-	int  filesize;
-} ItemInfo;
