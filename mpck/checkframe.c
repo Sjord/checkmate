@@ -297,7 +297,7 @@ static int checkcrc16(file, frame)
 	// read data
 	cfseek(file->fp, frame->offset+6, SEEK_SET);
 	if (nbytes > frame->length - 6) {
-		nbytes = frame->length - 6;
+		nbytes = MAX(0, frame->length - 6);
 		nbits = nbytes * 8;
 	}
 	res = cfread(buf+2, nbytes, file->fp);

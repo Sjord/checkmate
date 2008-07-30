@@ -78,8 +78,7 @@ lastframelength(file, frame)
 				break;
 			}
 			i += 2;
-		}
-		if (*ptr == 'I') {
+		} else if (*ptr == 'I') {
 			res = cfread(++ptr, 2, file->fp);
 			if (res < 2) {
 				i += res;
