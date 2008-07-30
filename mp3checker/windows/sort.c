@@ -28,10 +28,10 @@ static int InfoSort(const void * elem1, const void * elem2) {
 	return 0;
 }
 
-static int NameSort(const TCHAR * name1, const TCHAR * name2) {
-	if (0==lstrcmp(name1, "..")) return -1;
-	if (0==lstrcmp(name2, "..")) return 1;
-	return lstrcmpi(name1, name2);
+static int NameSort(const char * name1, const char * name2) {
+	if (0==strcmp(name1, "..")) return -1;
+	if (0==strcmp(name2, "..")) return 1;
+	return stricmp(name1, name2);
 }
 
 int NormalAscendingSort(const void * elem1, const void * elem2) {

@@ -56,10 +56,10 @@ LRESULT CALLBACK OwnComboWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 static BOOL Combo_AddDrives(HWND hWndCombo) {
 	DWORD drives;
 	int nPos=0;
-	TCHAR strDrive[4];
+	char strDrive[4];
 
 	drives=GetLogicalDrives();
-	lstrcpy(strDrive, TEXT("A:\\"));
+	strcpy(strDrive, "A:\\");
 
 	while (drives) {
         if (drives & 1) {
@@ -77,7 +77,7 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 	HWND hWndEdit;
 	HFONT font;
 
-	hWndCombo = CreateWindow(TEXT("COMBOBOX"),   // predefined class 
+	hWndCombo = CreateWindow("COMBOBOX",      // predefined class 
                                     NULL,        // no window title 
                                     WS_BORDER | WS_CHILD | WS_VISIBLE | CBS_DROPDOWN ,
                                     0, 0, 100, 200,  // set size in WM_SIZE message 
@@ -102,8 +102,8 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 
 HWND Rebar_Button(HWND hWndOwner) {
 	hWndButton = CreateWindow( 
-		TEXT("BUTTON"),// predefined class 
-		TEXT("OK"),    // button text 
+		"BUTTON",   // predefined class 
+		"OK",       // button text 
 		WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // styles 
 		10,         // starting x position 
 		10,         // starting y position 
@@ -116,13 +116,13 @@ HWND Rebar_Button(HWND hWndOwner) {
 	return hWndButton;
 }
 
-static BOOL Rebar_SetText(TCHAR * text) {
+static BOOL Rebar_SetText(char * text) {
 	return SendMessage(hWndCombo, WM_SETTEXT, 0, (LPARAM)text);
 }
 
 BOOL Rebar_UpdateText() {
 	/* FIXME: overflow risc */
-	static TCHAR curdir[255];
+	static char curdir[255];
 	GetCurrentDirectory(255, curdir);
 	Rebar_SetText(curdir);
 	UpdateWindow(hWndRebar);
@@ -171,7 +171,7 @@ HWND Rebar_Create(HWND hWndOwner)
    RECT          rc;
    HWND			 hWndContents;
    INITCOMMONCONTROLSEX icex;
-   TCHAR locationtext[20];
+   char locationtext[20];
    LoadString(hInst, IDS_LOCATION, locationtext, 19);
    
    icex.dwSize=sizeof(INITCOMMONCONTROLSEX);
@@ -224,14 +224,14 @@ int Rebar_ButtonID() {
 }
 
 /* FIXME: static is Evil */
-TCHAR * Rebar_GetText() {
-	static TCHAR buf[255];
+char * Rebar_GetText() {
+	static char buf[255];
 	GetWindowText(hWndCombo, buf, 254);
 	return buf;
 }
 
 void Rebar_Clear() {
-	SetWindowText(hWndCombo, TEXT(""));
+	SetWindowText(hWndCombo, "");
 }
 
 BOOL Rebar_Destroy() {
@@ -241,14 +241,14 @@ BOOL Rebar_Destroy() {
 
 int Rebar_Select() {
 	int iItem;
-	TCHAR * strPath;
+	char * strPath;
 	int iLen;
 	int iRes;
 	
 	iItem=SendMessage(hWndCombo, CB_GETCURSEL, 0, 0);
 	iLen=SendMessage(hWndCombo, CB_GETLBTEXTLEN, iItem, 0);
 	
-	strPath=HeapAlloc(GetProcessHeap(), 0, sizeof(strPath[0]) * (iLen+1));
+	strPath=HeapAlloc(GetProcessHeap(), 0, iLen+1);
 	if (strPath==NULL) return FALSE;
 
 	SendMessage(hWndCombo, CB_GETLBTEXT, iItem, strPath);

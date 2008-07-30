@@ -49,8 +49,8 @@ BOOL LV_InitVector() {
 }
 
 BOOL LV_OnKey(NMLVKEYDOWN * key) {
-	TCHAR buf[15];
-	wsprintf(buf, TEXT("%d\n"), key->wVKey);
+	char buf[15];
+	sprintf(buf, "%d\n", key->wVKey);
 	OutputDebugString(buf);
 	switch (key->wVKey) {
 		case VK_BACK:
@@ -115,7 +115,7 @@ static BOOL LV_InitColumns(HWND hWndListView) {
     LVCOLUMN lvc; 
 	int iCol;
 	int nElem;
-	TCHAR buf[256];
+	char buf[256];
 
 	ColInfo colinfo[]={
 		/* identifier      | alignment     | width */
@@ -154,14 +154,14 @@ static BOOL LV_InitColumns(HWND hWndListView) {
  */
 static BOOL LV_UpdateFindFile(WIN32_FIND_DATA * FileData) {
 	FileInfo * fi;
-	TCHAR curdir[255];
+	char curdir[255];
 	GetCurrentDirectory(255, curdir);
 
 	fi=FI_GetFile(FileData->cFileName, curdir);
 	if (fi==NULL) {		/* no information is available for this file */
 		fi=HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(FileInfo));
-		lstrcpy(fi->filename, FileData->cFileName);
-		lstrcpy(fi->dirname, curdir);
+		strcpy(fi->filename, FileData->cFileName);
+		strcpy(fi->dirname, curdir);
 		fi->filesize=(FileData->nFileSizeHigh*(MAXDWORD+1))+FileData->nFileSizeLow;
 		fi->filetype=FI_GetFileType(FileData);
 	}
@@ -215,7 +215,7 @@ static int LV_FindSelected(int start) {
 }
 
 /* does the actual renaming of the file indicated by index */
-BOOL LV_RenameFile(int index, TCHAR * newname) {
+BOOL LV_RenameFile(int index, char * newname) {
 	FileInfo * fi;
 	BOOL retval;
 	
@@ -227,7 +227,7 @@ BOOL LV_RenameFile(int index, TCHAR * newname) {
 	retval=MoveFile(fi->filename, newname);
 	if (retval) {
 		/* update vector */
-		lstrcpy(fi->filename, newname);
+		strcpy(fi->filename, newname);
 	} else {
 		ErrorBox(IDS_RENAMEFAILED, MB_OK | MB_ICONEXCLAMATION);
 	}
@@ -261,7 +261,7 @@ static BOOL LV_AddItem(HWND hWndListView, FileInfo * fi, int item) {
 
 
 static BOOL LV_UpdateDirItem(HWND hWndListView, FileInfo * fi, int item) {
-	TCHAR buf[20];
+	char buf[20];
 	LVITEM lv;
 	int iRes;
 
@@ -276,7 +276,7 @@ static BOOL LV_UpdateDirItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	/* result */
 	lv.iSubItem=1;
-	wsprintf(buf, TEXT("%d/%d"), fi->dirinfo->cGood, fi->dirinfo->cIsMP3);
+	sprintf(buf, "%d/%d", fi->dirinfo->cGood, fi->dirinfo->cIsMP3);
 	lv.pszText=buf;
 	iRes=ListView_SetItem(hWndListView, &lv);
 	if (!iRes) return FALSE;
@@ -285,10 +285,9 @@ static BOOL LV_UpdateDirItem(HWND hWndListView, FileInfo * fi, int item) {
 }
 
 static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
-	TCHAR buf[20];
+	char buf[20];
 	LVITEM lv;
 	int iRes;
-	char * version;
 
 	lv.iItem=item;
 
@@ -317,22 +316,20 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 	if (fi->info->ismp3file) {
 		/* version */
 		lv.iSubItem=2;
-		version=file_strversion(fi->info);
-		OemToChar(version, buf);
-		lv.pszText=buf;
+		lv.pszText=file_strversion(fi->info);
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* layer */
 		lv.iSubItem=3;
-		wsprintf(buf, TEXT("%d"), fi->info->layer);
+		sprintf(buf, "%d", fi->info->layer);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* bitrate */
 		lv.iSubItem=4;
-		wsprintf(buf, TEXT("%d bps"), fi->info->bitrate);
+		sprintf(buf, "%d bps", fi->info->bitrate);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
@@ -340,30 +337,30 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 		/* vbr/cbr */
 		lv.iSubItem=5;
 		if (fi->info->vbr) {
-			lv.pszText=TEXT("VBR");
+			lv.pszText="VBR";
 		} else {
-			lv.pszText=TEXT("CBR");
+			lv.pszText="CBR";
 		}
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* samplerate */
 		lv.iSubItem=6;
-		wsprintf(buf, TEXT("%d Hz"), fi->info->samplerate);
+		sprintf(buf, "%d Hz", fi->info->samplerate);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* frames */
 		lv.iSubItem=7;
-		wsprintf(buf, TEXT("%d"), fi->info->frames);
+		sprintf(buf, "%d", fi->info->frames);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* time */
 		lv.iSubItem=8;
-		wsprintf(buf, TEXT("%d:%02d"), fi->info->time/60, fi->info->time%60);
+		sprintf(buf, "%d:%02d", fi->info->time/60, fi->info->time%60);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
@@ -371,7 +368,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	/* size */
 	lv.iSubItem=9;
-	wsprintf(buf, TEXT("%d KiB"), fi->filesize/1024);
+	sprintf(buf, "%d KiB", fi->filesize/1024);
 	lv.pszText=buf;
 	iRes=ListView_SetItem(hWndListView, &lv);
 	if (!iRes) return FALSE;
@@ -464,7 +461,7 @@ BOOL LV_ScanDir(int item, int * filetype) {
 	fi->dirinfo->cFiles=cTotal;
 	fi->dirinfo->cIsMP3=cIsMP3;
 
-	iRes=SetCurrentDirectory(TEXT(".."));
+	iRes=SetCurrentDirectory("..");
 	LV_Refresh();
 
 	return TRUE;
@@ -473,7 +470,6 @@ BOOL LV_ScanDir(int item, int * filetype) {
 /* mpck-scans the file and stores this info in FI */
 BOOL LV_ScanFile(int item, int * filetype) {
 	FileInfo * file;
-	char filename[256];
 
 	file=Vector_Get(CurrentVector, item);
 	if (file==NULL) return FALSE;
@@ -481,8 +477,7 @@ BOOL LV_ScanFile(int item, int * filetype) {
 	file->info=HeapAlloc(GetProcessHeap(), 0, sizeof(file_info));
 	if (file->info==NULL) return FALSE;
 
-	CharToOem(file->filename, filename);
-	checkfile(filename, file->info);
+	checkfile(file->filename, file->info);
 
 	/* update filetype */
 	file->filetype|=FILE_SCANNED;
@@ -565,19 +560,19 @@ BOOL LV_ActivateSelected() {
 BOOL LV_OpenSelected() {
 	int index=-1;
 	FileInfo * fi;
-	TCHAR filename[512];
+	char filename[512];
 
 	if (LV_GetSelectedCount()<1) return FALSE;
 	
 	while (-1!=(index=LV_FindSelected(index))) {
 		fi=Vector_Get(CurrentVector, index);
 		if (fi==NULL) return FALSE;
-		lstrcpy(filename, TEXT("\""));
-		lstrcat(filename, fi->dirname);
-		lstrcat(filename, TEXT("\\"));
-		lstrcat(filename, fi->filename);
-		lstrcat(filename, TEXT("\""));
-		ShellExecute(NULL, NULL, fi->filename, NULL, NULL, SW_SHOWDEFAULT);
+		strcpy(filename, "\"");
+		strcat(filename, fi->dirname);
+		strcat(filename, "\\");
+		strcat(filename, fi->filename);
+		strcat(filename, "\"");
+		ShellExecute(NULL, "OPEN", fi->filename, NULL, NULL, SW_SHOWDEFAULT);
 	}
 	return TRUE;
 }
@@ -626,7 +621,7 @@ static BOOL LV_UpdateDirectory(HWND hWndListView) {
 	}
 
 	do {
-		if (lstrcmp(FindFileData.cFileName, ".")) LV_UpdateFindFile(&FindFileData);
+		if (strcmp(FindFileData.cFileName, ".")) LV_UpdateFindFile(&FindFileData);
 	} while (FindNextFile(hFind, &FindFileData));
 
 	FindClose(hFind);
@@ -650,17 +645,17 @@ BOOL LV_DeleteSelected() {
 	int index=-1;		/* file index in CurrentVector			*/
 	FileInfo * fi;		/* info from CurrentVector				*/
 	BOOL retval;		/* value of DeleteFile()				*/
-	TCHAR * files;		/* buffer with files, seperated by NULL */
-	TCHAR * curfile;	/* pointer to current/next file			*/
-	int cursize=256;	/* current size of buffer, in chars.	*/
-	int sizeleft=cursize; /* number of chars left in buffer		*/
+	char * files;		/* buffer with files, seperated by NULL */
+	char * curfile;		/* pointer to current/next file			*/
+	int cursize=256;	/* current size of buffer				*/
+	int sizeleft=cursize; /* number of bytes left in buffer		*/
 	int namelen;
-	int charsize=sizeof(fi->filename[0]);
 	SHFILEOPSTRUCT FileOp;
 
 	if (LV_GetSelectedCount()==0) return FALSE;
 
-	files=HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cursize*charsize);
+	files=HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cursize);
+	curfile=files;
 
 	FileOp.hwnd=hWndListView;
 	FileOp.wFunc=FO_DELETE;
@@ -671,26 +666,26 @@ BOOL LV_DeleteSelected() {
 	FileOp.lpszProgressTitle=NULL;
 	FileOp.pFrom=files;
 	
+
 	/* read the docs for SHFILEOPSTRUCT.pFrom for an explaination about
 	 * the strange data structure in /files/
 	 */
-	curfile=files;
 	while (-1!=(index=LV_FindSelected(index))) {
 		fi=Vector_Get(CurrentVector, index);
-		namelen=lstrlen(fi->filename);
+		namelen=strlen(fi->filename);
 		if (namelen>sizeleft) {	/* buffer is full, enlarge it */
 			cursize+=1024;
 			sizeleft+=1024;
-			files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize*charsize);
+			files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize);
 		}
-		lstrcpy(curfile, fi->filename);
+		strncpy(curfile, fi->filename, namelen);
 		curfile+=namelen+1; /* +1 because of trailing zero */
 		sizeleft-=namelen+1;
 	}
-	/* trailing zeroes */
-	if (sizeleft<2) {
+	/* trailing zero */
+	if (sizeleft==0) {
 		cursize+=2;
-		files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize*charsize);
+		files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize);
 	}
 	retval=SHFileOperation(&FileOp);
 
@@ -792,7 +787,7 @@ int LV_SortColumn(int column) {
 
 /* Go one directory up */
 BOOL LV_DirUp() {
-	SetCurrentDirectory(TEXT(".."));
+	SetCurrentDirectory("..");
 	LV_Refresh();
 	return TRUE;
 }
@@ -806,7 +801,7 @@ void LV_Select(int index) {
 int LV_SelectAll() {
 	FileInfo * fi;
 	int i=0;
-	TCHAR * ext;
+	char * ext;
 
 	while (fi=Vector_Get(CurrentVector, i)) {
 		ext=strrchr(fi->filename, '.');
