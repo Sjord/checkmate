@@ -45,12 +45,14 @@ char *
 file_strversion(file)
 	file_info * file;
 {
-	char * result;
 	int version = file->version;
-	if (version == MPEG_VER_10) result="v1.0";
-	else if (version == MPEG_VER_20) result="v2.0";
-	else if (version == MPEG_VER_25) result="v2.5";
-	return result;
+	if      (version == MPEG_VER_10) return "v1.0";
+	else if (version == MPEG_VER_20) return "v2.0";
+	else if (version == MPEG_VER_25) return "v2.5";
+	else {
+		error("bug: invalid file version");
+		abort();
+	}
 }
 
 static void file_print_result(file)
