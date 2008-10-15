@@ -54,7 +54,7 @@ lastframelength(file, frame)
 	file_info 	* file;
 	frame_info 	* frame;
 {
-	char buf[5];
+	char buf[4 + sizeof(int)];
 	char * ptr;
 	int res;
 	int i = 0;

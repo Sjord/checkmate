@@ -205,7 +205,7 @@ findframe(file, frame)
 	frame_info 	* frame;
 {
 	int res;
-	char buf[5];
+	char buf[6];
 	char * ptr;
 	
 	do {
