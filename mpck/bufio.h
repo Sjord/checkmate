@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #ifndef FALSE
 #define FALSE 0
 #endif
@@ -13,7 +17,10 @@
 
 #define MIN(a, b) (a < b ? a : b)
 
-#define BUFFER_LIMIT 10000000 /* the maximum size of the buffer used by the buffered I/O */
+/* The maximum size of the buffer used by the buffered I/O. 
+   This is currently based on the typical size of an MP3 file, 
+   but should probably be based on memory size. */
+#define BUFFER_LIMIT (6 * 1024 * 1024) // 6 MiB
 
 typedef struct _io_funcs io_funcs;
 
@@ -31,25 +38,20 @@ typedef struct {
 size_t cfilesize(CFILE *c);
 int cisdirectory(const char *filename);
 CFILE *cfopen(const char *filename, char *mode);
-size_t cfread(char *outbuf, size_t size, CFILE *c);
-int cfsetpos(CFILE *c, size_t pos);
-int cfseek(CFILE *c, long offset, int whence);
-size_t cftell(CFILE *c);
-int cfeof(CFILE *c);
-int cfclose(CFILE *c);
 
+// use cfeof instead of feof because feof is a macro which messes things up.
 struct _io_funcs {
-	size_t (*fread)(char *outbuf, size_t size, CFILE *c);
-	int (*fseek)(CFILE *c, long offset, int whence);
-	size_t (*ftell)(CFILE *c);
-	int (*feof)(CFILE *c);
-	int (*fclose)(CFILE *c);
+	size_t (*cfread)(char *outbuf, size_t size, CFILE *c);
+	int (*cfseek)(CFILE *c, long offset, int whence);
+	size_t (*cftell)(CFILE *c);
+	int (*cfeof)(CFILE *c);
+	int (*cfclose)(CFILE *c);
 };
 
-#define cfread(outbuf, size, c) c->io_funcs->fread(outbuf, size, c)
-#define cfseek(c, offset, whence) c->io_funcs->fseek(c, offset, whence)
-#define cftell(c) c->io_funcs->ftell(c)
-#define cfeof(c) c->io_funcs->feof(c)
-#define cfclose(c) c->io_funcs->fclose(c)
+#define cfread(outbuf, size, c) (c->io_funcs->cfread(outbuf, size, c))
+#define cfseek(c, offset, whence) (c->io_funcs->cfseek(c, offset, whence))
+#define cftell(c) (c->io_funcs->cftell(c))
+#define cfeof(c) (c->io_funcs->cfeof(c))
+#define cfclose(c) (c->io_funcs->cfclose(c))
 
 #endif

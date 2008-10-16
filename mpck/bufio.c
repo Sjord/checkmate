@@ -39,23 +39,33 @@
 #include <strings.h>
 #endif
 
+#ifdef HAVE_SYS_MMAN_H
+#include <sys/mman.h>
+#endif
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
 
+CFILE * ub_fopen(const char * filename, char * mode, size_t filesize);
 size_t ub_fread(char *outbuf, size_t size, CFILE *c);
 int ub_fseek(CFILE *c, long offset, int whence);
 size_t ub_ftell(CFILE *c);
 int ub_feof(CFILE *c);
 int ub_fclose(CFILE *c);
 
+CFILE * mm_fopen(const char * filename, char * mode, size_t filesize);
+size_t mm_fread(char *outbuf, size_t size, CFILE *c);
+int mm_fclose(CFILE * c);
+
+CFILE * wb_fopen(const char * filename, char * mode, size_t filesize);
 size_t wb_fread(char *outbuf, size_t size, CFILE *c);
 int wb_fseek(CFILE *c, long offset, int whence);
 size_t wb_ftell(CFILE *c);
 int wb_feof(CFILE *c);
 int wb_fclose(CFILE *c);
 
-static io_funcs unbuffered_funcs = {
+static io_funcs ub_funcs = {
 	ub_fread,
 	ub_fseek,
 	ub_ftell,
@@ -63,7 +73,15 @@ static io_funcs unbuffered_funcs = {
 	ub_fclose
 };
 
-static io_funcs buffered_funcs = {
+static io_funcs mm_funcs = {
+	mm_fread,
+	wb_fseek,
+	wb_ftell,
+	wb_feof,
+	mm_fclose
+};
+
+static io_funcs wb_funcs = {
 	wb_fread,
 	wb_fseek,
 	wb_ftell,
@@ -111,41 +129,25 @@ int cisdirectory(const char * filename) {
 CFILE * cfopen(const char * filename, char * mode) {
 	size_t filesize;
 	CFILE *c;
-	size_t nread;
-	int buffered;
 	
 	filesize=_cfilesize(filename);
 	if (filesize == -1) return NULL;
-	// we malloc an extra int because of what cfread does
-	c=(CFILE *)malloc(sizeof(CFILE)+filesize+sizeof(int));
-	if (c == NULL) {
-		buffered=FALSE;
-		c=(CFILE *)malloc(sizeof(CFILE));
-		if (c == NULL) return NULL;
+
+	if (filesize < BUFFER_LIMIT) {
+		c = wb_fopen(filename, mode, filesize);
 	} else {
-		buffered=TRUE;
+		c = mm_fopen(filename, mode, filesize);
+	}
+	if (c == NULL)
+	{
+		// TODO print warning about being slow
+		c = ub_fopen(filename, mode, filesize);
+	}
+	if (c != NULL)
+	{
+		c->filesize = filesize;
 	}
 
-	memset(c, 0, sizeof(CFILE));
-	c->fp=fopen(filename, mode);
-	if (c->fp == NULL) {
-		free(c);
-		return NULL;
-	}
-	c->filesize=filesize;
-	if (!buffered) {
-		c->io_funcs = & unbuffered_funcs;
-		return c;
-	}
-
-	c->io_funcs = & buffered_funcs;
-	c->buffer=(char *)(c+1);
-	c->bufpnt=c->buffer;
-	c->buflen=filesize;
-	c->bufend=c->buffer+filesize;
-	nread=fread(c->buffer, 1, filesize, c->fp);
-	fclose(c->fp);
-	c->fp=NULL;
 	return c;
 }
 
@@ -173,12 +175,40 @@ int cfclose(CFILE * c) {
 
 // whole buffered
 
+CFILE * wb_fopen(const char * filename, char * mode, size_t filesize) {
+	CFILE *c;
+	size_t nread; // TODO use this or remove this
+	
+	// we malloc an extra int because of what cfread does
+	c=(CFILE *)malloc(sizeof(CFILE)+filesize+sizeof(int));
+	if (c == NULL) {
+		return NULL;
+	}
+
+	memset(c, 0, sizeof(CFILE));
+	c->fp=fopen(filename, mode);
+	if (c->fp == NULL) {
+		free(c);
+		return NULL;
+	}
+
+	c->io_funcs = & wb_funcs;
+	c->buffer=(char *)(c+1);
+	c->bufpnt=c->buffer;
+	c->buflen=filesize;
+	c->bufend=c->buffer+filesize;
+	nread=fread(c->buffer, 1, filesize, c->fp);
+	fclose(c->fp);
+	c->fp=NULL;
+	return c;
+}
+
 size_t wb_fread(char * outbuf, size_t size, CFILE * c) {
 	size_t readnow;
 	readnow=MIN(reminbuf(c), size); 
 	// Most of the time, size is small and we do a fast assignment.
 	// This means we read beyond the end of the buffer. Hope it doesn't matter.
-	if (size <= sizeof(int)) {
+	if (readnow <= sizeof(int)) {
 		* (int *)outbuf = * (int *)c->bufpnt;
 	} else {
 		memcpy(outbuf, c->bufpnt, readnow);
@@ -213,13 +243,122 @@ int wb_feof(CFILE * c) {
 }
 
 int wb_fclose(CFILE * c) {
-	int res=TRUE;
-	if (c->fp != NULL) res=fclose(c->fp);
 	free(c);
-	return res;
+	return TRUE;
+}
+
+// memory mapped
+
+#ifdef _WIN32
+
+CFILE * mm_fopen(const char * filename, char * mode, size_t filesize) {
+	HANDLE file;
+	HANDLE fileMapping;
+	CFILE *c;
+
+	c = (CFILE *) malloc(sizeof(CFILE));
+	if (c == NULL) return NULL;
+
+	file = CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (file == INVALID_HANDLE_VALUE) {
+		free(c);
+		return NULL;
+	}
+
+	fileMapping = CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL);
+	CloseHandle(file);
+	if (fileMapping == INVALID_HANDLE_VALUE) {
+		free(c);
+		return NULL;
+	}
+
+	c->buffer = MapViewOfFile(fileMapping, FILE_MAP_READ, 0, 0, 0);
+	CloseHandle(fileMapping);
+	if (c->buffer == NULL)
+	{
+		free(c);
+		return NULL;
+	}
+
+	c->io_funcs = & mm_funcs;
+	c->bufpnt=c->buffer;
+	c->buflen=filesize;
+	c->bufend=c->buffer+filesize;
+	return c;
+}
+
+int mm_fclose(CFILE * c) {
+	int res = UnmapViewOfFile(c->buffer);
+	free(c);
+	if (res)
+		return 0;
+	else
+		return EOF;
+}
+#else // _WIN32
+
+CFILE * mm_fopen(const char * filename, char * mode, size_t filesize) {
+	CFILE *c;
+	FILE * fp;
+	int fd;
+
+	c = (CFILE *) malloc(sizeof(CFILE));
+	if (c == NULL) return NULL;
+
+	fp = fopen(filename, mode);
+	if (fp == NULL)
+	{
+		free(c);
+		return NULL;
+	}
+	fd = fileno(fp);
+		
+	c->buffer = mmap(0, filesize, PROT_READ, MAP_PRIVATE, fd, 0);
+	fclose(fp);
+	if (c->buffer == MAP_FAILED)
+	{
+		free(c);
+		return NULL;
+	}
+
+	c->io_funcs = & mm_funcs;
+	c->bufpnt=c->buffer;
+	c->buflen=filesize;
+	c->bufend=c->buffer+filesize;
+	return c;
+}
+
+int mm_fclose(CFILE * c) {
+	munmap(c->buffer, c->filesize);
+	free(c);
+	return TRUE;
+}
+
+#endif // _WIN32
+
+// Dont use wb_fread because it reads beyond the end of the buffer
+size_t mm_fread(char * outbuf, size_t size, CFILE * c) {
+	size_t readnow;
+	readnow=MIN(reminbuf(c), size); 
+	memcpy(outbuf, c->bufpnt, readnow);
+	c->bufpnt += readnow;
+	return readnow;
 }
 
 // unbuffered
+CFILE * ub_fopen(const char * filename, char * mode, size_t filesize) {
+	CFILE *c = (CFILE *) malloc(sizeof(CFILE));
+	if (c == NULL) return NULL;
+	c->fp = fopen(filename, mode);
+	if (c->fp == NULL)
+	{
+		free(c);
+		return NULL;
+	}
+	c->io_funcs = & ub_funcs;
+	return c;
+}
+
 size_t ub_fread(char * outbuf, size_t size, CFILE * c) {
 	return fread(outbuf, 1, size, c->fp);
 }
@@ -228,7 +367,7 @@ int ub_fseek(CFILE * c, long offset, int whence) {
 	return fseek(c->fp, offset, whence);
 }
 
-long ub_ftell(CFILE * c) {
+size_t ub_ftell(CFILE * c) {
 	return ftell(c->fp);
 }
 
@@ -237,5 +376,7 @@ int ub_feof(CFILE * c) {
 }
 
 int ub_fclose(CFILE * c) {
-	return fclose(c->fp);
+	int res = fclose(c->fp);
+	free(c);
+	return res;
 }
