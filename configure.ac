@@ -16,7 +16,7 @@ AC_PROG_MAKE_SET
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADER([getopt.h], , CPPFLAGS="$CPPFLAGS -I../libgnugetopt-1.2")
-AC_CHECK_HEADERS([unistd.h errno.h getopt.h malloc.h memory.h sys/mman.h])
+AC_CHECK_HEADERS([unistd.h errno.h getopt.h malloc.h memory.h sys/mman.h fcntl.h])
 AC_HEADER_DIRENT
 
 # Checks for typedefs, structures, and compiler characteristics.

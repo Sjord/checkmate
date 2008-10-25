@@ -36,7 +36,6 @@
 
 /* some definitions for other platforms */
 #ifdef _WIN32
-#define HAVE_WINDOWS_H
 #define HAVE_STDLIB_H
 #define HAVE_MALLOC_H
 #define HAVE_MEMORY_H
@@ -45,6 +44,8 @@
 #define HAVE_ERRNO_H
 #define HAVE_SYS_STAT_H
 #define HAVE_WINDOWS_H
+#define HAVE_IO_H
+#define HAVE_FCNTL_H
 #define DIRSEP '\\' /* directory seperator */
 #else /* _WIN32 */
 #define DIRSEP '/'
