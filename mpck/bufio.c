@@ -197,7 +197,11 @@ static CFILE * wb_fopen(const char * filename, char * mode, size_t filesize) {
 	}
 
 	memset(c, 0, sizeof(CFILE));
-	fd=open(filename, O_RDONLY | O_BINARY);
+	fd=open(filename, O_RDONLY
+#ifdef _WIN32
+ 	                | O_BINARY
+#endif
+		);
 	if (fd==-1) {
 		free(c);
 		return NULL;
