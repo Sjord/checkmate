@@ -76,6 +76,10 @@ checkargument(filename, total, file)
 {
 	int res = TRUE;
 	if (extension_match(filename)) {
+		if (cisdirectory(filename) > 0) {
+			error(" skipping directory `%s'", filename);
+			return FALSE;
+		}
 		if (!options_get_quiet() && !options_get_badonly() && !options_get_xmloutput()) {
 			print_scanning(filename);
 		}
