@@ -1,3 +1,11 @@
+version 0.19
+	* Mpck does not read big files in memory, but mmaps them instead.
+	  This significantly speeds up scanning of big files.
+	* Recursive scanning now also works in Windows.
+	* Added support for XML output.
+	* Fixed some minor bugs.
+	* Skip directories when scanning non-recursively.
+
 version 0.18
 	* Fixed various bugs and memory leaks.
 

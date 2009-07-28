@@ -1,5 +1,9 @@
 mpck
 
+0.19 (28-07-2009)
+	I changed the buffered I/O to use structs with function pointers.
+	Almost object-oriented.
+
 0.18 (08-12-2007)
 	Eric Blanpied supplied me with a file which causes mpck to crash.
 	This is valuable input for me and I used it to solve various bugs.
