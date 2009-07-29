@@ -48,11 +48,11 @@ int extension_match(filename)
 	if (lastdot == NULL) return FALSE;
 
 	lastdot++;	/* remove the dot */
-	if (strcmp(lastdot, extension) == 0) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
+#ifdef _WIN32
+	return stricmp(lastdot, extension) == 0;
+#else
+	return strcmp(lastdot, extension) == 0;
+#endif
 }
 
 static int
