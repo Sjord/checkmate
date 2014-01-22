@@ -19,48 +19,8 @@
  *
  *****************************************************************************
  *
- *   id3.c - functions that do something with id3 tags 
+ *   ape.h - functions that do something with ape tags 
  * 
  */
 
-#include "mpck.h"
-#include "file.h"
-#include "synchsafe.h"
-
-extern int verbose;
-
-/* Skips an id3v1 tag. The first three characters have already been read. */
-int
-skip_id3v1_tag(file)
-	file_info * file;
-{
-	file->id3 |= ID3V1;
-	cfseek(file->fp, 125, SEEK_CUR);
-	return TRUE;
-}
-
-/* Skips an id3v2 tag. The first three characters have already been read. */
-int
-skip_id3v2_tag(file)
-	file_info * file;
-{
-	char buf[8];
-	int res;
-	
-	int version, revision;		/* version of ID3v2 tag 	*/
-	int flags;			/* flags			*/
-	int size;			/* size of tag without header	*/
-
-	res=cfread(buf, 7, file->fp);	/* read rest of header		*/
-	if (res == 0) return FALSE;
-	version  = (int)(buf[0]);
-	revision = (int)(buf[1]);
-	flags    = (int)(buf[2]);
-	size     = INT_SS(buf+3);
-
-	file->id3 |= ID3V2;
-    file->id3v2_size = size;
-	cfseek(file->fp, size, SEEK_CUR);
-	
-	return 0;
-}
+int skip_ape_tag(file_info *file);
