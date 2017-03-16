@@ -130,29 +130,21 @@ BOOL Rebar_UpdateText() {
 }
 
 /* moves the contents of the static control to the right position */
-BOOL Rebar_ResizeContents() {
-	RECT crc, rrc;
-	int width, height, x;
+BOOL Rebar_ResizeContents(int width) {
+	RECT crc;
+	int height;
 
 	GetWindowRect(hWndCombo, &crc);
-	GetWindowRect(hWndRebar, &rrc);
 	height=crc.bottom-crc.top;
-	width=crc.right-crc.left;
-	x=(rrc.right-rrc.left)-width-5;
 
-//	MoveWindow(hWndButton, width-60, 0, 55, height, TRUE);
-	MoveWindow(hWndCombo, x, 0, width, height, TRUE);
+	int x = 100;
+	MoveWindow(hWndCombo, x, 0, width - x, height, TRUE);
+	MoveWindow(hWndRebar, 0, 0, width, height, TRUE);
 	return TRUE;
 }
 
 BOOL Rebar_Resize(int width, int height) {
-	MoveWindow(hWndRebar,
-		0,				/* x		*/
-		0,				/* y		*/
-		width,			/* width	*/
-		0,				/* height	*/
-		TRUE);			/* repaint  */
-	return Rebar_ResizeContents();
+	return Rebar_ResizeContents(width);
 }
 
 int Rebar_Height() {
@@ -166,54 +158,23 @@ int Rebar_Height() {
  */
 HWND Rebar_Create(HWND hWndOwner)
 {
-   REBARINFO     rbi;
-   REBARBANDINFO rbBand;
    RECT          rc;
    HWND			 hWndContents;
-   INITCOMMONCONTROLSEX icex;
    char locationtext[20];
    LoadString(hInst, IDS_LOCATION, locationtext, 19);
-   
-   icex.dwSize=sizeof(INITCOMMONCONTROLSEX);
-   icex.dwICC =ICC_COOL_CLASSES | ICC_BAR_CLASSES;
-   InitCommonControlsEx(&icex);
 
-   hWndRebar=CreateWindowEx(WS_EX_TOOLWINDOW,
-                           REBARCLASSNAME,
-                           NULL,
-                           WS_CHILD|WS_VISIBLE|WS_CLIPSIBLINGS|
-                           WS_CLIPCHILDREN|RBS_VARHEIGHT|RBS_BANDBORDERS|WS_BORDER|
-                           CCS_NODIVIDER,
-                           0,0,0,0,
-                           hWndOwner,
-                           NULL,
-                           hInst,
-                           NULL);
+   hWndRebar = CreateWindow("static", locationtext,
+	   WS_CHILD | WS_VISIBLE,
+	   0, 0, 0, 0,
+	   hWndOwner, NULL,
+	   hInst, NULL);
+
    if(!hWndRebar)
       return NULL;
-
-   rbi.cbSize = sizeof(REBARINFO);
-   rbi.fMask  = 0;
-   rbi.himl   = (HIMAGELIST)NULL;
-   if(!SendMessage(hWndRebar, RB_SETBARINFO, 0, (LPARAM)&rbi))
-      return NULL;
-   
-   rbBand.cbSize = sizeof(REBARBANDINFO);
-   rbBand.fMask  = RBBIM_TEXT | 
-                   RBBIM_STYLE | RBBIM_CHILD  | RBBIM_CHILDSIZE | 
-                   RBBIM_SIZE;
-   rbBand.fStyle = RBBS_CHILDEDGE;
 
    hWndContents=Rebar_ComboControl(hWndRebar);
    GetWindowRect(hWndContents, &rc);
    
-   rbBand.lpText     = locationtext;
-   rbBand.hwndChild  = hWndContents;
-   rbBand.cxMinChild = 100;
-   rbBand.cyMinChild = rc.bottom - rc.top;
-   rbBand.cx         = 200;
-   SendMessage(hWndRebar, RB_INSERTBAND, (WPARAM)-1, (LPARAM)&rbBand);
-
    Rebar_UpdateText();
    return (hWndRebar);
 }

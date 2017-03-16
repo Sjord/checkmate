@@ -327,8 +327,8 @@ LRESULT CALLBACK MainWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 			PostQuitMessage(0);
 			break;
 		case WM_SIZE:
-			LV_Resize(LOWORD(lParam), HIWORD(lParam));
 			Rebar_Resize(LOWORD(lParam), HIWORD(lParam));
+			LV_Resize(LOWORD(lParam), HIWORD(lParam));
 			return 0;
 			break;
 		case WM_COMMAND:
