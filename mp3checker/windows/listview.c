@@ -250,7 +250,7 @@ static BOOL LV_AddItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	lv.mask=LVIF_TEXT | LVIF_IMAGE;
 	lv.iItem=item;
-	lv.iSubItem=0;
+	lv.iSubItem=COL_FILENAME;
 	lv.pszText=fi->filename;
 	lv.iImage=LV_GetIcon(fi->filetype);
 	return ListView_InsertItem(hWndListView, &lv);
@@ -265,7 +265,7 @@ static BOOL LV_UpdateDirItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	lv.iItem=item;
 	lv.mask=LVIF_IMAGE;
-	lv.iSubItem=0;
+	lv.iSubItem=COL_FILENAME;
 	lv.iImage=LV_GetIcon(fi->filetype);
 	iRes=ListView_SetItem(hWndListView, &lv);
 	if (!iRes) return FALSE;
@@ -273,7 +273,7 @@ static BOOL LV_UpdateDirItem(HWND hWndListView, FileInfo * fi, int item) {
 	lv.mask=LVIF_TEXT;
 
 	/* result */
-	lv.iSubItem=1;
+	lv.iSubItem=COL_RESULT;
 	sprintf(buf, "%d/%d", fi->dirinfo->cGood, fi->dirinfo->cIsMP3);
 	lv.pszText=buf;
 	iRes=ListView_SetItem(hWndListView, &lv);
@@ -290,7 +290,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 	lv.iItem=item;
 
 	lv.mask=LVIF_IMAGE;
-	lv.iSubItem=0;
+	lv.iSubItem=COL_FILENAME;
 	lv.iImage=LV_GetIcon(fi->filetype);
 	iRes=ListView_SetItem(hWndListView, &lv);
 	if (!iRes) return FALSE;
@@ -298,7 +298,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 	lv.mask=LVIF_TEXT;
 
 	/* result */
-	lv.iSubItem=1;
+	lv.iSubItem=COL_RESULT;
 
 	if (!fi->info->ismp3file) {
 		LoadString(hInst, IDS_NOMP3, buf, 19);
@@ -313,27 +313,27 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	if (fi->info->ismp3file) {
 		/* version */
-		lv.iSubItem=2;
+		lv.iSubItem=COL_VERSION;
 		lv.pszText=file_strversion(fi->info);
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* layer */
-		lv.iSubItem=3;
+		lv.iSubItem=COL_LAYER;
 		sprintf(buf, "%d", fi->info->layer);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* bitrate */
-		lv.iSubItem=4;
+		lv.iSubItem=COL_BITRATE;
 		sprintf(buf, "%d bps", fi->info->bitrate);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* vbr/cbr */
-		lv.iSubItem=5;
+		lv.iSubItem=COL_VBR;
 		if (fi->info->vbr) {
 			lv.pszText="VBR";
 		} else {
@@ -343,21 +343,21 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 		if (!iRes) return FALSE;
 
 		/* samplerate */
-		lv.iSubItem=6;
+		lv.iSubItem=COL_SAMPLERATE;
 		sprintf(buf, "%d Hz", fi->info->samplerate);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* frames */
-		lv.iSubItem=7;
+		lv.iSubItem=COL_FRAMES;
 		sprintf(buf, "%d", fi->info->frames);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
 		if (!iRes) return FALSE;
 
 		/* time */
-		lv.iSubItem=8;
+		lv.iSubItem=COL_TIME;
 		sprintf(buf, "%d:%02d", fi->info->time/60, fi->info->time%60);
 		lv.pszText=buf;
 		iRes=ListView_SetItem(hWndListView, &lv);
@@ -365,7 +365,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 	}
 
 	/* size */
-	lv.iSubItem=9;
+	lv.iSubItem=COL_SIZE;
 	sprintf(buf, "%I64u KiB", fi->filesize/1024);
 	lv.pszText=buf;
 	iRes=ListView_SetItem(hWndListView, &lv);
