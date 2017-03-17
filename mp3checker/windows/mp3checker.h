@@ -23,6 +23,9 @@
  * 
  */
 
+#define WINVER 0x0501
+#define _WIN32_WINNT 0x0501		/* fix API version, specifically so that the rebar control works*/
+
 #include "listview.h"
 #include "mpck.h"
 #include "file.h"

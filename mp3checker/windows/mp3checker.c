@@ -24,8 +24,8 @@
  */
 
 
-#include <windows.h>
 #include "mp3checker.h"
+#include <windows.h>
 #include "resource.h"
 #include <commctrl.h>
 #include "rebar.h"

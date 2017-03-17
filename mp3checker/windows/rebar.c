@@ -23,9 +23,9 @@
  * 
  */
 
+#include "mp3checker.h"
 #include <windows.h>
 #include <commctrl.h>
-#include "mp3checker.h"
 #include "resource.h"
 
 static HWND hWndRebar;
