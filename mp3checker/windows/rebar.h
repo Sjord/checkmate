@@ -26,11 +26,9 @@
 /* prototypes */
 
 HWND Rebar_Create(HWND hWndParent);
-int Rebar_ButtonID(void);
 int Rebar_Height(void);
 BOOL Rebar_UpdateText(void);
 char * Rebar_GetText(void);
-BOOL Rebar_HasFocus(void);
 BOOL Rebar_Resize(int width, int height);
 BOOL Rebar_Destroy(void);
 int Rebar_Select();

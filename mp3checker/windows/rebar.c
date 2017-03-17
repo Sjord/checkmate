@@ -29,9 +29,6 @@
 #include "resource.h"
 
 static HWND hWndRebar;
-static HWND hWndEdit;	/* deprecated? */
-static HWND hWndButton;
-static HWND hWndStatic;
 static HWND hWndCombo;
 
 static WNDPROC DefComboWndProc;
@@ -100,30 +97,13 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 	return hWndCombo;
 }
 
-HWND Rebar_Button(HWND hWndOwner) {
-	hWndButton = CreateWindow( 
-		"BUTTON",   // predefined class 
-		"OK",       // button text 
-		WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // styles 
-		10,         // starting x position 
-		10,         // starting y position 
-		100,        // button width 
-		100,        // button height 
-		hWndOwner,  // parent window 
-		1234    ,
-		hInst, 
-		NULL);      // pointer not needed 
-	return hWndButton;
-}
-
 static BOOL Rebar_SetText(char * text) {
 	return SendMessage(hWndCombo, WM_SETTEXT, 0, (LPARAM)text);
 }
 
 BOOL Rebar_UpdateText() {
-	/* FIXME: overflow risc */
-	static char curdir[255];
-	GetCurrentDirectory(255, curdir);
+	static char curdir[MAX_PATH];
+	GetCurrentDirectory(sizeof(curdir), curdir);
 	Rebar_SetText(curdir);
 	UpdateWindow(hWndRebar);
 	return TRUE;
@@ -140,7 +120,6 @@ BOOL Rebar_ResizeContents() {
 	width=crc.right-crc.left;
 	x=(rrc.right-rrc.left)-width-5;
 
-//	MoveWindow(hWndButton, width-60, 0, 55, height, TRUE);
 	MoveWindow(hWndCombo, x, 0, width, height, TRUE);
 	return TRUE;
 }
@@ -216,11 +195,6 @@ HWND Rebar_Create(HWND hWndOwner)
 
    Rebar_UpdateText();
    return (hWndRebar);
-}
-
-int Rebar_ButtonID() {
-	return GetWindowLong(hWndCombo, GWL_ID);
-	// return GetLastError();
 }
 
 /* FIXME: static is Evil */
