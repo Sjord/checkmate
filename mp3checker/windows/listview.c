@@ -1,7 +1,7 @@
 /*
  *   This file is part of Checkmate MP3 checker, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2005  Sjoerd Langkemper
+ *   Copyright (C)  2017  Sjoerd Langkemper
  *   
  *   Checkmate is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -49,9 +49,6 @@ BOOL LV_InitVector() {
 }
 
 BOOL LV_OnKey(NMLVKEYDOWN * key) {
-	char buf[15];
-	sprintf(buf, "%d\n", key->wVKey);
-	OutputDebugString(buf);
 	switch (key->wVKey) {
 		case VK_BACK:
 			return LV_DirUp();
