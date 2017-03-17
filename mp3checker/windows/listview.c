@@ -128,7 +128,7 @@ static BOOL LV_InitColumns(HWND hWndListView) {
 		{IDS_SAMPLERATE,	LVCFMT_RIGHT,	 80},
 		{IDS_FRAMES,		LVCFMT_RIGHT,	 50},
 		{IDS_TIME,			LVCFMT_RIGHT,	 40},
-		{IDS_SIZE,			LVCFMT_RIGHT,	 60}
+		{IDS_SIZE,			LVCFMT_RIGHT,	 80}
 	};
 	nElem=sizeof(colinfo)/sizeof(ColInfo);
 
@@ -162,7 +162,7 @@ static BOOL LV_UpdateFindFile(WIN32_FIND_DATA * FileData) {
 		fi=HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(FileInfo));
 		strcpy(fi->filename, FileData->cFileName);
 		strcpy(fi->dirname, curdir);
-		fi->filesize=(FileData->nFileSizeHigh*(MAXDWORD+1))+FileData->nFileSizeLow;
+		fi->filesize=((UINT64)FileData->nFileSizeHigh << 32)+FileData->nFileSizeLow;
 		fi->filetype=FI_GetFileType(FileData);
 	}
 	Vector_Add(CurrentVector, fi);
@@ -368,7 +368,7 @@ static BOOL LV_UpdateFileItem(HWND hWndListView, FileInfo * fi, int item) {
 
 	/* size */
 	lv.iSubItem=9;
-	sprintf(buf, "%d KiB", fi->filesize/1024);
+	sprintf(buf, "%I64u KiB", fi->filesize/1024);
 	lv.pszText=buf;
 	iRes=ListView_SetItem(hWndListView, &lv);
 	if (!iRes) return FALSE;

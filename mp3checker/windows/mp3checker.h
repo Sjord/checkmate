@@ -54,7 +54,7 @@ struct _FileInfo {
 		file_info * info;
 		DirInfo	  * dirinfo;
 	};
-	UINT filesize;
+	UINT64 filesize;
 };
 
 
