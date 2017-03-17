@@ -160,10 +160,6 @@ SOURCE=..\..\mpck\print.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mp3checker\windows\progress.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mp3checker\windows\rebar.c
 # End Source File
 # Begin Source File
@@ -253,10 +249,6 @@ SOURCE=..\..\mpck\options.h
 # Begin Source File
 
 SOURCE=..\..\mpck\print.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\mp3checker\windows\progress.h
 # End Source File
 # Begin Source File
 

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by mp3checker.rc
 //
 #define IDS_CDELETE                     1
@@ -42,10 +42,6 @@
 #define IDR_ACCELERATOR                 111
 #define IDB_ABOUTLOGO                   114
 #define IDR_FILEPOPUP                   117
-#define IDD_PROGRESS                    121
-#define IDC_BUTTON2                     1001
-#define IDC_PROGRESSBAR                 1005
-#define IDC_FILENAME                    1006
 #define ID_FILE_SCAN                    40006
 #define ID_FILE_DELETE                  40007
 #define ID_FILE_RENAME                  40008
