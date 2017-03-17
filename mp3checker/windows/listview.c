@@ -32,6 +32,7 @@
 #include "resource.h"
 #include "rebar.h"
 #include "sort.h"
+#include "checkfile.h"
 
 extern HINSTANCE hInst;
 static HWND hWndListView;	/* the hWnd of the listview						*/
