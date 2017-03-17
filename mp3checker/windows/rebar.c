@@ -45,7 +45,7 @@ LRESULT CALLBACK OwnComboWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 				return TRUE;
 		}
 	}
-	return DefComboWndProc(hwnd, msg, wParam, lParam);
+	return CallWindowProc(DefComboWndProc, hwnd, msg, wParam, lParam);
 }
 
 static BOOL Combo_AddDrives(HWND hWndCombo) {
@@ -85,8 +85,8 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 
 	hWndEdit=GetWindow(hWndCombo, GW_CHILD);
 
-	DefComboWndProc=(WNDPROC)GetWindowLongPtr(hWndEdit, GWL_WNDPROC);
-	SetWindowLongPtr(hWndEdit, GWL_WNDPROC, (LONG_PTR) OwnComboWndProc);
+	DefComboWndProc=(WNDPROC)GetWindowLongPtr(hWndEdit, GWLP_WNDPROC);
+	SetWindowLongPtr(hWndEdit, GWLP_WNDPROC, (LONG_PTR) OwnComboWndProc);
 
 	Combo_AddDrives(hWndCombo);
 
