@@ -1,7 +1,7 @@
 /*
  *   This file is part of Checkmate MP3 checker, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2005  Sjoerd Langkemper
+ *   Copyright (C)  2017  Sjoerd Langkemper
  *   
  *   Checkmate is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -29,9 +29,6 @@
 #include "resource.h"
 
 static HWND hWndRebar;
-static HWND hWndEdit;	/* deprecated? */
-static HWND hWndButton;
-static HWND hWndStatic;
 static HWND hWndCombo;
 
 static WNDPROC DefComboWndProc;
@@ -48,29 +45,25 @@ LRESULT CALLBACK OwnComboWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 				return TRUE;
 		}
 	}
-	return DefComboWndProc(hwnd, msg, wParam, lParam);
-
+	return CallWindowProc(DefComboWndProc, hwnd, msg, wParam, lParam);
 }
-
 
 static BOOL Combo_AddDrives(HWND hWndCombo) {
 	DWORD drives;
 	int nPos=0;
-	char strDrive[4];
+	char strDrive[] = "A:\\";
 
 	drives=GetLogicalDrives();
-	strcpy(strDrive, "A:\\");
 
 	while (drives) {
         if (drives & 1) {
 			*strDrive='A'+nPos;
-			SendMessage(hWndCombo, CB_ADDSTRING, 0, strDrive);
+			SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM)strDrive);
         }
         drives >>= 1;
         nPos++;
     }
 	return TRUE;
-
 }
 
 HWND Rebar_ComboControl(HWND hWndOwner) {
@@ -82,38 +75,22 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
                                     WS_BORDER | WS_CHILD | WS_VISIBLE | CBS_DROPDOWN ,
                                     0, 0, 100, 200,  // set size in WM_SIZE message 
                                     hWndOwner,        // parent window 
-                                    ID_COMBO,   // combo control ID 
+                                    (HMENU)ID_COMBO,   // combo control ID 
                                     hInst, 
                                     NULL);       // pointer not needed 
 
 	/* set the same font as the rebar */
-	font=SendMessage(hWndRebar, WM_GETFONT, 0, 0);
-	SendMessage(hWndCombo, WM_SETFONT, font, 1);
+	font=(HFONT)SendMessage(hWndRebar, WM_GETFONT, 0, 0);
+	SendMessage(hWndCombo, WM_SETFONT, (WPARAM)font, MAKELPARAM(TRUE, 0));
 
 	hWndEdit=GetWindow(hWndCombo, GW_CHILD);
 
-	DefComboWndProc=GetWindowLong(hWndEdit, GWL_WNDPROC);
-	SetWindowLong(hWndEdit, GWL_WNDPROC, OwnComboWndProc);
+	DefComboWndProc=(WNDPROC)GetWindowLongPtr(hWndEdit, GWLP_WNDPROC);
+	SetWindowLongPtr(hWndEdit, GWLP_WNDPROC, (LONG_PTR) OwnComboWndProc);
 
 	Combo_AddDrives(hWndCombo);
 
 	return hWndCombo;
-}
-
-HWND Rebar_Button(HWND hWndOwner) {
-	hWndButton = CreateWindow( 
-		"BUTTON",   // predefined class 
-		"OK",       // button text 
-		WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // styles 
-		10,         // starting x position 
-		10,         // starting y position 
-		100,        // button width 
-		100,        // button height 
-		hWndOwner,  // parent window 
-		1234    ,
-		hInst, 
-		NULL);      // pointer not needed 
-	return hWndButton;
 }
 
 static BOOL Rebar_SetText(char * text) {
@@ -121,15 +98,13 @@ static BOOL Rebar_SetText(char * text) {
 }
 
 BOOL Rebar_UpdateText() {
-	/* FIXME: overflow risc */
-	static char curdir[255];
-	GetCurrentDirectory(255, curdir);
+	static char curdir[MAX_PATH];
+	GetCurrentDirectory(sizeof(curdir), curdir);
 	Rebar_SetText(curdir);
 	UpdateWindow(hWndRebar);
 	return TRUE;
 }
 
-/* moves the contents of the static control to the right position */
 BOOL Rebar_ResizeContents() {
 	RECT crc, rrc;
 	int width, height, x;
@@ -140,7 +115,6 @@ BOOL Rebar_ResizeContents() {
 	width=crc.right-crc.left;
 	x=(rrc.right-rrc.left)-width-5;
 
-//	MoveWindow(hWndButton, width-60, 0, 55, height, TRUE);
 	MoveWindow(hWndCombo, x, 0, width, height, TRUE);
 	return TRUE;
 }
@@ -218,11 +192,6 @@ HWND Rebar_Create(HWND hWndOwner)
    return (hWndRebar);
 }
 
-int Rebar_ButtonID() {
-	return GetWindowLong(hWndCombo, GWL_ID);
-	// return GetLastError();
-}
-
 /* FIXME: static is Evil */
 char * Rebar_GetText() {
 	static char buf[255];
@@ -234,9 +203,8 @@ void Rebar_Clear() {
 	SetWindowText(hWndCombo, "");
 }
 
-BOOL Rebar_Destroy() {
+void Rebar_Destroy() {
 	DestroyWindow(hWndRebar);
-	return TRUE;
 }
 
 int Rebar_Select() {
@@ -251,7 +219,7 @@ int Rebar_Select() {
 	strPath=HeapAlloc(GetProcessHeap(), 0, iLen+1);
 	if (strPath==NULL) return FALSE;
 
-	SendMessage(hWndCombo, CB_GETLBTEXT, iItem, strPath);
+	SendMessage(hWndCombo, CB_GETLBTEXT, iItem, (LPARAM)strPath);
 	iRes=SetCurrentDirectory(strPath);
 	HeapFree(GetProcessHeap(), 0, strPath);
 	if (iRes) {

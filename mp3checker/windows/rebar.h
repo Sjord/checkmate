@@ -1,7 +1,7 @@
 /*
  *   This file is part of Checkmate MP3 checker, a program to check MP3 files for errors
  *   
- *   Copyright (C)  2005  Sjoerd Langkemper
+ *   Copyright (C)  2017  Sjoerd Langkemper
  *   
  *   Checkmate is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -26,12 +26,10 @@
 /* prototypes */
 
 HWND Rebar_Create(HWND hWndParent);
-int Rebar_ButtonID(void);
 int Rebar_Height(void);
 BOOL Rebar_UpdateText(void);
 char * Rebar_GetText(void);
-BOOL Rebar_HasFocus(void);
 BOOL Rebar_Resize(int width, int height);
-BOOL Rebar_Destroy(void);
+void Rebar_Destroy(void);
 int Rebar_Select();
 void Rebar_Clear();
