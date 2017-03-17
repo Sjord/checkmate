@@ -512,6 +512,14 @@ BOOL LV_ScanSelected() {
 	return TRUE;
 }
 
+static void PumpMessageQueue() {
+	MSG  msg;
+	while (PeekMessage((LPMSG)&msg, NULL, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+
 /* scan item - could be a file or directory */
 BOOL LV_Scan(int item, int * filetype) {
 	FileInfo * fi;
@@ -524,6 +532,7 @@ BOOL LV_Scan(int item, int * filetype) {
 		iRes=LV_ScanDir(item, filetype);
 	}
 	UpdateWindow(hWndListView);
+	PumpMessageQueue();
 	return iRes;
 }
 
