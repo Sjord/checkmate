@@ -154,8 +154,8 @@ static BOOL LV_InitColumns(HWND hWndListView) {
  */
 static BOOL LV_UpdateFindFile(WIN32_FIND_DATA * FileData) {
 	FileInfo * fi;
-	char curdir[255];
-	GetCurrentDirectory(255, curdir);
+	char curdir[MAX_PATH];
+	GetCurrentDirectory(sizeof(curdir), curdir);
 
 	fi=FI_GetFile(FileData->cFileName, curdir);
 	if (fi==NULL) {		/* no information is available for this file */
