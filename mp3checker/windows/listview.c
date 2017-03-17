@@ -648,20 +648,20 @@ BOOL LV_Refresh() {
 
 /* delete all selected files */
 BOOL LV_DeleteSelected() {
+	const size_t block_size=MAX_PATH;
 	int index=-1;		/* file index in CurrentVector			*/
 	FileInfo * fi;		/* info from CurrentVector				*/
 	BOOL retval;		/* value of DeleteFile()				*/
 	char * files;		/* buffer with files, seperated by NULL */
-	char * curfile;		/* pointer to current/next file			*/
-	int cursize=256;	/* current size of buffer				*/
-	int sizeleft=cursize; /* number of bytes left in buffer		*/
-	int namelen;
+	ptrdiff_t offset=0;			/* offset of current/next file			*/
+	size_t cursize=block_size;	/* current size of buffer				*/
+	size_t sizeleft=cursize;	/* number of bytes left in buffer		*/
+	size_t namelen;
 	SHFILEOPSTRUCT FileOp;
 
 	if (LV_GetSelectedCount()==0) return FALSE;
 
 	files=HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cursize);
-	curfile=files;
 
 	FileOp.hwnd=hWndListView;
 	FileOp.wFunc=FO_DELETE;
@@ -670,8 +670,6 @@ BOOL LV_DeleteSelected() {
 	FileOp.fAnyOperationsAborted=0;
 	FileOp.hNameMappings=NULL;
 	FileOp.lpszProgressTitle=NULL;
-	FileOp.pFrom=files;
-	
 
 	/* read the docs for SHFILEOPSTRUCT.pFrom for an explaination about
 	 * the strange data structure in /files/
@@ -679,20 +677,21 @@ BOOL LV_DeleteSelected() {
 	while (-1!=(index=LV_FindSelected(index))) {
 		fi=Vector_Get(CurrentVector, index);
 		namelen=strlen(fi->filename);
-		if (namelen>sizeleft) {	/* buffer is full, enlarge it */
-			cursize+=1024;
-			sizeleft+=1024;
+		while (namelen>=sizeleft) {	/* buffer is full, enlarge it */
+			cursize+=block_size;
+			sizeleft+=block_size;
 			files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize);
 		}
-		strncpy(curfile, fi->filename, namelen);
-		curfile+=namelen+1; /* +1 because of trailing zero */
+		strncpy(files+offset, fi->filename, namelen);
+		offset+=namelen+1; /* +1 because of trailing zero */
 		sizeleft-=namelen+1;
 	}
 	/* trailing zero */
 	if (sizeleft==0) {
-		cursize+=2;
+		cursize+=1;
 		files=HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, files, cursize);
 	}
+	FileOp.pFrom = files;
 	retval=SHFileOperation(&FileOp);
 
 	HeapFree(GetProcessHeap(), 0, files);
