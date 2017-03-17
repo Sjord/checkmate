@@ -41,7 +41,7 @@
 #include <strings.h>
 #endif
 
-char *
+const char *
 file_strversion(file)
 	file_info * file;
 {

@@ -66,6 +66,7 @@ int file_update(file_info *file, const frame_info *frame);
 void file_final(file_info *file);
 void file_clear(file_info *file);
 void file_print(const file_info *file);
+const char * file_strversion(file_info * file);
 
 #endif
 
