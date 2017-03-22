@@ -60,3 +60,16 @@ typedef struct {
 	char name[255];
 	int  filesize;
 } ItemInfo;
+
+enum {
+	COL_FILENAME,
+	COL_RESULT,
+	COL_VERSION,
+	COL_LAYER,
+	COL_BITRATE,
+	COL_VBR,
+	COL_SAMPLERATE,
+	COL_FRAMES,
+	COL_TIME,
+	COL_SIZE,
+};
