@@ -43,7 +43,7 @@
 
 const char *
 file_strversion(file)
-	file_info * file;
+	const file_info * file;
 {
 	int version = file->version;
 	if      (version == MPEG_VER_10) return "v1.0";
