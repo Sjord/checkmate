@@ -33,6 +33,7 @@ int crcdatalength2(file, frame)
 	int i;
 	int j;
 	BITFILE * bitfile;
+	unsigned char const * nbals;
 
 	nchannels = nchannels(frame);
 
@@ -59,8 +60,9 @@ int crcdatalength2(file, frame)
 
 	bitfile = bitfile_new(file->fp);
 
+	nbals = sbquant_table[index].nbal;
 	for (sb = 0; sb < sblimit; sb++) {
-		nbal = sbquant_table[index].nbal[sb];
+		nbal = nbals[sb];
 
 		if (sb < bound) {
 			for (i = 0; i < nchannels; i++) {
