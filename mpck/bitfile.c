@@ -1,16 +1,11 @@
 #include "bitfile.h"
 #include <stdlib.h>
 
-void bitfile_reset(BITFILE * b) {
-	b->currentchar = '\0';
-	b->bitoffset = 0;
-}
-
-BITFILE * bitfile_new(CFILE * fp) {
+BITFILE * bitfile_new(const char * buffer) {
 	BITFILE * b;
 	b = malloc(sizeof(BITFILE));
-	b->fp = fp;
-	bitfile_reset(b);
+	b->buffer = buffer;
+	b->bitoffset = 0;
 	return b;
 }
 
@@ -19,32 +14,20 @@ void bitfile_destroy(BITFILE * b) {
 }
 
 int bitfile_readbits(BITFILE * b, size_t length) {
-	int result;
-	int left;
-	char ch;
-	unsigned int mask;
+	int i;
+	size_t byte;
+	size_t bit;
+	int result = 0;
+	int val;
 
-	result = 0;
-	do {
-		if (b->bitoffset == 0) {
-			cfread(& (b->currentchar), 1, b->fp);
-		}
-		mask = (1 << length) - 1;
-		left = BYTEBITS - b->bitoffset - length;
-		if (left > 0) {
-			// 'left' bits remain in this byte
-			ch = b->currentchar >> left;
-			b->bitoffset = (b->bitoffset + length) % BYTEBITS;
-			length = 0;
-		} else {
-			// abs(left) bits are in the next byte
-			left = abs(left);
-			ch = b->currentchar << left;
-			b->bitoffset = (b->bitoffset + length - left) % BYTEBITS;
-			length = left;
-		}
-		result |= ch & mask;
-	} while (length);
+	for (i = 0; i < length; i++) {
+		result <<= 1;
+		byte = b->bitoffset / 8;
+		bit = 7 - b->bitoffset % 8;
+		val = (b->buffer[byte] & (1 << bit)) >> bit;
+		result |= val;
+		b->bitoffset += 1;
+	}
+
 	return result;
 }
-

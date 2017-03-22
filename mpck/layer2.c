@@ -23,6 +23,29 @@ static struct {
 
 #define nchannels(fi) 	(fi->stereo == MONO ? 1 : 2)
 
+size_t get_bit_count(nbals, nchannels, sblimit, bound)
+	unsigned char const * nbals;
+	unsigned int nchannels;
+	unsigned int sblimit;
+	unsigned int bound;
+{
+	size_t bit_count = 0;
+	unsigned int sb, nbal;
+
+	for (sb = 0; sb < bound; sb++) {
+		nbal = nbals[sb];
+		bit_count += nbal;
+	}
+
+	bit_count *= nchannels;
+
+	for (; sb < sblimit; sb++) {
+		nbal = nbals[sb];
+		bit_count += nbal;
+	}
+	return bit_count;
+}
+
 int crcdatalength2(file, frame)
 	const file_info * file;
 	frame_info * frame;
@@ -58,9 +81,16 @@ int crcdatalength2(file, frame)
 	}
 	if (bound > sblimit) bound = sblimit;
 
-	bitfile = bitfile_new(file->fp);
-
 	nbals = sbquant_table[index].nbal;
+	
+	size_t bits_to_read = get_bit_count(nbals, nchannels, sblimit, bound);
+	size_t bytes_to_read = (bits_to_read + 7) / 8;
+	char * buffer = malloc(bytes_to_read);
+	size_t read = cfread(buffer, bytes_to_read, file->fp);
+	// TODO check read
+
+	bitfile = bitfile_new(buffer);
+
 	for (sb = 0; sb < sblimit; sb++) {
 		nbal = nbals[sb];
 
@@ -81,6 +111,7 @@ int crcdatalength2(file, frame)
 		}
 	}
 	bitfile_destroy(bitfile);
+
 	return bits;
 }
 
