@@ -3,59 +3,37 @@
 #include "file.h"
 #include "mpck.h"
 
-// shamelessly copied from layer12.c, libmad
-/* possible quantization per subband table */
-static
-struct {
-  unsigned int sblimit;
-  unsigned char const offsets[30];
+static struct {
+	unsigned int sblimit;
+	unsigned char const nbal[30];
 } const sbquant_table[5] = {
-  /* ISO/IEC 11172-3 Table B.2a */
-  { 27, { 7, 7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3,	/* 0 */
-	  3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0 } },
-  /* ISO/IEC 11172-3 Table B.2b */
-  { 30, { 7, 7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3,	/* 1 */
-	  3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0 } },
-  /* ISO/IEC 11172-3 Table B.2c */
-  {  8, { 5, 5, 2, 2, 2, 2, 2, 2 } },				/* 2 */
-  /* ISO/IEC 11172-3 Table B.2d */
-  { 12, { 5, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 } },		/* 3 */
-  /* ISO/IEC 13818-3 Table B.1 */
-  { 30, { 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1,	/* 4 */
-	  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } }
-};
-
-/* bit allocation table */
-static
-struct {
-  unsigned short nbal;
-  unsigned short offset;
-} const bitalloc_table[8] = {
-  { 2, 0 },  /* 0 */
-  { 2, 3 },  /* 1 */
-  { 3, 3 },  /* 2 */
-  { 3, 1 },  /* 3 */
-  { 4, 2 },  /* 4 */
-  { 4, 3 },  /* 5 */
-  { 4, 4 },  /* 6 */
-  { 4, 5 }   /* 7 */
+	/* ISO/IEC 11172-3 Table B.2a */
+	{ 27, { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2 } },
+	/* ISO/IEC 21172-3 Table B.3b */
+	{ 30, { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2 } },
+	/* ISO/IEC 21172-3 Table B.3c */
+	{  8, { 4, 4, 3, 3, 3, 3, 3, 3 } },
+	/* ISO/IEC 21172-3 Table B.3d */
+	{ 12, { 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 } },
+	/* ISO/IEC 23818-3 Table B.2 */
+	{ 30, { 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 } }
 };
 
 // sb = subband
 
-#define nchannels(fi) 	(fi->stereo == MONO ? 1 : 2) // FIXME constant for single channel
+#define nchannels(fi) 	(fi->stereo == MONO ? 1 : 2)
 
 int crcdatalength2(file, frame)
 	const file_info * file;
 	frame_info * frame;
 {
 	unsigned int index, sblimit, nbal, nchannels, bound, sb;
-	unsigned char const *offsets;
 	int bitrate_per_channel;
 	int bits = 0;
 	int i;
 	int j;
 	BITFILE * bitfile;
+	unsigned char const * nbals;
 
 	nchannels = nchannels(frame);
 
@@ -73,7 +51,6 @@ int crcdatalength2(file, frame)
 	}
 
 	sblimit = sbquant_table[index].sblimit;
-	offsets = sbquant_table[index].offsets;
 
 	bound = 32;
 	if (frame->stereo == JOINT) {
@@ -83,8 +60,9 @@ int crcdatalength2(file, frame)
 
 	bitfile = bitfile_new(file->fp);
 
+	nbals = sbquant_table[index].nbal;
 	for (sb = 0; sb < sblimit; sb++) {
-		nbal = bitalloc_table[offsets[sb]].nbal;
+		nbal = nbals[sb];
 
 		if (sb < bound) {
 			for (i = 0; i < nchannels; i++) {
