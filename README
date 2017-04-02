@@ -13,6 +13,20 @@ files and has a Explorer-like display which shows which files where
 scanned and what the result was. MP3 checker was tested on Windows 2000
 and should work on any Windows version.
 
+--=[ BUILDING ]=--
+
+If your release does not have `configure`, first run
+
+    ./autogen.sh
+
+After that, it is the normal build method:
+
+    ./configure
+    make
+    make install
+
+For Windows there is a Visual Studio project in the `vc++` directory.
+
 --=[ USAGE ]=--
 
 Usage: mpck [OPTION]... [FILE]...
