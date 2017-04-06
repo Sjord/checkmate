@@ -172,10 +172,10 @@ CFILE * cfopen(const char * filename, char * mode) {
 static size_t readall(int fd, void * buf, size_t count) {
 	char * p = buf;
 	size_t nread = 0;
-	int result;
+	size_t result;
 	do {
 		result = read(fd, p, count);
-		if (result <= 0)
+		if (result == 0)
 		{
 			break;
 		}

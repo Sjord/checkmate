@@ -56,7 +56,7 @@ lastframelength(file, frame)
 {
 	char buf[4 + sizeof(int)];
 	char * ptr;
-	int res;
+	size_t res;
 	int i = 0;
 
 	frame->length = MIN(frame->length, file->length - frame->offset);
@@ -65,7 +65,7 @@ lastframelength(file, frame)
 	while (i < frame->length) {
 		ptr = buf;
 		res = cfread(ptr, 1, file->fp);
-		if (res <= 0) {
+		if (res == 0) {
 			offseterror(file, "read error");
 			continue;
 		}

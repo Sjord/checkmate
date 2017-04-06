@@ -73,7 +73,7 @@ goodchar(ch)
 static int check_filename_length(filename)
 	const char * filename;
 {	
-	int fnlen; 	/* filename length */
+	size_t fnlen; 	/* filename length */
 	int maxname = options_get_maxname();
 	if (maxname == 0) return TRUE;
 
@@ -89,7 +89,8 @@ static int check_filename_length(filename)
 static int check_filename_chars(filename)
 	const char * filename;
 {
-	int fnlen, ch, i;
+	size_t fnlen;
+	int ch, i;
 
 	fnlen=strlen(filename);
 

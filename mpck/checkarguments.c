@@ -112,7 +112,7 @@ wildcard_checkfile(wildcardpath, total)
 {
 	WIN32_FIND_DATA FindFileData;	/* struct to store the found file */
 	HANDLE hFind;
-	int wcplen;		/* wildcard path length 		*/
+	size_t wcplen;		/* wildcard path length 		*/
 	int res;		/* function result 			*/
 	char * filepart;	/* part of wcp with the filename 	*/
 	char * realfilename;	/* expanded filename 			*/
@@ -186,7 +186,7 @@ recursivecheck(dirname, total)
 	total_info * total;
 {
 	char * wildcarddir;
-	int dirlen;
+	size_t dirlen;
 
 	dirlen=strlen(dirname);
 	wildcarddir=(char *)malloc(dirlen+MAXPATH);

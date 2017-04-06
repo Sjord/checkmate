@@ -35,7 +35,7 @@ typedef struct _file_info file_info;
 struct _file_info { 
 	CFILE * fp;		/* filepointer to this file		*/
 	char * filename;	/* filename of this file		*/
-	int length;		/* length of this file (in bytes)	*/
+	size_t length;		/* length of this file (in bytes)	*/
 	int lengthcount;	/* length of all frames			*/
 	int time;		/* length of this file (in seconds)	*/
 	int msec;		/* milliseconds left (see time)		*/
@@ -55,7 +55,7 @@ struct _file_info {
 	int vbr;		/* variable bit rate (boolean)		*/
 	int errors;		/* is TRUE or >1 if errors are found	*/
 	int lastframe_offset;	/* offset of last frame			*/
-	int lastframe_length;	/* length of last frame			*/
+	size_t lastframe_length;	/* length of last frame			*/
 	int ismp3file;		/* TRUE if this file is an mp3 file	*/
 };
 
