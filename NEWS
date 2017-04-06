@@ -1,5 +1,8 @@
 mpck
 
+0.20 (02-04-2017)
+    Got back to fixing some things after a quiet period of several years.
+
 0.19 (28-07-2009)
 	I changed the buffered I/O to use structs with function pointers.
 	Almost object-oriented.

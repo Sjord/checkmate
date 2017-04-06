@@ -1,3 +1,13 @@
+version 0.20
+	* Merge two lookup tables into one in the layer 2 CRC length code.
+	* Fix issues when deleting multiple files in MP3 Checker.
+	* Clean up code.
+	* Pump message queue in MP3 Checker so that the interface stays responsive
+	  while scanning.
+	* Support file sizes larger than 4 GB.
+	* Show toolbar in MP3 Checker, even when compiling on newer version of
+	  Windows and Visual Studio.
+
 version 0.19
 	* Mpck does not read big files in memory, but mmaps them instead.
 	  This significantly speeds up scanning of big files.
