@@ -65,7 +65,7 @@
 #endif /* VERSION */
 
 #define PROGNAME	"mpck"
-#define HOMEPAGE	"http://mpck.linuxonly.nl/"
+#define HOMEPAGE	"https://github.com/Sjord/checkmate"
 #define AUTHOR		"Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>"
 
 /* constants */

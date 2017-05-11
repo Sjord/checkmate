@@ -33,7 +33,7 @@ BEGIN
     CONTROL         IDB_ABOUTLOGO,IDC_STATIC,"Static",SS_BITMAP,0,0,267,19
     CTEXT           "(C) 2006 Sjoerd Langkemper",IDC_STATIC,0,45,267,8,SS_CENTERIMAGE
     CTEXT           "sjoerd-checkmate@linuxonly.nl",IDC_STATIC,0,56,267,8,SS_CENTERIMAGE
-    CTEXT           "http://checkmate.linuxonly.nl/",IDC_STATIC,0,67,267,8,SS_CENTERIMAGE
+    CTEXT           "https://github.com/Sjord/checkmate",IDC_STATIC,0,67,267,8,SS_CENTERIMAGE
     RTEXT           "Enter",IDC_STATIC,44,85,63,8,SS_CENTERIMAGE
     RTEXT           "Backspace",IDC_STATIC,44,97,63,8,SS_CENTERIMAGE
     RTEXT           "Delete",IDC_STATIC,44,109,63,8,SS_CENTERIMAGE
