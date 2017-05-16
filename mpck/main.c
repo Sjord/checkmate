@@ -100,7 +100,7 @@ parse_options(argc, argv)
 			case 'e':
 				/* Only scan files with this extension */
 				if (strlen(optarg)>MAXEXT) {
-					error(" extension is too long");
+					error("extension is too long");
 					exit(ENAMETOOLONG);
 				}
 				options_set_extension(optarg);
@@ -108,7 +108,7 @@ parse_options(argc, argv)
 			case 'm':
 				maxname=atoi(optarg);
 				if (maxname<=0) {
-					error(" %s is not a valid argument to -m", optarg);
+					error("%s is not a valid argument to -m", optarg);
 					exit(EINVAL);
 				}
 				options_set_maxname(maxname);
@@ -133,10 +133,10 @@ parse_options(argc, argv)
 				options_set_xmloutput(TRUE);
 				break;
 			case '?':
-				error(" ambiguous match or an extraneous parameter");
+				error("ambiguous match or an extraneous parameter");
 				exit(EINVAL);
 			case ':':
-				error(" missing parameter");
+				error("missing parameter");
 				exit(EINVAL);
 			default:
 				exit(EINVAL);
@@ -166,7 +166,7 @@ main(argc, argv)
 
 	/* If there's no data after the flags, return an error. */
 	if (*argv == NULL) {
-		error(" no filename specified");
+		error("no filename specified");
 		print_usage();
 		exit(EINVAL);
 	}

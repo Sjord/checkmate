@@ -79,22 +79,7 @@ error(const char * format, ...) {
 	
 	if (len < 0) exit(EINVAL);
 
-	fprintf(stderr, "%s:%s\n", PROGNAME, buf);
-}
-
-void 
-fileerror(const file_info * f, const char * format, ...) {
-	va_list ap;  
-	char buf[1024];
-	int len;
-	
-	va_start(ap, format);
-	len = vsnprintf(buf, sizeof(buf), format, ap);
-	va_end(ap);
-	
-	if (len < 0) exit(EINVAL);
-
-	error("%s:%s", f->filename, buf);
+	fprintf(stderr, "%s: %s\n", PROGNAME, buf);
 }
 	
 void 
@@ -109,7 +94,7 @@ offseterror(const file_info * f, const char * format, ...) {
 	
 	if (len < 0) exit(EINVAL);
 
-	error("%s:%d:%s", f->filename, cftell(f->fp), buf);
+	fprintf(stderr, "%s:%s:%d: %s\n", PROGNAME, f->filename, cftell(f->fp), buf);
 }
 
 /* print something to let the user know we are scanning */
