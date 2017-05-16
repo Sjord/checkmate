@@ -91,7 +91,7 @@ parse_options(argc, argv)
 			case 'V':
 				/* version info */
 				print_version();
-				exit(0);
+				exit(EXIT_SUCCESS);
 			case 'v':
 				/*  verbose  */
 				options_set_verbose(TRUE);
@@ -115,7 +115,7 @@ parse_options(argc, argv)
 				break;
 			case 'h':
 				print_usage();
-				exit(0);
+				exit(EXIT_SUCCESS);
 			case 'q':
 				/* Only print either good or bad for a file */
 				options_set_quiet(TRUE);
