@@ -167,7 +167,7 @@ main(argc, argv)
 	if (*argv == NULL) {
 		error(" no filename specified");
 		print_usage();
-		return 1;
+		exit(EINVAL);
 	}
 
 	/* call checkfile for each file in the argument list 
