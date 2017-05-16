@@ -154,7 +154,8 @@ main(argc, argv)
 	char *argv[];
 {
 	int opt_count;
-	int res;
+	errno_t last_error;
+	int all_good;
 	total_info * total;
 	
 	opt_count = parse_options(argc, argv);
@@ -173,14 +174,14 @@ main(argc, argv)
 	/* call checkfile for each file in the argument list 
 	 * and put the result in total.							*/
 	total = total_create();
-	checkarguments(argv, total);
+	last_error = checkarguments(argv, total);
 	total_print(total);
-	res = total_allgood(total);
+	all_good = total_allgood(total);
 	total_destroy(total);
 
-	if (res) {
+	if (all_good) {
 		/* nothing wrong */
-		exit(0);	
+		exit(last_error);
 	} else {
 		/* at least one file is damaged */
 		exit(1);

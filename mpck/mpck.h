@@ -166,4 +166,8 @@
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)
 
+#ifndef __STDC_LIB_EXT1__
+typedef int errno_t;
+#endif
+
 #endif /* _MPCK_H */
