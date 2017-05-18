@@ -94,7 +94,7 @@ offseterror(const file_info * f, const char * format, ...) {
 	
 	if (len < 0) exit(EINVAL);
 
-	fprintf(stderr, "%s:%s:%d: %s\n", PROGNAME, f->filename, cftell(f->fp), buf);
+	fprintf(stderr, "%s:%s:%zu: %s\n", PROGNAME, f->filename, cftell(f->fp), buf);
 }
 
 /* print something to let the user know we are scanning */
