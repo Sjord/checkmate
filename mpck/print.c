@@ -81,6 +81,11 @@ error(const char * format, ...) {
 
 	fprintf(stderr, "%s: %s\n", PROGNAME, buf);
 }
+
+void
+fileerror(const char * filename, const char * error) {
+	fprintf(stderr, "%s:%s: %s\n", PROGNAME, filename, error);
+}
 	
 void 
 offseterror(const file_info * f, const char * format, ...) {
