@@ -122,13 +122,13 @@ static errno_t openfile(filename, file)
 	char 		* filename;
 	file_info	* file;
 {
-	errno_t _errno;
+	errno_t errno_keep;
 
 	file->fp = cfopen(filename, "rb");
 	if (file->fp == NULL) {
-		_errno = errno;
-		error("%s: %s", filename, strerror(_errno));
-		return _errno;
+		errno_keep = errno;
+		error("%s: %s", filename, strerror(errno_keep));
+		return errno_keep;
 	}
 	file->filename = filename;
 	file->length = cfilesize(file->fp);
