@@ -63,6 +63,10 @@
 #include <io.h>
 #endif
 
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
 static CFILE * ub_fopen(const char * filename, char * mode, size_t filesize);
 static size_t ub_fread(char *outbuf, size_t size, CFILE *c);
 static int ub_fseek(CFILE *c, long offset, int whence);
