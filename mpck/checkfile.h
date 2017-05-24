@@ -23,4 +23,4 @@
  * 
  */
 
-int checkfile(char *filename, file_info *file);
+errno_t checkfile(char *filename, file_info *file);

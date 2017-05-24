@@ -118,29 +118,34 @@ static int findlastframe(file)
 	return TRUE;
 }
 
-static int openfile(filename, file) 
+static errno_t openfile(filename, file)
 	char 		* filename;
 	file_info	* file;
 {
+	errno_t errno_keep;
+
 	file->fp = cfopen(filename, "rb");
 	if (file->fp == NULL) {
-		error("%s: %s", filename, strerror(errno));
-		return FALSE;
+		errno_keep = errno;
+		error("%s: %s", filename, strerror(errno_keep));
+		return errno_keep;
 	}
 	file->filename = filename;
 	file->length = cfilesize(file->fp);
-	return TRUE;
+	return 0;
 }
 
-int checkfile(filename, file)
+errno_t checkfile(filename, file)
 	char		* filename;
 	file_info 	* file;
 {
 	frame_info * frame;
+	errno_t _errno;
 	
 	file_clear(file);
-	if (!openfile(filename, file)) {
-		return FALSE;
+	_errno = openfile(filename, file);
+	if (_errno) {
+		return _errno;
 	}
 
 	frame = frame_create();
@@ -158,5 +163,5 @@ int checkfile(filename, file)
 	cfclose(file->fp);
 
 	file_final(file);
-	return TRUE;
+	return 0;
 }

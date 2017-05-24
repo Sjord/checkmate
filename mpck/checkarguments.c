@@ -68,17 +68,17 @@
 #include <windows.h>
 #endif
 
-static int
+static errno_t
 checkargument(filename, total, file)
 	char * filename;
 	total_info * total;
 	file_info * file;
 {
-	int res = TRUE;
+	errno_t res = 0;
 	if (extension_match(filename)) {
 		if (cisdirectory(filename) > 0) {
 			error(" skipping directory `%s'", filename);
-			return FALSE;
+			return EISDIR;
 		}
 		if (!options_get_quiet() && !options_get_badonly() && !options_get_xmloutput()) {
 			print_scanning(filename);
@@ -251,12 +251,12 @@ recursivecheck(dirname, total)
 }
 
 /* checkarguments opens each file and calls checkfile */
-int
+errno_t
 checkarguments(argv, total)
 	char		**argv;
 	total_info	* total;
 {
-	int res=TRUE;
+	errno_t _errno, last_error=0;
 	char * filename;
 	file_info * file;
 	
@@ -266,13 +266,16 @@ checkarguments(argv, total)
 		if (options_get_recursive() && cisdirectory(filename)) {
 			recursivecheck(filename, total);
 		} else {
-			res &= checkargument(filename, total, file);
+			_errno = checkargument(filename, total, file);
+			if (_errno) {
+				last_error = _errno;
+			}
 		}
 		argv++;
 	} while (*argv); 
 	file_destroy(file);
 
-	return res;
+	return last_error;
 }
 
 #endif /* !_WIN32 */

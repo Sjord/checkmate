@@ -91,7 +91,7 @@ parse_options(argc, argv)
 			case 'V':
 				/* version info */
 				print_version();
-				exit(0);
+				exit(EXIT_SUCCESS);
 			case 'v':
 				/*  verbose  */
 				options_set_verbose(TRUE);
@@ -115,7 +115,7 @@ parse_options(argc, argv)
 				break;
 			case 'h':
 				print_usage();
-				exit(0);
+				exit(EXIT_SUCCESS);
 			case 'q':
 				/* Only print either good or bad for a file */
 				options_set_quiet(TRUE);
@@ -154,7 +154,8 @@ main(argc, argv)
 	char *argv[];
 {
 	int opt_count;
-	int res;
+	errno_t last_error;
+	int all_good;
 	total_info * total;
 	
 	opt_count = parse_options(argc, argv);
@@ -167,20 +168,20 @@ main(argc, argv)
 	if (*argv == NULL) {
 		error(" no filename specified");
 		print_usage();
-		return 1;
+		exit(EINVAL);
 	}
 
 	/* call checkfile for each file in the argument list 
 	 * and put the result in total.							*/
 	total = total_create();
-	checkarguments(argv, total);
+	last_error = checkarguments(argv, total);
 	total_print(total);
-	res = total_allgood(total);
+	all_good = total_allgood(total);
 	total_destroy(total);
 
-	if (res) {
+	if (all_good) {
 		/* nothing wrong */
-		exit(0);	
+		exit(last_error);
 	} else {
 		/* at least one file is damaged */
 		exit(1);
