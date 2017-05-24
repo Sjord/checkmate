@@ -70,13 +70,13 @@ static int framelength(file, fi)
 
 static void
 alienbytes(file, num)
-        file_info * file;
-        int num;
+	file_info * file;
+	int num;
 {
-        if (file->frames == 0)
-                file->alien_before += num;
-        else
-                file->alien_after += num;
+	if (file->frames == 0)
+		file->alien_before += num;
+	else
+		file->alien_after += num;
 }
 
 /* checks for consistency */
@@ -246,13 +246,13 @@ findframe(file, frame)
 			} else {
 				alienbytes(file, 3);
 			}
-        } else if (*ptr == 'A') {   /* APETAGEX -> APE tag */
+		} else if (*ptr == 'A') {   /* APETAGEX -> APE tag */
 			res = cfread(++ptr, 7, file->fp);
 			if (res < 7) continue;
 			if (*ptr++ == 'P' && *ptr++ == 'E' &&
-                *ptr++ == 'T' && *ptr++ == 'A' &&
-                *ptr++ == 'G' && *ptr++ == 'E' &&
-                *ptr++ == 'X') {
+					*ptr++ == 'T' && *ptr++ == 'A' &&
+					*ptr++ == 'G' && *ptr++ == 'E' &&
+					*ptr++ == 'X') {
 				skip_ape_tag(file);
 			} else {
 				alienbytes(file, 8);

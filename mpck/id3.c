@@ -59,7 +59,7 @@ skip_id3v2_tag(file)
 	size     = INT_SS(buf+3);
 
 	file->id3 |= ID3V2;
-    file->id3v2_size = size;
+	file->id3v2_size = size;
 	cfseek(file->fp, size, SEEK_CUR);
 	
 	return 0;

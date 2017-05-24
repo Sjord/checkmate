@@ -46,28 +46,28 @@ skip_ape_tag(file)
 	
 	uint32_t version;	/* version of APE tag 	*/
 	uint32_t flags;		/* flags			 */
-	uint32_t items;	    /* number of items in tag	*/
+	uint32_t items;		/* number of items in tag	*/
 	uint32_t size;		/* size of tag without header (but including footer) */
 
 	res=cfread(buf, 24, file->fp);	/* read rest of header		*/
 	if (res == 0) return FALSE;
 
-    memcpy(&version, buf, 4);
-    memcpy(&size, buf+4, 4);
-    memcpy(&items, buf+8, 4);
-    memcpy(&flags, buf+12, 4);
+	memcpy(&version, buf, 4);
+	memcpy(&size, buf+4, 4);
+	memcpy(&items, buf+8, 4);
+	memcpy(&flags, buf+12, 4);
 
-    //only seek ahead if this is version 2,
-    //apev1 only has footers, so we already
-    //passed all the data to get here
-    if (version == 2000) {
-        file->ape |= APEV2;
-        file->apev2_size = size;
-	    cfseek(file->fp, size, SEEK_CUR);
-    } else {
-        file->ape |= APEV1;
-        file->apev1_size = size;
-    }
-	
+	//only seek ahead if this is version 2,
+	//apev1 only has footers, so we already
+	//passed all the data to get here
+	if (version == 2000) {
+		file->ape |= APEV2;
+		file->apev2_size = size;
+		cfseek(file->fp, size, SEEK_CUR);
+	} else {
+		file->ape |= APEV1;
+		file->apev1_size = size;
+	}
+
 	return 0;
 }
