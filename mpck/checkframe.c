@@ -28,6 +28,7 @@
 #include "frame.h"
 #include "print.h"
 #include "id3.h"
+#include "ape.h"
 #include "crc.h"
 #include "options.h"
 #include "matrices.h"
@@ -205,7 +206,7 @@ findframe(file, frame)
 	frame_info 	* frame;
 {
 	int res;
-	char buf[6];
+	char buf[8];
 	char * ptr;
 	
 	do {
@@ -244,6 +245,17 @@ findframe(file, frame)
 				skip_id3v2_tag(file);
 			} else {
 				alienbytes(file, 3);
+			}
+        } else if (*ptr == 'A') {   /* APETAGEX -> APE tag */
+			res = cfread(++ptr, 7, file->fp);
+			if (res < 7) continue;
+			if (*ptr++ == 'P' && *ptr++ == 'E' &&
+                *ptr++ == 'T' && *ptr++ == 'A' &&
+                *ptr++ == 'G' && *ptr++ == 'E' &&
+                *ptr++ == 'X') {
+				skip_ape_tag(file);
+			} else {
+				alienbytes(file, 8);
 			}
 		} else {
 			alienbytes(file, 1);

@@ -19,48 +19,55 @@
  *
  *****************************************************************************
  *
- *   id3.c - functions that do something with id3 tags 
+ *   ape.c - functions that do something with ape tags 
  * 
  */
 
 #include "mpck.h"
 #include "file.h"
-#include "synchsafe.h"
+
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
 
 extern int verbose;
 
-/* Skips an id3v1 tag. The first three characters have already been read. */
-int
-skip_id3v1_tag(file)
-	file_info * file;
-{
-	file->id3 |= ID3V1;
-	cfseek(file->fp, 125, SEEK_CUR);
-	return TRUE;
-}
-
 /* Skips an id3v2 tag. The first three characters have already been read. */
 int
-skip_id3v2_tag(file)
+skip_ape_tag(file)
 	file_info * file;
 {
-	char buf[8];
+	char buf[25];
 	int res;
 	
-	int version, revision;		/* version of ID3v2 tag 	*/
-	int flags;			/* flags			*/
-	int size;			/* size of tag without header	*/
+	uint32_t version;	/* version of APE tag 	*/
+	uint32_t flags;		/* flags			 */
+	uint32_t items;	    /* number of items in tag	*/
+	uint32_t size;		/* size of tag without header (but including footer) */
 
-	res=cfread(buf, 7, file->fp);	/* read rest of header		*/
+	res=cfread(buf, 24, file->fp);	/* read rest of header		*/
 	if (res == 0) return FALSE;
-	version  = (int)(buf[0]);
-	revision = (int)(buf[1]);
-	flags    = (int)(buf[2]);
-	size     = INT_SS(buf+3);
 
-	file->id3 |= ID3V2;
-    file->id3v2_size = size;
-	cfseek(file->fp, size, SEEK_CUR);
+    memcpy(&version, buf, 4);
+    memcpy(&size, buf+4, 4);
+    memcpy(&items, buf+8, 4);
+    memcpy(&flags, buf+12, 4);
+
+    //only seek ahead if this is version 2,
+    //apev1 only has footers, so we already
+    //passed all the data to get here
+    if (version == 2000) {
+        file->ape |= APEV2;
+        file->apev2_size = size;
+	    cfseek(file->fp, size, SEEK_CUR);
+    } else {
+        file->ape |= APEV1;
+        file->apev1_size = size;
+    }
 	
 	return 0;
 }

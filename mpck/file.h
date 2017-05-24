@@ -45,6 +45,10 @@ struct _file_info {
 	int alien_between;	/* junk between first and last frame	*/
 	int alien_after;	/* junk after all frames		*/
 	int id3;		/* bitwise OR of 0, ID3V1, ID3V2.	*/
+    int id3v2_size; /* total number of bytes in ID3v2 tag */
+	int ape;		/* bitwise OR of 0, APEV1, APEV2.	*/
+    int apev1_size;   /* total number of bytes in APEv1 tag */
+    int apev2_size;   /* total number of bytes in APEv2 tag */
 	int version;		/* MPEG version				*/
 	int layer;		/* layer				*/
 	int bitrate;		/* bitrate in bps			*/
