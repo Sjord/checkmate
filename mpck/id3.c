@@ -45,7 +45,7 @@ skip_id3v2_tag(file)
 	file_info * file;
 {
 	char buf[8];
-	int res;
+	size_t res;
 	
 	int version, revision;		/* version of ID3v2 tag 	*/
 	int flags;			/* flags			*/

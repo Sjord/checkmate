@@ -42,7 +42,7 @@ skip_ape_tag(file)
 	file_info * file;
 {
 	char buf[25];
-	int res;
+	size_t res;
 	
 	uint32_t version;	/* version of APE tag 	*/
 	uint32_t flags;		/* flags			 */
