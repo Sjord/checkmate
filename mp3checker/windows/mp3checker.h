@@ -48,8 +48,8 @@ typedef struct _DirInfo {
 typedef struct _FileInfo FileInfo;
 struct _FileInfo {
 	int filetype;
-	char filename[MAX_PATH];
-	char dirname[MAX_PATH];
+	TCHAR filename[MAX_PATH];
+	TCHAR dirname[MAX_PATH];
 	union {
 		file_info * info;
 		DirInfo	  * dirinfo;
@@ -60,8 +60,8 @@ struct _FileInfo {
 
 
 /* definitions */
-#define MP3CHECKER_CLASSNAME		"MP3Checker"
-#define MP3CHECKER_TITLE			"Checkmate MP3 Checker"	/* window name */
+#define MP3CHECKER_CLASSNAME		TEXT("MP3Checker")
+#define MP3CHECKER_TITLE			TEXT("Checkmate MP3 Checker")	/* window name */
 
 /* icons */
 enum{

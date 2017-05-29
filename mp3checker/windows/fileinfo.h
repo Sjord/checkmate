@@ -28,6 +28,6 @@
 BOOL FI_Create();
 void FI_Destroy();
 void FI_AddFile(FileInfo * fi);
-FileInfo * FI_GetFile(char * filename, char * dirname);
+FileInfo * FI_GetFile(TCHAR * filename, TCHAR * dirname);
 FI_GetFileType(WIN32_FIND_DATA * FileData);
 BOOL FI_FreeAll(void); 

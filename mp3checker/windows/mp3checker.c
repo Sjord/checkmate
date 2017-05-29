@@ -145,7 +145,7 @@ INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 BOOL DirectoryChange() {
-	char * text;
+	TCHAR * text;
 	BOOL retval;
 	text=Rebar_GetText();
 	retval=SetCurrentDirectory(text);
@@ -355,8 +355,8 @@ LRESULT CALLBACK MainWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) {
 
 
 int ErrorBox(int iError, UINT uType) {
-	char text[1024];
-	char caption[256];
+	TCHAR text[1024];
+	TCHAR caption[256];
 	LoadString(hInst, iError, text, 1023);
 	LoadString(hInst, iError+1, caption, 255);
 //	sprintf(text, "%s\nError #%d.", text, GetLastError());

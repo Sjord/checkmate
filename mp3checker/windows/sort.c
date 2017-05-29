@@ -1,6 +1,7 @@
 /* sort functions */
 
 #include "mp3checker.h"
+#include <tchar.h>
 
 /* puts directories on top */
 static int DirSort(const void * elem1, const void * elem2) {
@@ -28,10 +29,10 @@ static int InfoSort(const void * elem1, const void * elem2) {
 	return 0;
 }
 
-static int NameSort(const char * name1, const char * name2) {
-	if (0==strcmp(name1, "..")) return -1;
-	if (0==strcmp(name2, "..")) return 1;
-	return stricmp(name1, name2);
+static int NameSort(const TCHAR * name1, const TCHAR * name2) {
+	if (0==_tcscmp(name1, TEXT(".."))) return -1;
+	if (0==_tcscmp(name2, TEXT(".."))) return 1;
+	return _tcsicmp(name1, name2);
 }
 
 int NormalAscendingSort(const void * elem1, const void * elem2) {

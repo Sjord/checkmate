@@ -67,18 +67,22 @@
 #include <stdlib.h>
 #endif
 
-static CFILE * ub_fopen(const char * filename, char * mode, size_t filesize);
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
+static CFILE * ub_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize);
 static size_t ub_fread(char *outbuf, size_t size, CFILE *c);
 static int ub_fseek(CFILE *c, long offset, int whence);
 static size_t ub_ftell(CFILE *c);
 static int ub_feof(CFILE *c);
 static int ub_fclose(CFILE *c);
 
-static CFILE * mm_fopen(const char * filename, char * mode, size_t filesize);
+static CFILE * mm_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize);
 static size_t mm_fread(char *outbuf, size_t size, CFILE *c);
 static int mm_fclose(CFILE * c);
 
-static CFILE * wb_fopen(const char * filename, char * mode, size_t filesize);
+static CFILE * wb_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize);
 static size_t wb_fread(char *outbuf, size_t size, CFILE *c);
 static int wb_fseek(CFILE *c, long offset, int whence);
 static size_t wb_ftell(CFILE *c);
@@ -120,12 +124,12 @@ static io_funcs wb_funcs = {
 #define S_ISREG(mode) (((mode) & S_IFREG)==(S_IFREG))
 #endif /* S_ISREG */
 
-static size_t _cfilesize(const char * filename) {
-	struct stat _ss;
-	struct stat * ss=&_ss; 
+static size_t _cfilesize(const TCHAR * filename) {
+	struct _stat _ss;
+	struct _stat * ss=&_ss; 
 	int statres;
 
-	statres=stat(filename, ss);
+	statres= _tstat(filename, ss);
 	if (statres != 0) return -1;	
 
 	return ss->st_size;
@@ -135,18 +139,18 @@ size_t cfilesize(CFILE * c) {
 	return c->filesize;
 }
 
-int cisdirectory(const char * filename) {
-	struct stat _ss;
-	struct stat * ss=&_ss; 
+int cisdirectory(const TCHAR * filename) {
+	struct _stat _ss;
+	struct _stat * ss=&_ss; 
 	int statres;
 
-	statres=stat(filename, ss);
+	statres= _tstat(filename, ss);
 	if (statres != 0) return -1;	
 
 	return S_ISDIR(ss->st_mode);
 }
 
-CFILE * cfopen(const char * filename, char * mode) {
+CFILE * cfopen(const TCHAR * filename, TCHAR * mode) {
 	size_t filesize;
 	CFILE *c;
 	
@@ -189,7 +193,7 @@ static size_t readall(int fd, void * buf, size_t count) {
 	return nread;
 }
 
-static CFILE * wb_fopen(const char * filename, char * mode, size_t filesize) {
+static CFILE * wb_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize) {
 	CFILE *c;
 	size_t nread; // TODO use this or remove this
 	int fd;
@@ -201,7 +205,7 @@ static CFILE * wb_fopen(const char * filename, char * mode, size_t filesize) {
 	}
 
 	memset(c, 0, sizeof(CFILE));
-	fd=open(filename, O_RDONLY
+	fd= _topen(filename, O_RDONLY
 #ifdef _WIN32
  	                | O_BINARY
 #endif
@@ -274,7 +278,7 @@ static int wb_fclose(CFILE * c) {
 
 #ifdef _WIN32
 
-static CFILE * mm_fopen(const char * filename, char * mode, size_t filesize) {
+static CFILE * mm_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize) {
 	HANDLE file;
 	HANDLE fileMapping;
 	CFILE *c;
@@ -320,7 +324,7 @@ static int mm_fclose(CFILE * c) {
 }
 #else // _WIN32
 
-static CFILE * mm_fopen(const char * filename, char * mode, size_t filesize) {
+static CFILE * mm_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize) {
 	CFILE *c;
 	FILE * fp;
 	int fd;
@@ -369,10 +373,10 @@ static size_t mm_fread(char * outbuf, size_t size, CFILE * c) {
 }
 
 // unbuffered
-static CFILE * ub_fopen(const char * filename, char * mode, size_t filesize) {
+static CFILE * ub_fopen(const TCHAR * filename, TCHAR * mode, size_t filesize) {
 	CFILE *c = (CFILE *) malloc(sizeof(CFILE));
 	if (c == NULL) return NULL;
-	c->fp = fopen(filename, mode);
+	c->fp = _tfopen(filename, mode);
 	if (c->fp == NULL)
 	{
 		free(c);

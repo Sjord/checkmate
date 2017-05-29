@@ -28,7 +28,7 @@
 HWND Rebar_Create(HWND hWndParent);
 int Rebar_Height(void);
 BOOL Rebar_UpdateText(void);
-char * Rebar_GetText(void);
+TCHAR * Rebar_GetText(void);
 BOOL Rebar_Resize(int width, int height);
 void Rebar_Destroy(void);
 int Rebar_Select();

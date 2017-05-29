@@ -68,6 +68,10 @@
 #include <windows.h>
 #endif
 
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
 static errno_t
 checkargument(filename, total, file)
 	char * filename;
@@ -107,26 +111,26 @@ fisdirectory(FindFileData)
  */
 int
 wildcard_checkfile(wildcardpath, total)
-	char 		* wildcardpath;
+	TCHAR 		* wildcardpath;
 	total_info 	* total;
 {
 	WIN32_FIND_DATA FindFileData;	/* struct to store the found file */
 	HANDLE hFind;
 	int wcplen;		/* wildcard path length 		*/
 	int res;		/* function result 			*/
-	char * filepart;	/* part of wcp with the filename 	*/
-	char * realfilename;	/* expanded filename 			*/
+	TCHAR * filepart;	/* part of wcp with the filename 	*/
+	TCHAR * realfilename;	/* expanded filename 			*/
 	file_info * file;	/* info of this file			*/
 
-	wcplen=strlen(wildcardpath);
-	realfilename=(char*)malloc(wcplen+MAXPATH);
+	wcplen=_tcslen(wildcardpath);
+	realfilename=(TCHAR*)malloc(wcplen+MAXPATH*sizeof(TCHAR));
 	if (realfilename == NULL) {
 		error("malloc failed while doing wildcard expansion\n");
 		return FALSE;
 	}
 
-	strcpy(realfilename, wildcardpath);
-	filepart=strrchr(realfilename, DIRSEP);
+	_tcscpy(realfilename, wildcardpath);
+	filepart= _tcsrchr(realfilename, DIRSEP);
 	if (filepart == NULL) {
 		filepart=realfilename; /* no backslash found */
 	} else {
@@ -141,7 +145,7 @@ wildcard_checkfile(wildcardpath, total)
 
 	file = file_create();
 	do {
-		strncpy(filepart, FindFileData.cFileName, MAXPATH);
+		_tcsncpy(filepart, FindFileData.cFileName, MAXPATH);
 		if (filepart[0] != '.') {
 			if (options_get_recursive() && fisdirectory(&FindFileData)) {
 				recursivecheck(realfilename, total);
@@ -182,21 +186,21 @@ checkarguments(argv, total)
  */
 int
 recursivecheck(dirname, total)
-	const char *dirname;
+	const TCHAR *dirname;
 	total_info * total;
 {
-	char * wildcarddir;
+	TCHAR * wildcarddir;
 	int dirlen;
 
-	dirlen=strlen(dirname);
-	wildcarddir=(char *)malloc(dirlen+MAXPATH);
+	dirlen=_tcslen(dirname);
+	wildcarddir=(TCHAR *)malloc(dirlen+MAXPATH*sizeof(TCHAR));
 	if (wildcarddir == NULL) {
 		error("malloc failed");
 		return FALSE;
 	}
 	
-	strcpy(wildcarddir, dirname);
-	strcat(wildcarddir, "\\*");
+	_tcscpy(wildcarddir, dirname);
+	_tcscat(wildcarddir, TEXT("\\*"));
 
 	wildcard_checkfile(wildcarddir, total);
 	free(wildcarddir);

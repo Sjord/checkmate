@@ -46,9 +46,12 @@
 #define HAVE_WINDOWS_H
 #define HAVE_IO_H
 #define HAVE_FCNTL_H
+#define HAVE_TCHAR_H
 #define DIRSEP '\\' /* directory seperator */
 #else /* _WIN32 */
 #define DIRSEP '/'
+typedef char TCHAR;
+#define TEXT(a) a
 #endif /* _WIN32 */
 
 #ifndef _GNU_SOURCE
