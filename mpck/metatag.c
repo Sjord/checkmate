@@ -26,10 +26,7 @@
 #include "mpck.h"
 #include "file.h"
 #include "synchsafe.h"
-
-#ifdef HAVE_INTTYPES_H
-#include <inttypes.h>
-#endif
+#include <stdint.h>
 
 #ifdef HAVE_STRING_H
 #include <string.h>
