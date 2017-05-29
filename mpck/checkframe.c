@@ -92,11 +92,11 @@ checkconsistency(file, frame)
 	}
 
 	if (file->version != frame->version) {
-		if (verbose) offseterror(file, " version differs from previous frame");
+		if (verbose) offseterror(file, "version differs from previous frame");
 		return FALSE;
 	}
 	if (file->layer != frame->layer) {
-		if (verbose) offseterror(file, " layer differs from previous frame");
+		if (verbose) offseterror(file, "layer differs from previous frame");
 		return FALSE;
 	}
 	return TRUE;
@@ -155,7 +155,7 @@ parseframe(file, fr, buf)
 
 	if (fr->crc16) {
 		res=cfread(buf, 2, file->fp);
-		if (!res) offseterror(file, " CRC read error");
+		if (!res) offseterror(file, "CRC read error");
 		fr->crc16=(buf[0]&0xff)<<8;
 		fr->crc16 += (buf[1]&0xff);
 	}
@@ -177,20 +177,20 @@ checkvalidity(file, frame)
 
 	/* These values are not valid */
 	if (frame->version == MPEG_VER_INVALID) {
-		if (verbose) offseterror(file, " unknown version");
+		if (verbose) offseterror(file, "unknown version");
 		return FALSE;
 	}
 	if (frame->layer == 4) {
-		if (verbose) offseterror(file, " unknown layer (1-3 allowed)");
+		if (verbose) offseterror(file, "unknown layer (1-3 allowed)");
 		return FALSE;
 	}
 	if (frame->bitrate < 8000) {
 		// FIXME this ignores the freeform bitrate
-		if (verbose) offseterror(file, " unknown bitrate");
+		if (verbose) offseterror(file, "unknown bitrate");
 		return FALSE;
 	}
 	if (frame->samplerate < 8000) {
-		if (verbose) offseterror(file, " unknown samplerate");
+		if (verbose) offseterror(file, "unknown samplerate");
 		return FALSE;
 	}
 	return TRUE;

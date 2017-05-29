@@ -127,7 +127,7 @@ static errno_t openfile(filename, file)
 	file->fp = cfopen(filename, "rb");
 	if (file->fp == NULL) {
 		errno_keep = errno;
-		error("%s: %s", filename, strerror(errno_keep));
+		fileerror(filename, strerror(errno_keep));
 		return errno_keep;
 	}
 	file->filename = filename;

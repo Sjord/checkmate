@@ -77,7 +77,7 @@ checkargument(filename, total, file)
 	errno_t res = 0;
 	if (extension_match(filename)) {
 		if (cisdirectory(filename) > 0) {
-			error(" skipping directory `%s'", filename);
+			error("skipping directory `%s'", filename);
 			return EISDIR;
 		}
 		if (!options_get_quiet() && !options_get_badonly() && !options_get_xmloutput()) {
@@ -121,7 +121,7 @@ wildcard_checkfile(wildcardpath, total)
 	wcplen=strlen(wildcardpath);
 	realfilename=(char*)malloc(wcplen+MAXPATH);
 	if (realfilename == NULL) {
-		error(" malloc failed while doing wildcard expansion\n");
+		error("malloc failed while doing wildcard expansion\n");
 		return FALSE;
 	}
 
@@ -135,7 +135,7 @@ wildcard_checkfile(wildcardpath, total)
 
 	hFind=FindFirstFile(wildcardpath, &FindFileData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		error(" no file found: %s", wildcardpath);
+		error("no file found: %s", wildcardpath);
 		return FALSE;
 	}
 
@@ -191,7 +191,7 @@ recursivecheck(dirname, total)
 	dirlen=strlen(dirname);
 	wildcarddir=(char *)malloc(dirlen+MAXPATH);
 	if (wildcarddir == NULL) {
-		error(" malloc failed");
+		error("malloc failed");
 		return FALSE;
 	}
 	
@@ -220,7 +220,7 @@ recursivecheck(dirname, total)
 	dirlen=strlen(dirname);
 	filename=(char *)malloc(2+dirlen+256);
 	if (filename == NULL) {
-		error(" malloc failed while doing recursion\n");
+		error("malloc failed while doing recursion\n");
 		return FALSE;
 	}
 	strcpy(filename, dirname);
@@ -229,7 +229,7 @@ recursivecheck(dirname, total)
 
 	dir=opendir(dirname);
 	if (dir == NULL) {
-		error(" error opening directory %s", dirname);
+		error("error opening directory %s", dirname);
 		return FALSE;
 	}
 

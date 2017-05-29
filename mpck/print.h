@@ -26,6 +26,6 @@
 void print_version(void);
 void print_usage(void);
 void error(const char *format, ...);
-void fileerror(const file_info *f, const char *format, ...);
+void fileerror(const char * filename, const char * error);
 void offseterror(const file_info *f, const char *format, ...);
 void print_scanning(const char *filename);
