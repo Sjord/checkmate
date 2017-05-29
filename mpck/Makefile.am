@@ -18,10 +18,8 @@ mpck_SOURCES = \
 	filename.h \
 	frame.c \
 	frame.h \
-	id3.c \
-	id3.h \
-	ape.c \
-	ape.h \
+	metatag.c \
+	metatag.h \
 	main.c \
 	matrices.h \
 	mp3errors.h \

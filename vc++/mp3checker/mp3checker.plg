@@ -23,7 +23,7 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 ".\Debug\file.obj"
 ".\Debug\filename.obj"
 ".\Debug\frame.obj"
-".\Debug\id3.obj"
+".\Debug\metatag.obj"
 ".\Debug\options.obj"
 ".\Debug\print.obj"
 ".\Debug\total.obj"

@@ -132,7 +132,7 @@ SOURCE=..\..\mpck\frame.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\id3.c
+SOURCE=..\..\mpck\metatag.c
 # End Source File
 # Begin Source File
 
@@ -220,7 +220,7 @@ SOURCE=..\..\mpck\frame.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\id3.h
+SOURCE=..\..\mpck\metatag.h
 # End Source File
 # Begin Source File
 
