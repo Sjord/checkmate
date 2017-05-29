@@ -129,7 +129,7 @@ SOURCE="..\..\libgnugetopt-1.2\getopt_long.c"
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\id3.c
+SOURCE=..\..\mpck\metatag.c
 # End Source File
 # Begin Source File
 
@@ -197,7 +197,7 @@ SOURCE="..\..\libgnugetopt-1.2\getopt.h"
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mpck\id3.h
+SOURCE=..\..\mpck\metatag.h
 # End Source File
 # Begin Source File
 

@@ -151,7 +151,22 @@ file_print_verbose(file)
 	printf("    %-30s%s\n", "stereo", strbool(file->stereo));
 	printf("    %-30s%d KiB\n", "size", file->length/1024);
 	printf("    %-30s%s\n", "ID3V1", strbool(file->id3&ID3V1));
+
 	printf("    %-30s%s\n", "ID3V2", strbool(file->id3&ID3V2));
+	if (file->id3 & ID3V2) {
+		printf("        %-26s%zu B\n", "size", file->id3v2_size);
+	}
+
+	printf("    %-30s%s\n", "APEV1", strbool(file->ape&APEV1));
+	if (file->ape & APEV1) {
+		printf("        %-26s%zu B\n", "size", file->apev1_size);
+	}
+
+	printf("    %-30s%s\n", "APEV2", strbool(file->ape&APEV2));
+	if (file->ape & APEV2) {
+		printf("        %-26s%zu B\n", "size", file->apev2_size);
+	}
+
 	file_print_lastframe(file);
 }
 
@@ -306,7 +321,21 @@ file_print_xml(file)
 		if (file->vbr) printf("\t\t<vbr />\n");
 		printf("\t\t<frames>%d</frames>\n", file->frames);
 		if (file->id3 & ID3V1) printf("\t\t<id3v1 />\n");
-		if (file->id3 & ID3V2) printf("\t\t<id3v2 />\n");
+		if (file->id3 & ID3V2) {
+			printf("\t\t<id3v2>\n");
+			printf("\t\t\t<size>%zu</size>\n", file->id3v2_size);
+			printf("\t\t</id3v2>\n");
+		}
+		if (file->ape & APEV1) {
+			printf("\t\t<apev1>\n");
+			printf("\t\t\t<size>%zu</size>\n", file->apev1_size);
+			printf("\t\t</apev1>\n");
+		}
+		if (file->ape & APEV2) { 
+			printf("\t\t<apev2>\n");
+			printf("\t\t\t<size>%zu</size>\n", file->apev2_size);
+			printf("\t\t</apev2>\n");
+		}
 		printf("\t\t<time>%d:%02d.%03d</time>\n", file->time / 60, file->time % 60, file->msec);
 		printf("\t</MPEG>\n");
 	}

@@ -97,6 +97,9 @@
 #define ID3V1 1
 #define ID3V2 2
 
+#define APEV1 1
+#define APEV2 2
+
 #define STEREO 0
 #define JOINT 1
 #define DUAL 2
