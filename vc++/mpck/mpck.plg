@@ -8,7 +8,7 @@
 <h3>Command Lines</h3>
 Creating temporary file "C:\DOCUME~1\sjoerd\LOCALS~1\Temp\RSP24.tmp" with contents
 [
-/nologo /MLd /W3 /Gm /GX /ZI /Od /I "..\..\libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+/nologo /MLd /W3 /Gm /GX /Zi /Od /I "..\..\libgnugetopt-1.2" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/mpck.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkarguments.c"
 "C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkfile.c"
 "C:\Documents and Settings\sjoerd\Mijn documenten\checkmate.cleanup\mpck\checkframe.c"
