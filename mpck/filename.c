@@ -28,28 +28,32 @@
 #include "options.h"
 #include <string.h>
 
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
 /*
  * @return true if filename is ending in .extension
  * extension is something like "mp3", not starting with a dot
  * filename only matches if it ends in ".mp3" (thus with a dot)
  */
 int extension_match(filename)
-	const char * filename;
+	const TCHAR * filename;
 {
-	char * lastdot;
-	char * extension = options_get_extension();
+	TCHAR * lastdot;
+	TCHAR * extension = options_get_extension();
 
 	if (extension == NULL) {
 		/* extension was not set */
 		return TRUE;
 	}
 	
-	lastdot=strrchr(filename, EXTENSION_MARK); /* search for last dot */
+	lastdot=_tcsrchr(filename, EXTENSION_MARK); /* search for last dot */
 	if (lastdot == NULL) return FALSE;
 
 	lastdot++;	/* remove the dot */
 #ifdef _WIN32
-	return stricmp(lastdot, extension) == 0;
+	return _tcsicmp(lastdot, extension) == 0;
 #else
 	return strcmp(lastdot, extension) == 0;
 #endif
@@ -57,7 +61,7 @@ int extension_match(filename)
 
 static int
 goodchar(ch)
-	int ch;
+	TCHAR ch;
 {
 	if ((ch>='a') && (ch<='z')) return TRUE;
 	if ((ch>='A') && (ch<='Z')) return TRUE;
@@ -71,13 +75,13 @@ goodchar(ch)
 }
 
 static int check_filename_length(filename)
-	const char * filename;
+	const TCHAR * filename;
 {	
 	int fnlen; 	/* filename length */
 	int maxname = options_get_maxname();
 	if (maxname == 0) return TRUE;
 
-	fnlen=strlen(filename);
+	fnlen=_tcslen(filename);
 	
 	if (fnlen>maxname) {
 		return FALSE;
@@ -87,11 +91,12 @@ static int check_filename_length(filename)
 }
 
 static int check_filename_chars(filename)
-	const char * filename;
+	const TCHAR * filename;
 {
-	int fnlen, ch, i;
+	int fnlen, i;
+	TCHAR ch;
 
-	fnlen=strlen(filename);
+	fnlen=_tcslen(filename);
 
 	for (i=0; i<fnlen; i++) {
 		ch=filename[i];
@@ -106,10 +111,10 @@ void
 check_filename(file)
 	file_info * 	file;
 {
-	char * filename;
+	TCHAR * filename;
 
 	/* strip directory name */
-	filename=strrchr(file->filename, DIRSEP);
+	filename= _tcsrchr(file->filename, DIRSEP);
 	if (filename == NULL) {
 		filename=file->filename;
 	} else {
@@ -124,7 +129,7 @@ check_filename(file)
 		file->errors |= ERR_BADFNAME;
 	}
 	
-	if (strcmp(filename, PROGNAME) == 0) printf("    I'm fine, thank you!\n");
+	if (_tcscmp(filename, PROGNAME) == 0) printf("    I'm fine, thank you!\n");
 }	
 
 

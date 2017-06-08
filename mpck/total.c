@@ -39,6 +39,10 @@
 #include <strings.h>
 #endif
 
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
 total_info *
 total_create() 
 {
@@ -87,17 +91,17 @@ total_print(total)
 {
 	if (total->filecount<2) return;
 	if (options_get_quiet()) return;
-	printf("TOTAL:\n");
-	printf("    %-30s%d\n", "number of files", total->filecount);
-	printf("        %-26s%d\n", GOODFILE, total->goodcount);
-	printf("        %-26s%d\n", BADFILE, total->filecount-total->goodcount);
-	printf("    %-30s%d:%02d:%02d\n", "time",
+	_tprintf(TEXT("TOTAL:\n"));
+	_tprintf(TEXT("    %-30s%d\n"), TEXT("number of files"), total->filecount);
+	_tprintf(TEXT("        %-26s%d\n"), GOODFILE, total->goodcount);
+	_tprintf(TEXT("        %-26s%d\n"), BADFILE, total->filecount-total->goodcount);
+	_tprintf(TEXT("    %-30s%d:%02d:%02d\n"), TEXT("time"),
 		total->time/3600, (total->time/60)%60, total->time%60);
-	printf("    %-30s\n", "bitrate");
-	printf("        %-26s%d\n", "minimum", total->minbitrate);
-	printf("        %-26s%d\n", "average", total->totalbitrate/total->filecount);
-	printf("        %-26s%d\n", "maximum", total->maxbitrate);
-	printf("\n");
+	_tprintf(TEXT("    %-30s\n"), TEXT("bitrate"));
+	_tprintf(TEXT("        %-26s%d\n"), TEXT("minimum"), total->minbitrate);
+	_tprintf(TEXT("        %-26s%d\n"), TEXT("average"), total->totalbitrate/total->filecount);
+	_tprintf(TEXT("        %-26s%d\n"), TEXT("maximum"), total->maxbitrate);
+	_tprintf(TEXT("\n"));
 }
 	
 int

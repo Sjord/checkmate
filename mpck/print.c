@@ -36,77 +36,81 @@
 #include <errno.h>
 #endif
 
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
 void
 print_version(void)
 {
-	printf("%s %s\n", PROGNAME, VERSION);
-	printf("Copyright (C) 2006 Sjoerd Langkemper\n");
-	printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
-	printf("You may redistribute copies of this program\n");
-	printf("under the terms of the GNU General Public License.\n");
-	printf("For more information about these matters, see the file named COPYING.\n");
+	_tprintf(TEXT("%s %s\n"), PROGNAME, VERSION);
+	_tprintf(TEXT("Copyright (C) 2006 Sjoerd Langkemper\n"));
+	_tprintf(TEXT("This program comes with ABSOLUTELY NO WARRANTY.\n"));
+	_tprintf(TEXT("You may redistribute copies of this program\n"));
+	_tprintf(TEXT("under the terms of the GNU General Public License.\n"));
+	_tprintf(TEXT("For more information about these matters, see the file named COPYING.\n"));
 }
 
 void
 print_usage(void)
 {
-	printf("%s %s - checks a MP3 file for errors\n\n", PROGNAME, VERSION);
-	printf("Usage: %s [OPTION]... [FILE]...\n\n", PROGNAME);
-	printf("Verbosity:\n");
-	printf("   -v, --verbose        print some extra info\n");
-	printf("   -q, --quiet          print only %s or %s per file\n", GOODFILE, BADFILE);
-	printf("   -B, --badonly        only report bad files\n");
-	printf("Other options:\n");
-	printf("   -R, --recursive      check directories recursively\n");  
-	printf("   -e, --extention=EXT  only check files ending on .EXT\n");
-	printf("   -r                   short for -R -e mp3\n");
-	printf("   -m, --maxname=NUM    report bad for filenames which exceed NUM characters\n");
-	printf("   -n, --namecheck      check for strange characters in the filename\n");
-	printf("   -x, --xmloutput      output results in XML\n");
-	printf("   -h, --help           print this help, then exit\n");
-	printf("   -V, --version        print version information\n");
+	_tprintf(TEXT("%s %s - checks a MP3 file for errors\n\n"), PROGNAME, VERSION);
+	_tprintf(TEXT("Usage: %s [OPTION]... [FILE]...\n\n"), PROGNAME);
+	_tprintf(TEXT("Verbosity:\n"));
+	_tprintf(TEXT("   -v, --verbose        print some extra info\n"));
+	_tprintf(TEXT("   -q, --quiet          print only %s or %s per file\n"), GOODFILE, BADFILE);
+	_tprintf(TEXT("   -B, --badonly        only report bad files\n"));
+	_tprintf(TEXT("Other options:\n"));
+	_tprintf(TEXT("   -R, --recursive      check directories recursively\n"));
+	_tprintf(TEXT("   -e, --extention=EXT  only check files ending on .EXT\n"));
+	_tprintf(TEXT("   -r                   short for -R -e mp3\n"));
+	_tprintf(TEXT("   -m, --maxname=NUM    report bad for filenames which exceed NUM characters\n"));
+	_tprintf(TEXT("   -n, --namecheck      check for strange characters in the filename\n"));
+	_tprintf(TEXT("   -x, --xmloutput      output results in XML\n"));
+	_tprintf(TEXT("   -h, --help           print this help, then exit\n"));
+	_tprintf(TEXT("   -V, --version        print version information\n"));
 }
 
 void 
-error(const char * format, ...) {
+error(const TCHAR * format, ...) {
 	va_list ap;  
-	char buf[1024];
+	TCHAR buf[1024];
 	int len;
 	
 	va_start(ap, format);
-	len = vsnprintf(buf, sizeof(buf), format, ap);
+	len = _vsntprintf(buf, sizeof(buf), format, ap);
 	va_end(ap);
 	
 	if (len < 0) exit(EINVAL);
 
-	fprintf(stderr, "%s: %s\n", PROGNAME, buf);
+	_ftprintf(stderr, TEXT("%s: %s\n"), PROGNAME, buf);
 }
 
 void
-fileerror(const char * filename, const char * error) {
-	fprintf(stderr, "%s:%s: %s\n", PROGNAME, filename, error);
+fileerror(const TCHAR * filename, const TCHAR * error) {
+	_ftprintf(stderr, TEXT("%s:%s: %s\n"), PROGNAME, filename, error);
 }
 	
 void 
-offseterror(const file_info * f, const char * format, ...) {
+offseterror(const file_info * f, const TCHAR * format, ...) {
 	va_list ap;  
-	char buf[1024];
+	TCHAR buf[1024];
 	int len;
 	
 	va_start(ap, format);
-	len = vsnprintf(buf, sizeof(buf), format, ap);
+	len = _vsntprintf(buf, sizeof(buf), format, ap);
 	va_end(ap);
 	
 	if (len < 0) exit(EINVAL);
 
-	fprintf(stderr, "%s:%s:%zu: %s\n", PROGNAME, f->filename, cftell(f->fp), buf);
+	_ftprintf(stderr, TEXT("%s:%s:%zu: %s\n"), PROGNAME, f->filename, cftell(f->fp), buf);
 }
 
 /* print something to let the user know we are scanning */
 void
 print_scanning(filename)
-	const char * filename;
+	const TCHAR * filename;
 {
-	printf("SUMMARY: %s\n", filename);
+	_tprintf(TEXT("SUMMARY: %s\n"), filename);
 }
 

@@ -63,11 +63,11 @@ typedef char TCHAR;
 #ifdef PACKAGE_VERSION 
 #define VERSION PACKAGE_VERSION
 #else
-#define VERSION "0.20"
+#define VERSION TEXT("0.20")
 #endif /* PACKAGE_VERSION */
 #endif /* VERSION */
 
-#define PROGNAME	"mpck"
+#define PROGNAME	TEXT("mpck")
 #define HOMEPAGE	"https://github.com/Sjord/checkmate"
 #define AUTHOR		"Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>"
 
@@ -82,9 +82,9 @@ typedef char TCHAR;
 #define EXTENSION_MARK '.'	/* the dot in foobar.mp3 */
 #define DEF_EXTENSION "mp3"		/* default extention */
 
-#define GOODFILE "Ok"	/* the text to print if a file is fine */
-#define BADFILE  "Bad"	/* the text to print if a file is corrupt */
-#define BADTYPE  "No MP3"	/* the text to print if the filetype is wrong */
+#define GOODFILE TEXT("Ok")	/* the text to print if a file is fine */
+#define BADFILE  TEXT("Bad")	/* the text to print if a file is corrupt */
+#define BADTYPE  TEXT("No MP3")	/* the text to print if the filetype is wrong */
 
 /* FIXME make enums */
 

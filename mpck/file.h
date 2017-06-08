@@ -34,7 +34,7 @@ typedef struct _file_info file_info;
 
 struct _file_info { 
 	CFILE * fp;		/* filepointer to this file		*/
-	char * filename;	/* filename of this file		*/
+	TCHAR * filename;	/* filename of this file		*/
 	int length;		/* length of this file (in bytes)	*/
 	int lengthcount;	/* length of all frames			*/
 	int time;		/* length of this file (in seconds)	*/
