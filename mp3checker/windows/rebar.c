@@ -51,7 +51,7 @@ LRESULT CALLBACK OwnComboWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 static BOOL Combo_AddDrives(HWND hWndCombo) {
 	DWORD drives;
 	int nPos=0;
-	char strDrive[] = "A:\\";
+	TCHAR strDrive[] = TEXT("A:\\");
 
 	drives=GetLogicalDrives();
 
