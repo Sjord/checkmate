@@ -359,7 +359,6 @@ int ErrorBox(int iError, UINT uType) {
 	TCHAR caption[256];
 	LoadString(hInst, iError, text, 1023);
 	LoadString(hInst, iError+1, caption, 255);
-//	sprintf(text, "%s\nError #%d.", text, GetLastError());
 
 	return MessageBox(hWndMain, text, caption, uType);
 }
