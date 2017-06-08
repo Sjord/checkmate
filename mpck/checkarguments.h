@@ -23,9 +23,5 @@
  * 
  */
 
-#ifdef _WIN32
 int recursivecheck(const TCHAR *dirname, total_info *total);
-#else
-int recursivecheck(const char *dirname, total_info *total);
-#endif
 errno_t checkarguments(char **argv, total_info *total);

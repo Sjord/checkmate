@@ -212,7 +212,7 @@ recursivecheck(dirname, total)
 /* recursively scans all the files in dirname */
 int
 recursivecheck(dirname, total)
-	const char *dirname;
+	const TCHAR *dirname;
 	total_info * total;
 {
 	DIR * dir;
