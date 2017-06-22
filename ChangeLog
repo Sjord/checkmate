@@ -1,3 +1,7 @@
+version 0.21
+	* Support the APE metadata tag format.
+	* Exit with the correct exit code.
+
 version 0.20
 	* Merge two lookup tables into one in the layer 2 CRC length code.
 	* Fix issues when deleting multiple files in MP3 Checker.

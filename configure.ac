@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([checkmate], [0.20], [sjoerd-mpck@linuxonly.nl])
+AC_INIT([checkmate], [0.21], [sjoerd-mpck@linuxonly.nl])
 AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 
