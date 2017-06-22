@@ -28,10 +28,10 @@ IDD_ABOUT DIALOG 0, 0, 267, 170
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "Checkmate MP3 checker 0.20",IDC_STATIC,0,23,267,8,SS_CENTERIMAGE
-    CTEXT           "Based on mpck 0.20",IDC_STATIC,0,34,267,8,SS_CENTERIMAGE
+    CTEXT           "Checkmate MP3 checker 0.21",IDC_STATIC,0,23,267,8,SS_CENTERIMAGE
+    CTEXT           "Based on mpck 0.21",IDC_STATIC,0,34,267,8,SS_CENTERIMAGE
     CONTROL         IDB_ABOUTLOGO,IDC_STATIC,"Static",SS_BITMAP,0,0,267,19
-    CTEXT           "(C) 2006 Sjoerd Langkemper",IDC_STATIC,0,45,267,8,SS_CENTERIMAGE
+    CTEXT           "(C) 2017 Sjoerd Langkemper",IDC_STATIC,0,45,267,8,SS_CENTERIMAGE
     CTEXT           "sjoerd-checkmate@linuxonly.nl",IDC_STATIC,0,56,267,8,SS_CENTERIMAGE
     CTEXT           "https://github.com/Sjord/checkmate",IDC_STATIC,0,67,267,8,SS_CENTERIMAGE
     RTEXT           "Enter",IDC_STATIC,44,85,63,8,SS_CENTERIMAGE
@@ -123,8 +123,8 @@ IDB_ABOUTLOGO           BITMAP                  "mp3checker.bmp"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,0,0,20
- PRODUCTVERSION 0,0,0,20
+ FILEVERSION 0,0,0.21
+ PRODUCTVERSION 0,0,0.21
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -141,12 +141,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Sjoerd Langkemper"
             VALUE "FileDescription", "Checkmate MP3 checker"
-            VALUE "FileVersion", "0, 0, 0, 20"
+            VALUE "FileVersion", "0, 0, 0, 21"
             VALUE "InternalName", "Checkmate MP3 checker"
             VALUE "LegalCopyright", "Copyright © 2017"
             VALUE "OriginalFilename", "mp3checker.exe"
             VALUE "ProductName", "Checkmate MP3 checker"
-            VALUE "ProductVersion", "0, 0, 0, 20"
+            VALUE "ProductVersion", "0, 0, 0, 21"
         END
     END
     BLOCK "VarFileInfo"

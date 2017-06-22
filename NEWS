@@ -1,5 +1,9 @@
 mpck
 
+0.21 (22-06-2017)
+    Finally support APE tags, which correctly identifies some files as OK
+    instead of broken.
+
 0.20 (02-04-2017)
     Got back to fixing some things after a quiet period of several years.
 
