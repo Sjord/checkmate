@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.57)
 AC_INIT([checkmate], [0.20], [sjoerd-mpck@linuxonly.nl])
-AM_INIT_AUTOMAKE([checkmate], [0.20])
+AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 
 AC_CONFIG_SRCDIR([mpck/main.c])
