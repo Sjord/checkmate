@@ -36,6 +36,7 @@
 
 #include "mp3checker.h"
 #include "vector.h"
+#include <tchar.h>
 
 #define CVECTORS 26
 #define FI_HASH(filename) abs(filename[0]%(CVECTORS))
@@ -76,8 +77,8 @@ FileInfo * FI_GetFile(TCHAR * filename, TCHAR * dirname) {
 
 	v=fileinfo[FI_HASH(filename)];
 	while (fi=(FileInfo *)Vector_Get(v, i++)) {
-		if ((stricmp(filename, fi->filename)==0)
-			&&(stricmp(dirname, fi->dirname)==0)) {
+		if ((_tcsicmp(filename, fi->filename)==0)
+			&&(_tcsicmp(dirname, fi->dirname)==0)) {
 			return fi;
 		}
 	}

@@ -119,12 +119,12 @@ static int findlastframe(file)
 }
 
 static errno_t openfile(filename, file)
-	char 		* filename;
+	TCHAR 		* filename;
 	file_info	* file;
 {
 	errno_t errno_keep;
 
-	file->fp = cfopen(filename, "rb");
+	file->fp = cfopen(filename, TEXT("rb"));
 	if (file->fp == NULL) {
 		errno_keep = errno;
 		fileerror(filename, strerror(errno_keep));
@@ -136,7 +136,7 @@ static errno_t openfile(filename, file)
 }
 
 errno_t checkfile(filename, file)
-	char		* filename;
+	TCHAR		* filename;
 	file_info 	* file;
 {
 	frame_info * frame;

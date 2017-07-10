@@ -23,5 +23,5 @@
  * 
  */
 
-int recursivecheck(const char *dirname, total_info *total);
+int recursivecheck(const TCHAR *dirname, total_info *total);
 errno_t checkarguments(char **argv, total_info *total);

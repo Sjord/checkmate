@@ -5,6 +5,12 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+typedef char TCHAR;
+#define _topen open
+#define _tfopen fopen
+#define _tstat stat
+#define _stat stat
 #endif
 
 #ifndef FALSE
@@ -36,8 +42,8 @@ typedef struct {
 
 /* bufio.c */
 size_t cfilesize(CFILE *c);
-int cisdirectory(const char *filename);
-CFILE *cfopen(const char *filename, char *mode);
+int cisdirectory(const TCHAR *filename);
+CFILE *cfopen(const TCHAR *filename, TCHAR *mode);
 
 // use cfeof instead of feof because feof is a macro which messes things up.
 struct _io_funcs {

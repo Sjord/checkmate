@@ -41,14 +41,18 @@
 #include <strings.h>
 #endif
 
-const char *
+#ifdef HAVE_TCHAR_H
+#include <tchar.h>
+#endif
+
+const TCHAR *
 file_strversion(file)
 	const file_info * file;
 {
 	int version = file->version;
-	if      (version == MPEG_VER_10) return "v1.0";
-	else if (version == MPEG_VER_20) return "v2.0";
-	else if (version == MPEG_VER_25) return "v2.5";
+	if      (version == MPEG_VER_10) return TEXT("v1.0");
+	else if (version == MPEG_VER_20) return TEXT("v2.0");
+	else if (version == MPEG_VER_25) return TEXT("v2.5");
 	else {
 		error("bug: invalid file version");
 		abort();

@@ -51,7 +51,7 @@ LRESULT CALLBACK OwnComboWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam)
 static BOOL Combo_AddDrives(HWND hWndCombo) {
 	DWORD drives;
 	int nPos=0;
-	char strDrive[] = "A:\\";
+	TCHAR strDrive[] = TEXT("A:\\");
 
 	drives=GetLogicalDrives();
 
@@ -70,7 +70,7 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 	HWND hWndEdit;
 	HFONT font;
 
-	hWndCombo = CreateWindow("COMBOBOX",      // predefined class 
+	hWndCombo = CreateWindow(TEXT("COMBOBOX"),      // predefined class 
                                     NULL,        // no window title 
                                     WS_BORDER | WS_CHILD | WS_VISIBLE | CBS_DROPDOWN ,
                                     0, 0, 100, 200,  // set size in WM_SIZE message 
@@ -93,12 +93,12 @@ HWND Rebar_ComboControl(HWND hWndOwner) {
 	return hWndCombo;
 }
 
-static BOOL Rebar_SetText(char * text) {
+static BOOL Rebar_SetText(TCHAR * text) {
 	return SendMessage(hWndCombo, WM_SETTEXT, 0, (LPARAM)text);
 }
 
 BOOL Rebar_UpdateText() {
-	static char curdir[MAX_PATH];
+	static TCHAR curdir[MAX_PATH];
 	GetCurrentDirectory(sizeof(curdir), curdir);
 	Rebar_SetText(curdir);
 	UpdateWindow(hWndRebar);
@@ -145,7 +145,7 @@ HWND Rebar_Create(HWND hWndOwner)
    RECT          rc;
    HWND			 hWndContents;
    INITCOMMONCONTROLSEX icex;
-   char locationtext[20];
+   TCHAR locationtext[20];
    LoadString(hInst, IDS_LOCATION, locationtext, 19);
    
    icex.dwSize=sizeof(INITCOMMONCONTROLSEX);
@@ -193,14 +193,14 @@ HWND Rebar_Create(HWND hWndOwner)
 }
 
 /* FIXME: static is Evil */
-char * Rebar_GetText() {
-	static char buf[255];
+TCHAR * Rebar_GetText() {
+	static TCHAR buf[255];
 	GetWindowText(hWndCombo, buf, 254);
 	return buf;
 }
 
 void Rebar_Clear() {
-	SetWindowText(hWndCombo, "");
+	SetWindowText(hWndCombo, TEXT(""));
 }
 
 void Rebar_Destroy() {
@@ -209,7 +209,7 @@ void Rebar_Destroy() {
 
 int Rebar_Select() {
 	int iItem;
-	char * strPath;
+	TCHAR * strPath;
 	int iLen;
 	int iRes;
 	
