@@ -36,6 +36,7 @@
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif
+#include <string.h>
 
 /* samplerate in Hz of frame fi with headervalue h */
 #define samplerate(h, fi)  samplerate_matrix[h][fi->version]
@@ -196,6 +197,44 @@ checkvalidity(file, frame)
 	return TRUE;
 }
 
+// If a frame is found on the current position in the file, return TRUE and
+// leave the file pointer at the end of the frame.
+int readframe(file, frame)
+	file_info 	* file;
+	frame_info 	* frame;
+{
+	size_t read_len;
+	char ptr[4];
+	size_t orig_pos = cftell(file->fp);
+
+	read_len = cfread(ptr, 4, file->fp);
+	if (read_len == 4 
+		&& ptr[0] & 0xff == 0xff 
+		&& ptr[1] & 0xe0 == 0xe0) {
+		parseframe(file, frame, ptr);
+		return TRUE;
+	}
+	cfseek(file->fp, orig_pos, SEEK_SET);
+	return FALSE;
+}
+
+int peak_tag_header(file, text)
+	file_info * file;
+	char * text;
+{
+	size_t cmp_len = strlen(text);
+	size_t read_len;
+	char ptr[sizeof text];
+	size_t orig_pos = cftell(file->fp);
+
+	read_len = cfread(ptr, cmp_len, file->fp);
+	if (read_len == cmp_len && 0 == strncmp(ptr, text, cmp_len)) {
+		return TRUE;
+	}
+	cfseek(file->fp, orig_pos, SEEK_SET);
+	return FALSE;
+}
+
 /*
  * FIXME: return the number of bytes which could not be interpreted.
  */
@@ -209,55 +248,30 @@ findframe(file, frame)
 	char * ptr;
 	
 	do {
-		ptr = buf;
-		res = cfread(ptr, 1, file->fp);
-		if (res <= 0) {
-			if (cfeof(file->fp)) {
-				return FALSE;
-			} else {
-				offseterror(file, "read error");
-			}
-			continue;
-		}
-
-		if ((*ptr & 0xff) == 0xff) {
-			res = cfread(++ptr, 1, file->fp);
-			if (res < 1) continue;
-			if ((*ptr & 0xe0) == 0xe0) { /* possible MP3 frame header */
-				res = cfread(++ptr, 2, file->fp);
-				if (res < 2) continue;
-				parseframe(file, frame, buf);
-				return TRUE;
-			}
-		} else if (*ptr == 'T') {	/* TAG -> ID3v1 tag */
-			res = cfread(++ptr, 2, file->fp);
-			if (res < 2) continue;
-			if (*ptr++ == 'A' && *ptr++ == 'G') {
-				skip_id3v1_tag(file);
-			} else {
-				alienbytes(file, 3);
-			}
-		} else if (*ptr == 'I') {	/* ID3 -> ID3v2 tag */
-			res = cfread(++ptr, 2, file->fp);
-			if (res < 2) continue;
-			if (*ptr++ == 'D' && *ptr++ == '3') {
-				skip_id3v2_tag(file);
-			} else {
-				alienbytes(file, 3);
-			}
-		} else if (*ptr == 'A') {   /* APETAGEX -> APE tag */
-			res = cfread(++ptr, 7, file->fp);
-			if (res < 7) continue;
-			if (*ptr++ == 'P' && *ptr++ == 'E' &&
-					*ptr++ == 'T' && *ptr++ == 'A' &&
-					*ptr++ == 'G' && *ptr++ == 'E' &&
-					*ptr++ == 'X') {
-				skip_ape_tag(file);
-			} else {
-				alienbytes(file, 8);
-			}
+		if (readframe(file, frame)) {
+			/* possible MP3 frame header */
+			return TRUE;
+        } else if (peak_tag_header(file, "TAG")) {
+			/* TAG -> ID3v1 tag */
+			skip_id3v1_tag(file);
+        } else if (peak_tag_header(file, "ID3")) {
+			/* ID3 -> ID3v2 tag */
+			skip_id3v2_tag(file);
+        } else if (peak_tag_header(file, "APETAGEX")) {
+			/* APETAGEX -> APE tag */
+			skip_ape_tag(file);
 		} else {
-			alienbytes(file, 1);
+			ptr = buf;
+			res = cfread(ptr, 1, file->fp);
+			if (res <= 0) {
+				if (cfeof(file->fp)) {
+					return FALSE;
+				} else {
+					offseterror(file, "read error");
+				}
+			} else {
+				alienbytes(file, 1);
+			}
 		}
 	} while (!cfeof(file->fp));
 	return FALSE;
