@@ -25,5 +25,7 @@
  * 
  */
 
+#include "options.h"
+
 #define __OPTIONS_C__
 #include "options.h"

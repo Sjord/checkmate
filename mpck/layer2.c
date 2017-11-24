@@ -2,6 +2,7 @@
 #include "bitfile.h"
 #include "file.h"
 #include "mpck.h"
+#include "layer2.h"
 
 static struct {
 	unsigned int sblimit;

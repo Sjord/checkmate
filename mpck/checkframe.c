@@ -32,6 +32,7 @@
 #include "options.h"
 #include "matrices.h"
 #include "layer2.h"
+#include "checkframe.h"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>

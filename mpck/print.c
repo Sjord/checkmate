@@ -24,6 +24,7 @@
 
 #include "mpck.h"
 #include "file.h"
+#include "print.h"
 #include "options.h"
 #include <stdio.h>
 #include <stdarg.h>

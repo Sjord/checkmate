@@ -25,6 +25,7 @@
 
 #include "mpck.h"
 #include "file.h"
+#include "metatag.h"
 #include "synchsafe.h"
 #include <stdint.h>
 

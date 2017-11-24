@@ -25,6 +25,7 @@
 
 #include "mpck.h"
 #include "file.h"
+#include "filename.h"
 #include "options.h"
 #include <string.h>
 

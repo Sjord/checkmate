@@ -28,6 +28,7 @@
 #include "checkframe.h"
 #include "print.h"
 #include "filename.h"
+#include "checkfile.h"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>

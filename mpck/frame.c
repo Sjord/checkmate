@@ -60,8 +60,7 @@ frame_clear(frame_info * frame)
 	memset(frame, 0, sizeof(frame_info));
 }
 
-void
-frame_print(const frame_info *fi)
+void frame_print(const frame_info *fi)
 {
         printf("FRAME");
         printf("    %-30s%d\n", "version", (fi->version));
