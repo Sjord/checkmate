@@ -46,13 +46,7 @@
 #include <strings.h>
 #endif
 
-/* needed for getopt */
-char *
-_getprogname() {
-	return PROGNAME;
-}
-
-int
+static int
 parse_options(argc, argv)
 	int argc;
 	char *argv[];
