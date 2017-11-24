@@ -40,7 +40,7 @@
 #endif
 
 total_info *
-total_create() 
+total_create(void)
 {
 	total_info * total;
 	
@@ -50,8 +50,7 @@ total_create()
 	return total;
 }
 
-void total_destroy(total)
-	total_info * total;
+void total_destroy(total_info * total)
 {
 	free(total);
 }
@@ -60,9 +59,7 @@ void total_destroy(total)
  * puts stats from file (bitrate, file count) into the total stats
  */
 int
-total_update(total, file)
-	total_info       * total;
-	const file_info  * file;
+total_update(total_info * total, const file_info * file)
 {
 	/* don't do stats for files which aren't MP3s */
 	if (!file->ismp3file) return TRUE;
@@ -82,8 +79,7 @@ total_update(total, file)
 }
 
 void
-total_print(total)
-	const total_info * total;
+total_print(const total_info * total)
 {
 	if (total->filecount<2) return;
 	if (options_get_quiet()) return;
@@ -101,15 +97,13 @@ total_print(total)
 }
 	
 int
-total_allgood(total) 
-	const total_info * total;
+total_allgood(const total_info * total)
 {
 	return total->goodcount == total->filecount;
 }
 
 void
-total_clear(total) 
-	total_info * total;
+total_clear(total_info * total)
 {
 	memset(total, 0, sizeof(total_info));
 }

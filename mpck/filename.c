@@ -25,6 +25,7 @@
 
 #include "mpck.h"
 #include "file.h"
+#include "filename.h"
 #include "options.h"
 #include <string.h>
 
@@ -33,8 +34,7 @@
  * extension is something like "mp3", not starting with a dot
  * filename only matches if it ends in ".mp3" (thus with a dot)
  */
-int extension_match(filename)
-	const char * filename;
+int extension_match(const char * filename)
 {
 	char * lastdot;
 	char * extension = options_get_extension();
@@ -56,8 +56,7 @@ int extension_match(filename)
 }
 
 static int
-goodchar(ch)
-	int ch;
+goodchar(int ch)
 {
 	if ((ch>='a') && (ch<='z')) return TRUE;
 	if ((ch>='A') && (ch<='Z')) return TRUE;
@@ -70,8 +69,7 @@ goodchar(ch)
 	return FALSE;
 }
 
-static int check_filename_length(filename)
-	const char * filename;
+static int check_filename_length(const char * filename)
 {	
 	int fnlen; 	/* filename length */
 	int maxname = options_get_maxname();
@@ -86,8 +84,7 @@ static int check_filename_length(filename)
 	}
 }
 
-static int check_filename_chars(filename)
-	const char * filename;
+static int check_filename_chars(const char * filename)
 {
 	int fnlen, ch, i;
 
@@ -103,8 +100,7 @@ static int check_filename_chars(filename)
 }
 
 void
-check_filename(file)
-	file_info * 	file;
+check_filename(file_info * file)
 {
 	char * filename;
 

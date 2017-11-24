@@ -2,6 +2,7 @@
 #include "bitfile.h"
 #include "file.h"
 #include "mpck.h"
+#include "layer2.h"
 
 static struct {
 	unsigned int sblimit;
@@ -23,9 +24,7 @@ static struct {
 
 #define nchannels(fi) 	(fi->stereo == MONO ? 1 : 2)
 
-int crcdatalength2(file, frame)
-	const file_info * file;
-	frame_info * frame;
+int crcdatalength2(const file_info * file, frame_info * frame)
 {
 	unsigned int index, sblimit, nbal, nchannels, bound, sb;
 	int bitrate_per_channel;

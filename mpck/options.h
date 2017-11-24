@@ -28,6 +28,7 @@
  *
  */
 
+#undef OPTION
 #ifdef __OPTIONS_C__
 /* This macro takes a variable name and its type. It defines the variable and
  * the functions options_set_variable and options_get_variable.
@@ -35,13 +36,12 @@
 #define OPTION(NAME, TYPE) 		\
 	static TYPE NAME = (TYPE) 0;	\
 	void				\
-	options_set_ ## NAME(value)	\
-		TYPE value;		\
+	options_set_ ## NAME(TYPE value)\
 	{				\
 		NAME = value;		\
 	}				\
 	TYPE				\
-	options_get_ ## NAME() {	\
+	options_get_ ## NAME(void) {	\
 		return NAME;		\
 	}
 #else
@@ -50,7 +50,7 @@
  */
 #define OPTION(NAME, TYPE) 			\
 	void options_set_ ## NAME(TYPE value);	\
-	TYPE options_get_ ## NAME();
+	TYPE options_get_ ## NAME(void);
 #endif
 
 #define INT_OPTION(NAME) OPTION(NAME, int)

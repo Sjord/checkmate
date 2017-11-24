@@ -52,5 +52,6 @@ struct _frame_info {
 frame_info *frame_create(void);
 void frame_destroy(frame_info *frame);
 void frame_clear(frame_info *frame);
+void frame_print(const frame_info *fi);
 
 #endif

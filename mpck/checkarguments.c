@@ -69,10 +69,7 @@
 #endif
 
 static errno_t
-checkargument(filename, total, file)
-	char * filename;
-	total_info * total;
-	file_info * file;
+checkargument(char * filename, total_info * total, file_info * file)
 {
 	errno_t res = 0;
 	if (extension_match(filename)) {
@@ -106,9 +103,7 @@ fisdirectory(FindFileData)
  * only if _WIN32 is defined
  */
 int
-wildcard_checkfile(wildcardpath, total)
-	char 		* wildcardpath;
-	total_info 	* total;
+wildcard_checkfile(char * wildcardpath, total_info * total)
 {
 	WIN32_FIND_DATA FindFileData;	/* struct to store the found file */
 	HANDLE hFind;
@@ -163,9 +158,7 @@ wildcard_checkfile(wildcardpath, total)
  * only if _WIN32 is defined
  */
 int
-checkarguments(argv, total)
-	char		**argv;
-	total_info 	* total;
+checkarguments(char **argv, total_info * total)
 {
 	int res=TRUE;
 
@@ -181,9 +174,7 @@ checkarguments(argv, total)
 /* only if _WIN32 is defined 
  */
 int
-recursivecheck(dirname, total)
-	const char *dirname;
-	total_info * total;
+recursivecheck(const char *dirname, total_info * total)
 {
 	char * wildcarddir;
 	int dirlen;
@@ -207,9 +198,7 @@ recursivecheck(dirname, total)
 
 /* recursively scans all the files in dirname */
 int
-recursivecheck(dirname, total)
-	const char *dirname;
-	total_info * total;
+recursivecheck(const char *dirname, total_info * total)
 {
 	DIR * dir;
 	struct dirent * ent;
@@ -252,9 +241,7 @@ recursivecheck(dirname, total)
 
 /* checkarguments opens each file and calls checkfile */
 errno_t
-checkarguments(argv, total)
-	char		**argv;
-	total_info	* total;
+checkarguments(char **argv, total_info * total)
 {
 	errno_t _errno, last_error=0;
 	char * filename;

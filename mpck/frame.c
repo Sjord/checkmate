@@ -39,7 +39,7 @@
 #endif
 
 frame_info *
-frame_create() 
+frame_create(void)
 {
 	frame_info * frame;
 	
@@ -49,22 +49,18 @@ frame_create()
 	return frame;
 }
 
-void frame_destroy(frame)
-	frame_info * frame;
+void frame_destroy(frame_info * frame)
 {
 	free(frame);
 }
 
 void
-frame_clear(frame) 
-	frame_info * frame;
+frame_clear(frame_info * frame)
 {
 	memset(frame, 0, sizeof(frame_info));
 }
 
-void
-frame_print(fi)
-        const frame_info *fi;
+void frame_print(const frame_info *fi)
 {
         printf("FRAME");
         printf("    %-30s%d\n", "version", (fi->version));

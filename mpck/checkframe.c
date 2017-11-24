@@ -32,6 +32,7 @@
 #include "options.h"
 #include "matrices.h"
 #include "layer2.h"
+#include "checkframe.h"
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
@@ -50,9 +51,7 @@
 #define layer(h) 	   (4-(h))
 
 /* framelength(fi) calculates the length (in bytes) of a frame */
-static int framelength(file, fi)
-	const file_info  * file;
-	const frame_info * fi;
+static int framelength(const file_info * file, const frame_info * fi)
 {
 	/* if this is the last frame, it has a different length */
 	if ((file->lastframe_offset == fi->offset) && (file->lastframe_offset)) {
@@ -68,9 +67,7 @@ static int framelength(file, fi)
 }
 
 static void
-alienbytes(file, num)
-	file_info * file;
-	int num;
+alienbytes(file_info * file, int num)
 {
 	if (file->frames == 0)
 		file->alien_before += num;
@@ -80,9 +77,7 @@ alienbytes(file, num)
 
 /* checks for consistency */
 static int
-checkconsistency(file, frame)
-	const file_info * file;
-	const frame_info * frame;
+checkconsistency(const file_info * file, const frame_info * frame)
 {
 	int verbose = options_get_verbose();
 
@@ -104,25 +99,20 @@ checkconsistency(file, frame)
 
 /* sets consistency data to current frame */
 static void
-setconsistent(file, frame)
-	file_info * file;
-	const frame_info * frame;
+setconsistent(file_info * file, const frame_info * frame)
 {
 	file->version = frame->version;
 	file->layer = frame->layer;
 }
 
 /* returns bitrate in bps */
-static int bitrate(headervalue, fi)
-	int headervalue;	/* value of the bitrate as in the header */
-	frame_info * fi;	/* this function uses version and layer */
+static int bitrate(int headervalue, frame_info * fi)
 {
 	return 1000*bitrate_matrix[3*fi->version+fi->layer-1][headervalue];
 }
 
 static int 
-mpegver(headervalue) 
-	int headervalue;
+mpegver(int headervalue)
 {
 	if (headervalue == 3) return MPEG_VER_10;
 	if (headervalue == 2) return MPEG_VER_20;
@@ -131,10 +121,7 @@ mpegver(headervalue)
 }
 
 static void
-parseframe(file, fr, buf)
-	const file_info  * file;
-	frame_info * fr;
-	char * buf;
+parseframe(const file_info * file, frame_info * fr, char * buf)
 {
 	int res;
 	
@@ -169,9 +156,7 @@ parseframe(file, fr, buf)
 
 /* checks the validity of struct frame_info fi */
 int
-checkvalidity(file, frame)
-	const file_info * file;
-	const frame_info * frame;
+checkvalidity(const file_info * file, const frame_info * frame)
 {
 	int verbose = options_get_verbose();
 
@@ -200,9 +185,7 @@ checkvalidity(file, frame)
  * FIXME: return the number of bytes which could not be interpreted.
  */
 int
-findframe(file, frame)
-	file_info 	* file;
-	frame_info 	* frame;
+findframe(file_info * file, frame_info * frame)
 {
 	int res;
 	char buf[8];
@@ -263,9 +246,7 @@ findframe(file, frame)
 	return FALSE;
 }
 
-static int crcdatalength(file, frame)
-	const file_info * file;
-	frame_info * frame;
+static int crcdatalength(const file_info * file, frame_info * frame)
 {
 	if (frame->layer == 2) {
 		return crcdatalength2(file, frame);
@@ -283,9 +264,7 @@ static int crcdatalength(file, frame)
 	return 0; // never reached, but supress warning
 }
 
-static int checkcrc16(file, frame)
-	const file_info * file;
-	frame_info * frame;
+static int checkcrc16(const file_info * file, frame_info * frame)
 {
 	// This buffer needs to hold the header and all other CRC bytes.
 	// header is 2 bytes, crcdatalength2 returns max. 39 bytes.
@@ -322,9 +301,7 @@ static int checkcrc16(file, frame)
 }
 
 int
-checkframe(file, frame)
-	file_info  * file;
-	frame_info * frame;
+checkframe(file_info * file, frame_info * frame)
 {
 	if (!checkvalidity(file, frame)) {
 		file->errors |= ERR_INVALID;
