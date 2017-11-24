@@ -41,18 +41,14 @@
 #include <strings.h>
 #endif
 
-static void skipframe(file, frame)
-	file_info * file;
-	frame_info * frame;
+static void skipframe(file_info * file, frame_info * frame)
 {
 	int newpos = MIN(frame->offset + frame->length, file->length);
 	cfseek(file->fp, newpos, SEEK_SET);
 }
 
 static size_t
-lastframelength(file, frame)
-	file_info 	* file;
-	frame_info 	* frame;
+lastframelength(file_info * file, frame_info * frame)
 {
 	char buf[4 + sizeof(int)];
 	char * ptr;
@@ -93,8 +89,7 @@ lastframelength(file, frame)
 	return frame->length;
 }
 
-static int findlastframe(file)
-	file_info * file;
+static int findlastframe(file_info * file)
 {
 	int oldpos;
 	frame_info * frame;
@@ -118,9 +113,7 @@ static int findlastframe(file)
 	return TRUE;
 }
 
-static errno_t openfile(filename, file)
-	char 		* filename;
-	file_info	* file;
+static errno_t openfile(char * filename, file_info * file)
 {
 	errno_t errno_keep;
 
@@ -135,9 +128,7 @@ static errno_t openfile(filename, file)
 	return 0;
 }
 
-errno_t checkfile(filename, file)
-	char		* filename;
-	file_info 	* file;
+errno_t checkfile(char * filename, file_info * file)
 {
 	frame_info * frame;
 	errno_t _errno;

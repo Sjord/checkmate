@@ -36,8 +36,7 @@ extern int verbose;
 
 /* Skips an id3v1 tag. The first three characters have already been read. */
 int
-skip_id3v1_tag(file)
-	file_info * file;
+skip_id3v1_tag(file_info * file)
 {
 	file->id3 |= ID3V1;
 	cfseek(file->fp, 125, SEEK_CUR);
@@ -46,8 +45,7 @@ skip_id3v1_tag(file)
 
 /* Skips an id3v2 tag. The first three characters have already been read. */
 int
-skip_id3v2_tag(file)
-	file_info * file;
+skip_id3v2_tag(file_info * file)
 {
 	char buf[8];
 	size_t res;
@@ -72,8 +70,7 @@ skip_id3v2_tag(file)
 
 /* Skips an id3v2 tag. The first three characters have already been read. */
 int
-skip_ape_tag(file)
-	file_info * file;
+skip_ape_tag(file_info * file)
 {
 	char buf[25];
 	size_t res;

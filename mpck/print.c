@@ -104,8 +104,7 @@ offseterror(const file_info * f, const char * format, ...) {
 
 /* print something to let the user know we are scanning */
 void
-print_scanning(filename)
-	const char * filename;
+print_scanning(const char * filename)
 {
 	printf("SUMMARY: %s\n", filename);
 }

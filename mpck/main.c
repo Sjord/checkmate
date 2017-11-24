@@ -47,9 +47,7 @@
 #endif
 
 static int
-parse_options(argc, argv)
-	int argc;
-	char *argv[];
+parse_options(int argc, char *argv[])
 {	
 	
 	int ch;			/* option */
@@ -143,9 +141,7 @@ parse_options(argc, argv)
 
 
 int
-main(argc, argv)
-	int argc;
-	char *argv[];
+main(int argc, char *argv[])
 {
 	int opt_count;
 	errno_t last_error;

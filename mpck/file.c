@@ -42,8 +42,7 @@
 #endif
 
 const char *
-file_strversion(file)
-	const file_info * file;
+file_strversion(const file_info * file)
 {
 	int version = file->version;
 	if      (version == MPEG_VER_10) return "v1.0";
@@ -55,14 +54,12 @@ file_strversion(file)
 	}
 }
 
-static void file_print_result(file)
-	const file_info * file;
+static void file_print_result(const file_info * file)
 {
 	printf("    %-30s%s\n", "result", ((file->errors) ? BADFILE : GOODFILE));
 }
 
-static void file_print_bitrate(file)
-	const file_info * file;
+static void file_print_bitrate(const file_info * file)
 {
 	if (file->vbr) {
 		printf("    %-30s%d bps (VBR)\n", "average bitrate", file->bitrate);
@@ -71,8 +68,7 @@ static void file_print_bitrate(file)
 	}
 }
 
-static void file_print_ubytes(file)
-	const file_info * file;
+static void file_print_ubytes(const file_info * file)
 {
 	printf("    %-30s%d b (%d%%)\n", "unidentified", file->alien_total,
 			100*file->alien_total/file->length);
@@ -86,8 +82,7 @@ static void file_print_ubytes(file)
 }
 
 static void
-file_print_basic(file)
-	const file_info * file;
+file_print_basic(const file_info * file)
 {
 	printf("    %-30sMPEG %s\n", "version", 	file_strversion(file));
 	printf("    %-30s%d\n", "layer",	file->layer);
@@ -98,8 +93,7 @@ file_print_basic(file)
 	file_print_ubytes(file);
 }
 
-static void file_print_errors(file)
-	const file_info * file;
+static void file_print_errors(const file_info * file)
 {
 	int first=TRUE;
 	int x;
@@ -124,16 +118,14 @@ static void file_print_errors(file)
 }
 	
 static char *
-strbool(value)
-	int value;
+strbool(int value)
 {
 	if (value == 0) return FALSE_STRING;
 	else return TRUE_STRING;
 }
 
 static void
-file_print_lastframe(file)
-	const file_info * file;
+file_print_lastframe(const file_info * file)
 {
 	printf("    %-30s\n", "last frame");
 	if (file->lastframe_offset == 0) {
@@ -145,8 +137,7 @@ file_print_lastframe(file)
 }
 
 static void
-file_print_verbose(file)
-	const file_info * file;
+file_print_verbose(const file_info * file)
 {
 	printf("    %-30s%s\n", "stereo", strbool(file->stereo));
 	printf("    %-30s%d KiB\n", "size", file->length/1024);
@@ -171,8 +162,7 @@ file_print_verbose(file)
 }
 
 static void
-file_print_terse(file)
-	const file_info *file;
+file_print_terse(const file_info *file)
 {
 	if (!file->ismp3file) {
 		printf("%s:%s: %s\n", PROGNAME, file->filename, BADTYPE);
@@ -184,7 +174,7 @@ file_print_terse(file)
 }
 
 file_info *
-file_create() 
+file_create(void)
 {
 	file_info * file;
 	
@@ -194,16 +184,13 @@ file_create()
 	return file;
 }
 
-void file_destroy(file)
-	file_info * file;
+void file_destroy(file_info * file)
 {
 	free(file);
 }
 
 int
-file_update(file, frame)
-	file_info       * file;
-	const frame_info  * frame;
+file_update(file_info * file, const frame_info * frame)
 {
         file->frames++;
         file->lengthcount += frame->length;
@@ -229,8 +216,7 @@ file_update(file, frame)
 }
 
 void
-file_final(file) 
-	file_info * file;
+file_final(file_info * file)
 {
 	int samplesleft;
 	
@@ -262,15 +248,13 @@ file_final(file)
 }
 
 void
-file_clear(file) 
-	file_info * file;
+file_clear(file_info * file)
 {
 	memset(file, 0, sizeof(file_info));
 }
 
 static void
-file_print_human(file)
-	const file_info * file;
+file_print_human(const file_info * file)
 {
 	int verbose = options_get_verbose();
 	int quiet = options_get_quiet();
@@ -304,8 +288,7 @@ file_print_human(file)
 }
 
 static void
-file_print_xml(file)
-	const file_info * file;
+file_print_xml(const file_info * file)
 {
 	printf("<file>\n");
 	printf("\t<filename>%s</filename>\n", file->filename);
@@ -369,8 +352,7 @@ file_print_xml(file)
 }
 
 void
-file_print(file)
-	const file_info * file;
+file_print(const file_info * file)
 {
 	if (options_get_xmloutput()) {
 		file_print_xml(file);

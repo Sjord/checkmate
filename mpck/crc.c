@@ -42,9 +42,7 @@ crc_update(int value, int crc)
 }
 
 int
-crc16(data, length)
-	unsigned char * data;
-	int length;
+crc16(unsigned char * data, int length)
 {
 	int i;
 	int crc=0xffff;
@@ -71,9 +69,7 @@ crc_update_bits(int value, int crc, int nbits)
 }
 
 
-int crc16bits(data, nbits)
-	unsigned char * data;
-	int nbits;
+int crc16bits(unsigned char * data, int nbits)
 {
 	int i;
 	int crc=0xffff;
