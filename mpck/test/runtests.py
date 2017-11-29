@@ -82,3 +82,6 @@ if __name__ == "__main__":
     test(run_mpck(b"APETAG" + ape).has_apev2_tag())
     test(~run_mpck(b"APETAGXX" + ape[8:]).has_apev2_tag())
 
+    not_ape = b"APETAGE*"
+    for i in range(1, len(not_ape) + 1):
+        test(~run_mpck(not_ape[:i] * 20).has_apev2_tag())
