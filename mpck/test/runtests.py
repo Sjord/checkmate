@@ -5,6 +5,13 @@ from tempfile import NamedTemporaryFile
 import re
 import inspect
 import struct
+import os
+
+
+mpck_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+        "mpck"
+    )
 
 
 class MpckResult:
@@ -62,7 +69,7 @@ def mpck(mp3data):
     with NamedTemporaryFile(suffix="mp3") as mp3file:
         mp3file.write(mp3data)
         mp3file.seek(0)
-        result = subprocess.run(["../mpck", "-v", mp3file.name], stdout=subprocess.PIPE)
+        result = subprocess.run([mpck_path, "-v", mp3file.name], stdout=subprocess.PIPE)
         return MpckResult(mp3data, result)
 
 
