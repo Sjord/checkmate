@@ -15,6 +15,9 @@ class TestResult:
         if self.mpck_result.has_segfaulted():
             return "\033[91m segfault \033[0m"
 
+        if self.assertion is None:
+            return "\033[93m unknown \033[0m"
+
         if self.assertion:
             return "\033[92m ok \033[0m"
         else:
@@ -49,6 +52,13 @@ class MpckResult:
 
     def has_segfaulted(self):
         return self.returncode == -11
+
+    def has_frames(self, n):
+        return TestResult(self, self.result.get("frames") == str(n))
+
+    def has_unidentified(self, n):
+        return TestResult(self, self.result.get("unidentified").startswith(str(n) +" b"))
+
 
 
 def mpck(mp3data):
@@ -85,3 +95,23 @@ if __name__ == "__main__":
     not_ape = b"APETAGE*"
     for i in range(1, len(not_ape) + 1):
         test(~mpck(not_ape[:i] * 20).has_apev2_tag())
+
+    # MPEG 1 layer 3 frame, 128kbs, 44100 Hz, 417b
+    frame = b"\xff\xfb\x90\0" + b"A" * 413
+    test(mpck(frame).has_frames(1))
+    test(mpck(frame).has_unidentified(0))
+
+    test(mpck(frame + frame).has_frames(2))
+    test(mpck(frame + frame).has_unidentified(0))
+
+    garbage = b"U"
+
+    for i in range(10):
+        test(mpck(frame + garbage * i).has_unidentified(i))
+
+    for i in range(10):
+        test(mpck(frame + garbage * i + frame).has_unidentified(i))
+        test(mpck(frame + garbage * i + frame).has_frames(2))
+
+    for i in range(1, 4):
+        test(mpck(frame[:i]).has_frames(0))
