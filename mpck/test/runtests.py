@@ -51,7 +51,7 @@ class MpckResult:
         return self.returncode == -11
 
 
-def run_mpck(mp3data):
+def mpck(mp3data):
     with NamedTemporaryFile(suffix="mp3") as mp3file:
         mp3file.write(mp3data)
         mp3file.seek(0)
@@ -72,16 +72,16 @@ def test(assertion):
 
 if __name__ == "__main__":
     tag = b"TAG" + 125 * b"a"
-    test(run_mpck(tag).has_id3v1_tag())
-    test(run_mpck(b"T" + tag).has_id3v1_tag())
-    test(run_mpck(b"TA" + tag).has_id3v1_tag())
+    test(mpck(tag).has_id3v1_tag())
+    test(mpck(b"T" + tag).has_id3v1_tag())
+    test(mpck(b"TA" + tag).has_id3v1_tag())
 
     ape = b"APETAGEX" + struct.pack("<I", 2000) + struct.pack("<I", 0) + struct.pack("<I", 0) + b"\xa0\0\0\0"
-    test(run_mpck(ape).has_apev2_tag())
-    test(run_mpck(b"APE" + ape).has_apev2_tag())
-    test(run_mpck(b"APETAG" + ape).has_apev2_tag())
-    test(~run_mpck(b"APETAGXX" + ape[8:]).has_apev2_tag())
+    test(mpck(ape).has_apev2_tag())
+    test(mpck(b"APE" + ape).has_apev2_tag())
+    test(mpck(b"APETAG" + ape).has_apev2_tag())
+    test(~mpck(b"APETAGXX" + ape[8:]).has_apev2_tag())
 
     not_ape = b"APETAGE*"
     for i in range(1, len(not_ape) + 1):
-        test(~run_mpck(not_ape[:i] * 20).has_apev2_tag())
+        test(~mpck(not_ape[:i] * 20).has_apev2_tag())
