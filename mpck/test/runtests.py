@@ -117,3 +117,6 @@ if __name__ == "__main__":
 
     for i in range(1, 4):
         test(mpck(frame[:i]).has_frames(0))
+
+    for i in range(256):
+        test(mpck(bytes([i]) + frame).has_frames(1).has_unidentified(1), i=i)
