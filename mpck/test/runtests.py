@@ -85,12 +85,18 @@ def test(assertion, **kwargs):
     print("%-40s %s" % (name, assertion))
 
 
+def test_title(title):
+    print("%s:" % title)
+
+
 if __name__ == "__main__":
+    test_title("ID3v1 tag")
     tag = b"TAG" + 125 * b"a"
     test(mpck(tag).has_id3v1_tag().has_unidentified(0))
     test(mpck(b"T" + tag).has_id3v1_tag().has_unidentified(1))
     test(mpck(b"TA" + tag).has_id3v1_tag().has_unidentified(2))
 
+    test_title("APE tag")
     ape = b"APETAGEX" + struct.pack("<I", 2000) + struct.pack("<I", 0) + struct.pack("<I", 0) + b"\xa0\0\0\0"
     test(mpck(ape).has_apev2_tag())
     test(mpck(b"APE" + ape).has_apev2_tag().has_unidentified(3))
@@ -101,7 +107,7 @@ if __name__ == "__main__":
     for i in range(1, len(not_ape) + 1):
         test(mpck(not_ape[:i] * 20).has_apev2_tag(False))
 
-    # MPEG 1 layer 3 frame, 128kbs, 44100 Hz, 417b
+    test_title("MPEG 1 layer 3 frame, 128kbs, 44100 Hz, 417b")
     frame = b"\xff\xfb\x90\0" + b"A" * 413
     test(mpck(frame).has_frames(1).has_unidentified(0))
 
@@ -109,14 +115,18 @@ if __name__ == "__main__":
 
     garbage = b"U"
 
+    test_title("Garbage after frame")
     for i in range(10):
         test(mpck(frame + garbage * i).has_unidentified(i), i=i)
 
+    test_title("Garbage between frames")
     for i in range(10):
         test(mpck(frame + garbage * i + frame).has_unidentified(i).has_frames(2), i=i)
 
+    test_title("Partial header")
     for i in range(1, 4):
-        test(mpck(frame[:i]).has_frames(0))
+        test(mpck(frame[:i]).has_frames(0), i=i)
 
+    test_title("Random unidentified byte")
     for i in range(256):
         test(mpck(bytes([i]) + frame).has_frames(1).has_unidentified(1), i=i)
