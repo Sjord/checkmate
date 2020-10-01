@@ -1,4 +1,4 @@
-This file is about fixing MP3s
+This file is about fixing MP3's.
 
 An MP3 file could be corrupt because of some reasons:
 1) There is garbage before, between or after the frames. This garbage can be
@@ -6,12 +6,14 @@ An MP3 file could be corrupt because of some reasons:
    to say if a MP3 is broken when garbage is found. If the rest of the file
    is OK, MP3 players should just play the file and ``fixing'' the MP3 is not
    useful.
+   
 2) Frames aren't at their right locations. After the first frame should be the
    second frame, and not something else. When there is, this is either
    garbage as described as above or the file is seriously damaged.
    Removing everything between two valid frames does not fix the MP3, because
    you then have lost a tiny bit of your song. You download it again or find
    a better source.
+   
 3) The CRC is not correct. The CRC checksum validates the data. It makes a
    check possible, which either is positive (the data is correct) or
    negative (the data is corrupted). If it is negative, removing the frame
