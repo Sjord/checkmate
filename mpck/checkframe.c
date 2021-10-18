@@ -38,14 +38,17 @@
 #include <errno.h>
 #endif
 
+/* return matrix[x][y], or 0 if x or y are out of bounds */
+#define matrix_lookup(matrix, x, y) (x < sizeof(matrix) / sizeof(matrix[0]) && y < sizeof(matrix[0]) / sizeof(matrix[0][0]) ? matrix[x][y] : 0)
+
 /* samplerate in Hz of frame fi with headervalue h */
-#define samplerate(h, fi)  samplerate_matrix[h][fi->version]
+#define samplerate(h, fi)  matrix_lookup(samplerate_matrix, h, fi->version)
 
 /* the duration of this frame in ms */
 #define frametime(fi)      (1000*fi->samples/fi->samplerate)
 
 /* the number of samples in frame fi */
-#define framesamples(fi)   samples_matrix[fi->layer][fi->version]
+#define framesamples(fi)   matrix_lookup(samples_matrix, fi->layer, fi->version)
 
 /* the layer for headervalue h */
 #define layer(h) 	   (4-(h))
@@ -108,7 +111,7 @@ setconsistent(file_info * file, const frame_info * frame)
 /* returns bitrate in bps */
 static int bitrate(int headervalue, frame_info * fi)
 {
-	return 1000*bitrate_matrix[3*fi->version+fi->layer-1][headervalue];
+	return 1000*matrix_lookup(bitrate_matrix, 3*fi->version+fi->layer-1, headervalue);
 }
 
 static int 
