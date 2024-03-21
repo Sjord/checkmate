@@ -27,7 +27,6 @@
 #include "file.h"
 #include "metatag.h"
 #include "synchsafe.h"
-#include <stdint.h>
 
 #ifdef HAVE_STRING_H
 #include <string.h>
@@ -69,17 +68,17 @@ skip_id3v2_tag(file_info * file)
 	return 0;
 }
 
-/* Skips an id3v2 tag. The first three characters have already been read. */
+/* Skips an APE tag. The first eight characters have already been read. */
 int
 skip_ape_tag(file_info * file)
 {
 	char buf[25];
 	size_t res;
 
-	uint32_t version;	/* version of APE tag 	*/
-	uint32_t flags;		/* flags			 */
-	uint32_t items;		/* number of items in tag	*/
-	uint32_t size;		/* size of tag without header (but including footer) */
+	unsigned long version;	/* version of APE tag 		*/
+	unsigned long flags;	/* flags			*/
+	unsigned long items;	/* number of items in tag	*/
+	unsigned long size;	/* size of tag without header (but including footer) */
 
 	res=cfread(buf, 24, file->fp);	/* read rest of header		*/
 	if (res == 0) return FALSE;
