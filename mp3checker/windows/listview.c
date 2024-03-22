@@ -27,6 +27,7 @@
 #include "mp3checker.h"
 #include <windows.h>
 #include <commctrl.h>
+#include <stddef.h>
 #include "vector.h"
 #include "fileinfo.h"
 #include "resource.h"
