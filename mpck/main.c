@@ -46,6 +46,10 @@
 #include <strings.h>
 #endif
 
+#ifdef HAVE_WINDOWS_H
+#include <windows.h>
+#endif
+
 static int
 parse_options(int argc, char *argv[])
 {	
@@ -147,6 +151,10 @@ main(int argc, char *argv[])
 	errno_t last_error;
 	int all_good;
 	total_info * total;
+
+#ifdef _WIN32
+	SetConsoleOutputCP(CP_UTF8);
+#endif
 	
 	opt_count = parse_options(argc, argv);
 
