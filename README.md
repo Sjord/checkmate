@@ -90,8 +90,8 @@ of the following formats:
 2) mpck:bla: foo bar error
 3) mpck:bla:34003: yet another error
 
-Number 1 indicates a general error. Number 2 means an error occured in file
-bla. Number 3 says an error occured in file bla, at offset 34003 (decimal).
+Number 1 indicates a general error. Number 2 means an error occurred in file
+bla. Number 3 says an error occurred in file bla, at offset 34003 (decimal).
 
 ### Exit status
 
