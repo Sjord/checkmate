@@ -6,4 +6,16 @@ In order to install mpck, do something like the following:
     make
     make install
 
+On Windows, the following insane method is currently used:
+
+- On Windows XP:
+    - Install Visual Studio 6 SP6
+    - Install Microsoft Platform SDK Sept 1999 (X05 05207)
+    - Open "vc++/checkmate.dsw" in Visual Studio
+    - Configure the platform SDK include headers to be used first
+    - Build mpck.exe and mp3checker.exe
+- On a modern Windows:
+    - install a recent Windows SDK
+    - use mt.exe to mark the executables as UTF8, as described on https://learn.microsoft.com/en-us/windows/apps/design/globalizing/use-utf8-code-page
+
 
