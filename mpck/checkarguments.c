@@ -226,6 +226,7 @@ recursivecheck(const char *dirname, total_info * total)
 	while ((ent=readdir(dir)) != NULL) {
 		if (ent->d_name[0] == '.') continue; /* hidden files, . and .. */
 		strncpy(filename+dirlen+1, ent->d_name, 255);
+		filename[dirlen + 256] = '\0';
 		if (cisdirectory(filename)) {
 			recursivecheck(filename, total);
 		} else {
