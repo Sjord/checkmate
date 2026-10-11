@@ -27,7 +27,12 @@
 #include "file.h"
 #include "metatag.h"
 #include "synchsafe.h"
+
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#else
+typedef unsigned __int32 uint32_t;
+#endif
 
 #ifdef HAVE_STRING_H
 #include <string.h>
