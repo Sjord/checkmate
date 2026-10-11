@@ -567,19 +567,13 @@ BOOL LV_ActivateSelected() {
 BOOL LV_OpenSelected() {
 	int index=-1;
 	FileInfo * fi;
-	char filename[512];
 
 	if (LV_GetSelectedCount()<1) return FALSE;
 	
 	while (-1!=(index=LV_FindSelected(index))) {
 		fi=Vector_Get(CurrentVector, index);
 		if (fi==NULL) return FALSE;
-		strcpy(filename, "\"");
-		strcat(filename, fi->dirname);
-		strcat(filename, "\\");
-		strcat(filename, fi->filename);
-		strcat(filename, "\"");
-		ShellExecute(NULL, "OPEN", fi->filename, NULL, NULL, SW_SHOWDEFAULT);
+		ShellExecute(NULL, "open", fi->filename, NULL, NULL, SW_SHOWDEFAULT);
 	}
 	return TRUE;
 }
