@@ -217,6 +217,10 @@ SOURCE=..\..\mpck\mpck.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\windows\mpck.rc
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mpck\options.h
 # End Source File
 # Begin Source File
