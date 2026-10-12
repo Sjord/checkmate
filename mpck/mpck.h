@@ -150,14 +150,10 @@
 #endif /* _MAX_EXT */
 #endif /* MAXEXT */
 
-/* maximum path length */
-#ifndef MAXPATH
-#ifdef _MAX_PATH
-#define MAXPATH _MAX_PATH
-#else
-#define MAXPATH 2*MAXFNAME
-#endif /* _MAX_PATH */
-#endif /* MAXPATH */
+/* maximum length in bytes of a Windows path when it is encoded as UTF-8.
+ * Windows allows up to 260 characters; in the worst case a character takes
+ * 4 bytes in UTF-8, plus one byte for the terminating null. */
+#define MAX_PATH_UTF8 (260 * 4 + 1)
 
 /* function definitions */
 #ifndef HAVE_VSNPRINTF
