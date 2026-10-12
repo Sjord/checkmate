@@ -315,5 +315,9 @@ SOURCE=..\..\mp3checker\windows\fileunknown.ico
 SOURCE=..\..\mp3checker\windows\mp3checker.ico
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=\checkmate\mp3checker\windows\app.manifest
+# End Source File
 # End Target
 # End Project
