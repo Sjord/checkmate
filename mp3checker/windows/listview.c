@@ -153,7 +153,7 @@ static BOOL LV_InitColumns(HWND hWndListView) {
  */
 static BOOL LV_UpdateFindFile(WIN32_FIND_DATA * FileData) {
 	FileInfo * fi;
-	char curdir[MAX_PATH];
+	char curdir[MAX_PATH_UTF8];
 	GetCurrentDirectory(sizeof(curdir), curdir);
 
 	fi=FI_GetFile(FileData->cFileName, curdir);
@@ -644,7 +644,7 @@ BOOL LV_Refresh() {
 
 /* delete all selected files */
 BOOL LV_DeleteSelected() {
-	const size_t block_size=MAX_PATH;
+	const size_t block_size=MAX_PATH_UTF8;
 	int index=-1;		/* file index in CurrentVector			*/
 	FileInfo * fi;		/* info from CurrentVector				*/
 	BOOL retval;		/* value of DeleteFile()				*/

@@ -48,8 +48,8 @@ typedef struct _DirInfo {
 typedef struct _FileInfo FileInfo;
 struct _FileInfo {
 	int filetype;
-	char filename[MAX_PATH];
-	char dirname[MAX_PATH];
+	char filename[MAX_PATH_UTF8];
+	char dirname[MAX_PATH_UTF8];
 	union {
 		file_info * info;
 		DirInfo	  * dirinfo;

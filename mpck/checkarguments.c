@@ -114,7 +114,7 @@ wildcard_checkfile(char * wildcardpath, total_info * total)
 	file_info * file;	/* info of this file			*/
 
 	wcplen=strlen(wildcardpath);
-	realfilename=(char*)malloc(wcplen+MAXPATH);
+	realfilename=(char*)malloc(wcplen+MAX_PATH_UTF8);
 	if (realfilename == NULL) {
 		error("malloc failed while doing wildcard expansion\n");
 		return FALSE;
@@ -136,7 +136,7 @@ wildcard_checkfile(char * wildcardpath, total_info * total)
 
 	file = file_create();
 	do {
-		strncpy(filepart, FindFileData.cFileName, MAXPATH);
+		strncpy(filepart, FindFileData.cFileName, MAX_PATH_UTF8);
 		if (filepart[0] != '.') {
 			if (options_get_recursive() && fisdirectory(&FindFileData)) {
 				recursivecheck(realfilename, total);
@@ -180,7 +180,7 @@ recursivecheck(const char *dirname, total_info * total)
 	int dirlen;
 
 	dirlen=strlen(dirname);
-	wildcarddir=(char *)malloc(dirlen+MAXPATH);
+	wildcarddir=(char *)malloc(dirlen+MAX_PATH_UTF8);
 	if (wildcarddir == NULL) {
 		error("malloc failed");
 		return FALSE;

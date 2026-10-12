@@ -98,7 +98,7 @@ static BOOL Rebar_SetText(char * text) {
 }
 
 BOOL Rebar_UpdateText() {
-	static char curdir[MAX_PATH];
+	static char curdir[MAX_PATH_UTF8];
 	GetCurrentDirectory(sizeof(curdir), curdir);
 	Rebar_SetText(curdir);
 	UpdateWindow(hWndRebar);
