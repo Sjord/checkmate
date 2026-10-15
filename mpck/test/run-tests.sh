@@ -20,7 +20,7 @@
 
 set -u
 
-testdir=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+testdir=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
 TESTDATA=${TESTDATA:-$testdir/data}
 MPCK=${MPCK:-}
 
@@ -52,7 +52,7 @@ if [ -z "$MPCK" ] || [ ! -x "$MPCK" ]; then
 	echo "${0##*/}: mpck binary not found; build it first or set MPCK" >&2
 	exit 1
 fi
-MPCK=$(CDPATH= cd -- "$(dirname "$MPCK")" && pwd)/$(basename "$MPCK")
+MPCK=$(CDPATH='' cd -- "$(dirname "$MPCK")" && pwd)/$(basename "$MPCK")
 
 for tool in lame twolame sox; do
 	if ! command -v "$tool" >/dev/null 2>&1; then
