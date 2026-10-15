@@ -16,7 +16,17 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y autoconf automake libtool
+          sudo apt-get install -y autoconf automake libtool lame twolame sox
+
+      # The test suite generates its MP2/MP3 fixtures at test time.  Cache
+      # them between runs so only the first run has to encode anything.
+      - name: Restore generated test files
+        uses: actions/cache@v4
+        with:
+          path: mpck/test/data
+          key: mpck-test-data-${{ hashFiles('mpck/test/*.sh') }}
+          restore-keys: |
+            mpck-test-data-
 
       - name: Autogen
         run: ./autogen.sh
@@ -27,5 +37,5 @@ jobs:
       - name: Make
         run: make
 
-      - name: Smoke test
-        run: ./mpck/mpck --version
+      - name: Test
+        run: make check
