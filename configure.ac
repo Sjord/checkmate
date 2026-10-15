@@ -13,6 +13,17 @@ AC_CONFIG_SRCDIR([mpck/main.c])
 AC_PROG_CC
 AC_PROG_MAKE_SET
 
+# Programs used by the test suite.  The tests are only hooked into
+# "make check" when all of them are available.
+AC_PATH_PROG([LAME], [lame], [])
+AC_PATH_PROG([TWOLAME], [twolame], [])
+AC_PATH_PROG([SOX], [sox], [])
+AM_CONDITIONAL([HAVE_TEST_TOOLS],
+	[test -n "$LAME" && test -n "$TWOLAME" && test -n "$SOX"])
+if test -z "$LAME" || test -z "$TWOLAME" || test -z "$SOX"; then
+	AC_MSG_WARN([lame, twolame and sox are required to run "make check"])
+fi
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADER([getopt.h], , CPPFLAGS="$CPPFLAGS -I../libgnugetopt-1.2")
