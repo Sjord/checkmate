@@ -127,16 +127,20 @@ checks mpck's output on known good and known bad files. The generated files
 live in `mpck/test/data/` (gitignored) and can be cached between CI runs;
 `mpck/test/run-tests.sh --rebuild` regenerates them.
 
-- `mpck/test/gentestdata.sh` generates valid MP2/MP3 files with `twolame` and
-  `lame`, using `sox` for the PCM source, for every bitrate and samplerate,
-  both with and without CRC protection. Unsupported combinations are skipped.
-- `mpck/test/run-tests.sh` derives broken files (empty, truncated, invalid
-  header, unidentified bytes, inconsistent frames, CRC error) and runs the
-  checks.
+- `mpck/test/gentestdata.sh` generates the fixtures: valid MP2/MP3 files with
+  `twolame` and `lame` (using `sox` for the PCM source) for every bitrate and
+  samplerate, both with and without CRC protection, plus ID3- and APE-tagged
+  variants and the known-broken files. Unsupported encoder combinations are
+  skipped.
+- `mpck/test/addapetags.py` writes APEv1 and APEv2 tags to a file using
+  mutagen.
+- `mpck/test/run-tests.sh` runs mpck against the fixtures and checks the
+  output.
 - `mpck/test/testlib.sh` is a small POSIX shell test framework.
 
 The tests require `lame`, `twolame` and `sox`; `configure` only hooks them
-into `make check` when all three are present.
+into `make check` when all three are present. `python3-mutagen` is used for
+the APE tag fixtures; without it those specific tests are skipped.
 
 ## License
 

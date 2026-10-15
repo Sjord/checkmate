@@ -47,6 +47,7 @@ AM_TESTS_ENVIRONMENT = \
 endif
 
 EXTRA_DIST = \
+	test/addapetags.py \
 	test/gentestdata.sh \
 	test/run-tests.sh \
 	test/testlib.sh

@@ -107,6 +107,23 @@ expect_contains "unidentified bytes description" "unidentified bytes" "$BAD/unid
 expect_contains "inconsistent frames description" "inconsistent frame headers" "$BAD/inconsistent.mp3"
 expect_contains "crc error description" "CRC error" "$BAD/crc_error.mp3"
 
+# --- Metadata tags ---------------------------------------------------------
+expect_contains "id3 tags detected" "<id3v2>" -x "$GOOD/mp3_44100_128_c2_id3.mp3"
+
+apev1=$GOOD/mp3_44100_128_c2_apev1.mp3
+apev2=$GOOD/mp3_44100_128_c2_apev2.mp3
+apeboth=$GOOD/mp3_44100_128_c2_ape.mp3
+if [ -s "$apev1" ]; then
+	expect_contains "apev1 tag detected" "<apev1>" -x "$apev1"
+	expect_not_contains "apev1 has no apev2 tag" "<apev2>" -x "$apev1"
+	expect_contains "apev2 tag detected" "<apev2>" -x "$apev2"
+	expect_not_contains "apev2 has no apev1 tag" "<apev1>" -x "$apev2"
+	expect_contains "both ape tags detected (v1)" "<apev1>" -x "$apeboth"
+	expect_contains "both ape tags detected (v2)" "<apev2>" -x "$apeboth"
+else
+	echo "SKIP: APE tag tests (mutagen not available)"
+fi
+
 # --- Options ---------------------------------------------------------------
 expect_status "version" 0 --version
 expect_status "help" 0 --help
