@@ -15,7 +15,7 @@
 
 set -u
 
-testdir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+testdir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 TESTDATA=${TESTDATA:-$testdir/data}
 GOOD=$TESTDATA/good
 BAD=$TESTDATA/bad
@@ -83,25 +83,30 @@ encode() {
 	fi
 
 	rm -f "$out"
+
+	# Build the argument list for the encoder.  "$@" already holds any
+	# extra arguments; the options are appended to it, and the input and
+	# output files are added when the encoder is called.  This avoids
+	# unquoted word splitting of an option string.
 	case $enc in
 	twolame)
-		opts="-r -N 2 -s $rate -b $bit"
-		[ "$ch" = 1 ] && opts="$opts -a"
-		[ "$prot" = 1 ] && opts="$opts -p"
+		set -- "$@" -r -N 2 -s "$rate" -b "$bit"
+		[ "$ch" = 1 ] && set -- "$@" -a
+		[ "$prot" = 1 ] && set -- "$@" -p
 		if [ "$verbose" = 1 ]; then
-			twolame $opts "$@" "$raw" "$out"
+			twolame "$@" "$raw" "$out"
 		else
-			twolame $opts "$@" "$raw" "$out" >/dev/null 2>&1
+			twolame "$@" "$raw" "$out" >/dev/null 2>&1
 		fi
 		;;
 	lame)
-		opts="-S -r -s $rate -b $bit"
-		[ "$ch" = 1 ] && opts="$opts -m m"
-		[ "$prot" = 1 ] && opts="$opts -p"
+		set -- "$@" -S -r -s "$rate" -b "$bit"
+		[ "$ch" = 1 ] && set -- "$@" -m m
+		[ "$prot" = 1 ] && set -- "$@" -p
 		if [ "$verbose" = 1 ]; then
-			lame $opts "$@" "$raw" "$out"
+			lame "$@" "$raw" "$out"
 		else
-			lame $opts "$@" "$raw" "$out" >/dev/null 2>&1
+			lame "$@" "$raw" "$out" >/dev/null 2>&1
 		fi
 		;;
 	*)
