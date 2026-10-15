@@ -137,6 +137,22 @@ done
 encode lame "$GOOD/mp3_44100_128_c2_id3.mp3" 44100 128 2 0 \
 	--add-id3v2 --tt "Test title" --ta "Test artist" || skipped=$((skipped + 1))
 
+# APE tag variants, written with mutagen by addapetags.py.  These are
+# regenerated every run because they are cheap and depend on a script that
+# may change.
+if command -v python3 >/dev/null 2>&1 && python3 -c 'import mutagen' >/dev/null 2>&1; then
+	ape_base=$GOOD/mp3_44100_128_c2.mp3
+	python3 "$testdir/addapetags.py" --apev1 "$ape_base" \
+		"$GOOD/mp3_44100_128_c2_apev1.mp3"
+	python3 "$testdir/addapetags.py" --apev2 "$ape_base" \
+		"$GOOD/mp3_44100_128_c2_apev2.mp3"
+	python3 "$testdir/addapetags.py" "$ape_base" \
+		"$GOOD/mp3_44100_128_c2_ape.mp3"
+	generated=$((generated + 3))
+else
+	echo "gentestdata.sh: python3-mutagen not found; skipping APE tag fixtures" >&2
+fi
+
 # Known broken files, derived from the valid ones above.
 #
 # The reference MP3 is 128 kbps, 44100 Hz, stereo MPEG-1 Layer III, so its

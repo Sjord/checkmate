@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y autoconf automake libtool lame twolame sox
+          sudo apt-get install -y autoconf automake libtool lame twolame sox python3-mutagen
 
       # The test suite generates its MP2/MP3 fixtures at test time.  Cache
       # them between runs so only the first run has to encode anything.  The

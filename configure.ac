@@ -14,7 +14,7 @@ AC_PROG_CC
 AC_PROG_MAKE_SET
 
 # Programs used by the test suite.  The tests are only hooked into
-# "make check" when all of them are available.
+# "make check" when the encoders and sox are available.
 AC_PATH_PROG([LAME], [lame], [])
 AC_PATH_PROG([TWOLAME], [twolame], [])
 AC_PATH_PROG([SOX], [sox], [])
@@ -22,6 +22,16 @@ AM_CONDITIONAL([HAVE_TEST_TOOLS],
 	[test -n "$LAME" && test -n "$TWOLAME" && test -n "$SOX"])
 if test -z "$LAME" || test -z "$TWOLAME" || test -z "$SOX"; then
 	AC_MSG_WARN([lame, twolame and sox are required to run "make check"])
+fi
+
+# python3-mutagen is used to generate the APE tag fixtures.  Without it the
+# rest of the test suite still runs, but the APE tag tests are skipped.
+AC_PATH_PROG([PYTHON], [python3], [])
+if test -n "$PYTHON" && $PYTHON -c "import mutagen" >/dev/null 2>&1; then
+	HAVE_MUTAGEN=yes
+else
+	HAVE_MUTAGEN=no
+	AC_MSG_WARN([python3-mutagen is needed to test the APE tag handling])
 fi
 
 # Checks for header files.
