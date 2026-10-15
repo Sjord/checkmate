@@ -19,14 +19,14 @@ jobs:
           sudo apt-get install -y autoconf automake libtool lame twolame sox
 
       # The test suite generates its MP2/MP3 fixtures at test time.  Cache
-      # them between runs so only the first run has to encode anything.
+      # them between runs so only the first run has to encode anything.  The
+      # key tracks gentestdata.sh, which is what determines the fixtures; a
+      # cold run only takes a few seconds.
       - name: Restore generated test files
         uses: actions/cache@v4
         with:
           path: mpck/test/data
-          key: mpck-test-data-${{ hashFiles('mpck/test/*.sh') }}
-          restore-keys: |
-            mpck-test-data-
+          key: mpck-testdata-${{ hashFiles('mpck/test/gentestdata.sh') }}
 
       - name: Autogen
         run: ./autogen.sh

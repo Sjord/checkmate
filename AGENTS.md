@@ -127,9 +127,9 @@ checks mpck's output on known good and known bad files. The generated files
 live in `mpck/test/data/` (gitignored) and can be cached between CI runs;
 `mpck/test/run-tests.sh --rebuild` regenerates them.
 
-- `mpck/test/crctest.sh` generates valid MP2/MP3 files with `twolame` and
-  `lame`, using `sox` for the PCM source. Unsupported bitrate/samplerate
-  combinations are skipped.
+- `mpck/test/gentestdata.sh` generates valid MP2/MP3 files with `twolame` and
+  `lame`, using `sox` for the PCM source, for every bitrate and samplerate,
+  both with and without CRC protection. Unsupported combinations are skipped.
 - `mpck/test/run-tests.sh` derives broken files (empty, truncated, invalid
   header, unidentified bytes, inconsistent frames, CRC error) and runs the
   checks.
