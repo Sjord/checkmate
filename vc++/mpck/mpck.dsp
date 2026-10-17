@@ -151,6 +151,10 @@ SOURCE=..\..\mpck\print.c
 
 SOURCE=..\..\mpck\total.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\xing.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -234,6 +238,10 @@ SOURCE=..\..\mpck\synchsafe.h
 # Begin Source File
 
 SOURCE=..\..\mpck\total.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\xing.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
