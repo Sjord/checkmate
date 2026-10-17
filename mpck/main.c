@@ -27,6 +27,7 @@
 #include "total.h"
 #include "print.h"
 #include "checkarguments.h"
+#include "crc.h"
 #include "options.h"
 #include <getopt.h>
 
@@ -157,6 +158,7 @@ main(int argc, char *argv[])
 #endif
 	
 	opt_count = parse_options(argc, argv);
+	crc_init();
 
 	/* skip options */
 	argv += opt_count;

@@ -13,9 +13,10 @@ error_info errordescs[]={
 	{ERR_XINGHEADER,	"XHD", "inconsistent Xing header values"},
 	{ERR_LONGFNAME,		"LFN", "filename too long"},
 	{ERR_BADFNAME,		"BFN", "filename contains strange characters"},
+	{ERR_MUSICCRC,		"MCR", "music data CRC error"},
 	{ERR_NOFRAMES,		"NOF", "no frames found"},
 	{ERR_LFRAMES,		"NEF", "not enough frames found"},
 	{ERR_EMPTY,		"EMP", "empty file"}
 };
 
-#define errordescs_siz 11
+#define errordescs_siz 12

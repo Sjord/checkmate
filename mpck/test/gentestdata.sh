@@ -214,6 +214,11 @@ make_bad_files() {
 	cp "$ref_mp3" "$BAD/xingbytes.mp3"
 	printf '\000\000\000\001' | dd of="$BAD/xingbytes.mp3" \
 		bs=1 seek=48 conv=notrunc 2>/dev/null
+
+	# Corrupt audio payload without changing any frame headers.
+	cp "$ref_mp3" "$BAD/musiccrc.mp3"
+	printf '\377\377\377\377' | dd of="$BAD/musiccrc.mp3" \
+		bs=1 seek=1000 conv=notrunc 2>/dev/null
 }
 
 make_bad_files

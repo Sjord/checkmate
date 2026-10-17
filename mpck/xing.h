@@ -34,8 +34,9 @@
 #define XING_FLAG_BYTES		0x0002
 #define XING_FLAG_TOC		0x0004
 #define XING_FLAG_VBR_SCALE	0x0008
-/* internal flag: the LAME extension contains a MusicLength field */
+/* internal flags: fields in the LAME extension */
 #define XING_FLAG_MUSICLENGTH	0x0010
+#define XING_FLAG_MUSICCRC	0x0020
 
 int xing_read(file_info *file, const frame_info *frame);
 
