@@ -38,6 +38,9 @@ struct _file_info {
 	int length;		/* length of this file (in bytes)	*/
 	int lengthcount;	/* length of all frames			*/
 	unsigned long musiclength; /* MusicLength from the LAME header	*/
+	unsigned long xingframes; /* frame count from the Xing header	*/
+	unsigned long xingbytes;  /* byte count from the Xing header	*/
+	int xingflags;		/* Xing/LAME fields that were present	*/
 	int time;		/* length of this file (in seconds)	*/
 	int msec;		/* milliseconds left (see time)		*/
 	int frames;		/* number of valid frames		*/

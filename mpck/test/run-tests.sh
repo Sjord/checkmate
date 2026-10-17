@@ -70,6 +70,8 @@ if [ "$rebuild" = 1 ]; then
 elif [ ! -s "$TESTDATA/good/mp3_44100_128_c2.mp3" ] || \
      [ ! -s "$TESTDATA/bad/crc_error.mp3" ] || \
      [ ! -s "$TESTDATA/bad/musiclength.mp3" ] || \
+     [ ! -s "$TESTDATA/bad/xingframes.mp3" ] || \
+     [ ! -s "$TESTDATA/bad/xingbytes.mp3" ] || \
      [ ! -s "$TESTDATA/good/mp3_44100_vbr.mp3" ]; then
 	TESTDATA=$TESTDATA "$testdir/gentestdata.sh" || exit $?
 fi
@@ -101,7 +103,9 @@ expect_result "invalid frame header" "$BAD/invalid_header.mp3" "Bad" 1
 expect_result "unidentified bytes" "$BAD/unidentified_bytes.mp3" "Bad" 1
 expect_result "inconsistent frames" "$BAD/inconsistent.mp3" "Bad" 1
 expect_result "crc error" "$BAD/crc_error.mp3" "Bad" 1
-expect_result "MusicLength mismatch" "$BAD/musiclength.mp3" "Bad" 1
+expect_result "Xing MusicLength mismatch" "$BAD/musiclength.mp3" "Bad" 1
+expect_result "Xing frame count mismatch" "$BAD/xingframes.mp3" "Bad" 1
+expect_result "Xing byte count mismatch" "$BAD/xingbytes.mp3" "Bad" 1
 
 # The error descriptions should be present in the full output.
 expect_contains "empty error description" "empty file" "$BAD/empty.mp3"
@@ -109,7 +113,9 @@ expect_contains "invalid header description" "invalid header values" "$BAD/inval
 expect_contains "unidentified bytes description" "unidentified bytes" "$BAD/unidentified_bytes.mp3"
 expect_contains "inconsistent frames description" "inconsistent frame headers" "$BAD/inconsistent.mp3"
 expect_contains "crc error description" "CRC error" "$BAD/crc_error.mp3"
-expect_contains "MusicLength error description" "MusicLength mismatch" "$BAD/musiclength.mp3"
+expect_contains "MusicLength error description" "inconsistent Xing header values" "$BAD/musiclength.mp3"
+expect_contains "Xing frame count error description" "inconsistent Xing header values" "$BAD/xingframes.mp3"
+expect_contains "Xing byte count error description" "inconsistent Xing header values" "$BAD/xingbytes.mp3"
 
 # --- Metadata tags ---------------------------------------------------------
 expect_contains "id3 tags detected" "<id3v2>" -x "$GOOD/mp3_44100_128_c2_id3.mp3"
@@ -136,6 +142,9 @@ expect_status "missing file" 2 "$BAD/does-not-exist.mp3"
 
 expect_contains "verbose shows version" "MPEG v1.0" -v "$GOOD/mp3_44100_128_c2.mp3"
 expect_contains "verbose shows MusicLength" "MusicLength" -v "$GOOD/mp3_44100_128_c2.mp3"
+expect_contains "verbose shows Xing tag" "Xing tag" -v "$GOOD/mp3_44100_128_c2.mp3"
+expect_contains "verbose shows Xing frames" "        frames" -v "$GOOD/mp3_44100_128_c2.mp3"
+expect_contains "verbose shows Xing bytes" "        bytes" -v "$GOOD/mp3_44100_128_c2.mp3"
 if [ -s "$GOOD/mp3_44100_vbr.mp3" ]; then
 	expect_contains "verbose shows VBR MusicLength" "MusicLength" -v "$GOOD/mp3_44100_vbr.mp3"
 fi
