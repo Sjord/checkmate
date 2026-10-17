@@ -31,6 +31,8 @@ mpck_SOURCES = \
 	synchsafe.h \
 	total.c \
 	total.h \
+	xing.c \
+	xing.h \
 	bitfile.c \
 	bitfile.h \
 	layer2.c \
