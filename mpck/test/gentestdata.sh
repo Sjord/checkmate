@@ -142,6 +142,10 @@ done
 encode lame "$GOOD/mp3_44100_128_c2_id3.mp3" 44100 128 2 0 \
 	--add-id3v2 --tt "Test title" --ta "Test artist" || skipped=$((skipped + 1))
 
+# A VBR file uses the "Xing" signature instead of the CBR "Info" signature.
+encode lame "$GOOD/mp3_44100_vbr.mp3" 44100 128 2 0 -V 4 \
+	|| skipped=$((skipped + 1))
+
 # APE tag variants, written with mutagen by addapetags.py.  These are
 # regenerated every run because they are cheap and depend on a script that
 # may change.
@@ -195,6 +199,26 @@ make_bad_files() {
 	# Corrupt the CRC of a protected frame.
 	cp "$ref_crc" "$BAD/crc_error.mp3"
 	printf '\000' | dd of="$BAD/crc_error.mp3" bs=1 seek=4 conv=notrunc 2>/dev/null
+
+	# Corrupt MusicLength in the LAME header of the first frame.  The LAME
+	# tag starts at offset 156 and MusicLength is 28 bytes into it.
+	cp "$ref_mp3" "$BAD/musiclength.mp3"
+	printf '\000\000\200\370' | dd of="$BAD/musiclength.mp3" \
+		bs=1 seek=184 conv=notrunc 2>/dev/null
+
+	# Corrupt the frame and byte counts in the Xing/Info header.  The
+	# header starts at offset 36 and these fields follow the flags.
+	cp "$ref_mp3" "$BAD/xingframes.mp3"
+	printf '\000\000\000\001' | dd of="$BAD/xingframes.mp3" \
+		bs=1 seek=44 conv=notrunc 2>/dev/null
+	cp "$ref_mp3" "$BAD/xingbytes.mp3"
+	printf '\000\000\000\001' | dd of="$BAD/xingbytes.mp3" \
+		bs=1 seek=48 conv=notrunc 2>/dev/null
+
+	# Corrupt audio payload without changing any frame headers.
+	cp "$ref_mp3" "$BAD/musiccrc.mp3"
+	printf '\377\377\377\377' | dd of="$BAD/musiccrc.mp3" \
+		bs=1 seek=1000 conv=notrunc 2>/dev/null
 }
 
 make_bad_files

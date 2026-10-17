@@ -118,12 +118,13 @@
 #define ERR_INCONSISTENT	1<<1	/* non-consistent frame headers */
 #define ERR_INVALID		1<<2 	/* invalid frame header values */
 #define ERR_FRAMECRC		1<<3
-/*                                 4					*/
+#define ERR_XINGHEADER		1<<4	/* Xing/LAME header values are inconsistent */
 #define ERR_NOFRAMES		1<<5	/* no frames found */
 #define ERR_LFRAMES		1<<6	/* not enough frames found */
 #define ERR_EMPTY		1<<7	/* empty file */
 #define ERR_LONGFNAME		1<<8	/* too long filename */
 #define ERR_BADFNAME		1<<9	/* filename containing bad chars */
+#define ERR_MUSICCRC		1<<10	/* music data CRC error */
 
 
 #define END_OFFSET 16384 /* the offset from the end to search for the last MP3 header */

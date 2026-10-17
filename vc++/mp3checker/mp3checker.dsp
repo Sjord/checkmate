@@ -172,6 +172,10 @@ SOURCE=..\..\mpck\total.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\mpck\xing.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\mp3checker\windows\vector.c
 # End Source File
 # End Group
@@ -269,6 +273,10 @@ SOURCE=..\..\mpck\synchsafe.h
 # Begin Source File
 
 SOURCE=..\..\mpck\total.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mpck\xing.h
 # End Source File
 # Begin Source File
 

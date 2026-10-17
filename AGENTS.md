@@ -49,6 +49,7 @@ Windows).
 | `checkframe.c` | core: parses a frame header, validates fields, checks CRC16, checks consistency vs. previous frame |
 | `checkarguments.c/h` | walks argv, recurses directories, dispatches to `checkfile` |
 | `metatag.c/h` | detects and skips ID3v1, ID3v2, APEv1/v2 tags |
+| `xing.c/h` | reads the Xing/Info and LAME header from the first frame |
 | `crc.c/h` | CRC16 implementation (polynomial `0x8005`), supports bit-aligned reads |
 | `layer2.c/h` | CRC data-length calculation for MPEG layer 2 |
 | `matrices.h` | lookup tables: bitrate, samplerate, samples-per-frame by version/layer |
@@ -73,6 +74,10 @@ Windows).
      number of bits and compare.
    - **Consistency**: MPEG version and layer must match the previous valid
      frame (bitrate may vary -- VBR is allowed).
+   - **Xing/LAME header**: on the first valid frame, read the Xing or Info
+     header and the LAME extension. Its frame count, byte count and
+     MusicLength are compared with the actual frames and total frame length.
+     The LAME MusicCRC is checked against the music data after the tag frame.
 5. Report per-file summary and aggregate totals.
 
 ## Error model
