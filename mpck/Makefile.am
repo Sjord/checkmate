@@ -41,8 +41,12 @@ mpck_LDADD = @GETOPT_LONG_LIB@
 
 # Test suite.  It generates its input files at test time, so the test data
 # directory can be cached between runs and is removed again on distclean.
+check_PROGRAMS = crctest
+crctest_SOURCES = test/crctest.c crc.c crc.h
+
+TESTS = crctest
 if HAVE_TEST_TOOLS
-TESTS = test/run-tests.sh
+TESTS += test/run-tests.sh
 AM_TESTS_ENVIRONMENT = \
 	MPCK='$(abs_top_builddir)/mpck/mpck'; export MPCK; \
 	TESTDATA='$(abs_builddir)/test/data'; export TESTDATA;
@@ -50,6 +54,7 @@ endif
 
 EXTRA_DIST = \
 	test/addapetags.py \
+	test/crctest.c \
 	test/gentestdata.sh \
 	test/run-tests.sh \
 	test/testlib.sh

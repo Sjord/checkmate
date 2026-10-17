@@ -32,8 +32,9 @@
 #include <string.h>
 #endif
 
-/* offset of MusicLength within the LAME extension of the Xing header */
+/* offsets within the LAME extension of the Xing header */
 #define LAME_MUSICLENGTH_OFFSET	28
+#define LAME_MUSICCRC_OFFSET	32
 
 static int
 readbe32(CFILE * fp, unsigned long * value)
@@ -67,6 +68,7 @@ xing_read(file_info * file, const frame_info * frame)
 	int frameend;
 	int savedpos;
 	char lame[4];
+	char crcbuf[2];
 	unsigned long flags;
 	unsigned long value;
 	unsigned long musiclength;
@@ -138,6 +140,17 @@ xing_read(file_info * file, const frame_info * frame)
 			readbe32(file->fp, &musiclength)) {
 		file->musiclength = musiclength;
 		file->xingflags |= XING_FLAG_MUSICLENGTH;
+	}
+
+	if (offset + LAME_MUSICCRC_OFFSET + 2 <= frameend &&
+			cfseek(file->fp, offset, SEEK_SET) == 0 &&
+			cfread(lame, 4, file->fp) == 4 &&
+			memcmp(lame, "LAME", 4) == 0 &&
+			cfseek(file->fp, offset + LAME_MUSICCRC_OFFSET, SEEK_SET) == 0 &&
+			cfread(crcbuf, 2, file->fp) == 2) {
+		file->musiccrc = ((unsigned int)(unsigned char)crcbuf[0] << 8)
+		               |  (unsigned int)(unsigned char)crcbuf[1];
+		file->xingflags |= XING_FLAG_MUSICCRC;
 	}
 
 	cfseek(file->fp, savedpos, SEEK_SET);

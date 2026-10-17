@@ -26,6 +26,8 @@
 #include "mpck.h"
 #include "file.h"
 #include "checkframe.h"
+#include "crc.h"
+#include "xing.h"
 #include "print.h"
 #include "filename.h"
 #include "checkfile.h"
@@ -114,6 +116,29 @@ static int findlastframe(file_info * file)
 	return TRUE;
 }
 
+static int
+calculate_musiccrc(file_info * file, int start, int end)
+{
+	char buf[65536];
+	int crc = 0;
+	int remaining = end - start;
+	int chunk;
+	int res;
+
+	cfseek(file->fp, start, SEEK_SET);
+	while (remaining > 0) {
+		chunk = MIN(remaining, (int)sizeof(buf));
+		res = cfread(buf, chunk, file->fp);
+		if (res != chunk) {
+			offseterror(file, "read error");
+			return -1;
+		}
+		crc = crc16_music_update(crc, (unsigned char *)buf, chunk);
+		remaining -= chunk;
+	}
+	return crc;
+}
+
 static errno_t openfile(char * filename, file_info * file)
 {
 	errno_t errno_keep;
@@ -133,6 +158,9 @@ errno_t checkfile(char * filename, file_info * file)
 {
 	frame_info * frame;
 	errno_t _errno;
+	int musicstart = 0;
+	int musicend = 0;
+	int musiccrc;
 	
 	file_clear(file);
 	_errno = openfile(filename, file);
@@ -144,11 +172,23 @@ errno_t checkfile(char * filename, file_info * file)
 	findlastframe(file);
 	while (findframe(file, frame)) {
 		if (checkframe(file, frame)) {
+			if (file->frames > 0) {
+				if (!musicstart) musicstart = frame->offset;
+				musicend = frame->offset + frame->length;
+			}
 			file_update(file, frame);
 			skipframe(file, frame);
 		}
 	}
 	frame_destroy(frame);
+
+	if ((file->xingflags & XING_FLAG_MUSICCRC) && musicstart) {
+		musiccrc = calculate_musiccrc(file, musicstart, musicend);
+		if (musiccrc >= 0) {
+			file->musiccrccalc = (unsigned int)musiccrc;
+			file->musiccrccomputed = TRUE;
+		}
+	}
 	
 	check_filename(file);
 

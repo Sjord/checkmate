@@ -72,6 +72,7 @@ elif [ ! -s "$TESTDATA/good/mp3_44100_128_c2.mp3" ] || \
      [ ! -s "$TESTDATA/bad/musiclength.mp3" ] || \
      [ ! -s "$TESTDATA/bad/xingframes.mp3" ] || \
      [ ! -s "$TESTDATA/bad/xingbytes.mp3" ] || \
+     [ ! -s "$TESTDATA/bad/musiccrc.mp3" ] || \
      [ ! -s "$TESTDATA/good/mp3_44100_vbr.mp3" ]; then
 	TESTDATA=$TESTDATA "$testdir/gentestdata.sh" || exit $?
 fi
@@ -106,6 +107,7 @@ expect_result "crc error" "$BAD/crc_error.mp3" "Bad" 1
 expect_result "Xing MusicLength mismatch" "$BAD/musiclength.mp3" "Bad" 1
 expect_result "Xing frame count mismatch" "$BAD/xingframes.mp3" "Bad" 1
 expect_result "Xing byte count mismatch" "$BAD/xingbytes.mp3" "Bad" 1
+expect_result "music data CRC mismatch" "$BAD/musiccrc.mp3" "Bad" 1
 
 # The error descriptions should be present in the full output.
 expect_contains "empty error description" "empty file" "$BAD/empty.mp3"
@@ -116,6 +118,7 @@ expect_contains "crc error description" "CRC error" "$BAD/crc_error.mp3"
 expect_contains "MusicLength error description" "inconsistent Xing header values" "$BAD/musiclength.mp3"
 expect_contains "Xing frame count error description" "inconsistent Xing header values" "$BAD/xingframes.mp3"
 expect_contains "Xing byte count error description" "inconsistent Xing header values" "$BAD/xingbytes.mp3"
+expect_contains "music data CRC error description" "music data CRC error" "$BAD/musiccrc.mp3"
 
 # --- Metadata tags ---------------------------------------------------------
 expect_contains "id3 tags detected" "<id3v2>" -x "$GOOD/mp3_44100_128_c2_id3.mp3"

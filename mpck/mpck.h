@@ -124,6 +124,7 @@
 #define ERR_EMPTY		1<<7	/* empty file */
 #define ERR_LONGFNAME		1<<8	/* too long filename */
 #define ERR_BADFNAME		1<<9	/* filename containing bad chars */
+#define ERR_MUSICCRC		1<<10	/* music data CRC error */
 
 
 #define END_OFFSET 16384 /* the offset from the end to search for the last MP3 header */

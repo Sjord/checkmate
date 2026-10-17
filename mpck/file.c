@@ -279,6 +279,10 @@ file_final(file_info * file)
 			file->errors |= ERR_XINGHEADER;
 		}
 	}
+	if ((file->xingflags & XING_FLAG_MUSICCRC) && file->musiccrccomputed &&
+			file->musiccrc != file->musiccrccalc) {
+		file->errors |= ERR_MUSICCRC;
+	}
 
 	file->ismp3file=(!((file->errors&ERR_EMPTY)||(file->errors&ERR_LFRAMES))); 
 
