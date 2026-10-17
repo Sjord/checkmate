@@ -75,8 +75,8 @@ Windows).
    - **Consistency**: MPEG version and layer must match the previous valid
      frame (bitrate may vary -- VBR is allowed).
    - **Xing/LAME header**: on the first valid frame, read the Xing or Info
-     header and the LAME extension. Its MusicLength is compared with the
-     total length of all frames.
+     header and the LAME extension. Its frame count, byte count and
+     MusicLength are compared with the actual frames and total frame length.
 5. Report per-file summary and aggregate totals.
 
 ## Error model

@@ -205,6 +205,15 @@ make_bad_files() {
 	cp "$ref_mp3" "$BAD/musiclength.mp3"
 	printf '\000\000\200\370' | dd of="$BAD/musiclength.mp3" \
 		bs=1 seek=184 conv=notrunc 2>/dev/null
+
+	# Corrupt the frame and byte counts in the Xing/Info header.  The
+	# header starts at offset 36 and these fields follow the flags.
+	cp "$ref_mp3" "$BAD/xingframes.mp3"
+	printf '\000\000\000\001' | dd of="$BAD/xingframes.mp3" \
+		bs=1 seek=44 conv=notrunc 2>/dev/null
+	cp "$ref_mp3" "$BAD/xingbytes.mp3"
+	printf '\000\000\000\001' | dd of="$BAD/xingbytes.mp3" \
+		bs=1 seek=48 conv=notrunc 2>/dev/null
 }
 
 make_bad_files
