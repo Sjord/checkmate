@@ -25,6 +25,7 @@
 
 #include "mpck.h"
 #include "file.h"
+#include "xing.h"
 #include "mp3errors.h"
 #include "options.h"
 #include "print.h"
@@ -141,8 +142,17 @@ file_print_verbose(const file_info * file)
 {
 	printf("    %-30s%s\n", "stereo", strbool(file->stereo));
 	printf("    %-30s%zu KiB\n", "size", (size_t)(file->length/1024));
-	if (file->musiclength) {
-		printf("    %-30s%lu B\n", "MusicLength", file->musiclength);
+	if (file->xingflags) {
+		printf("    %-30s\n", "Xing tag");
+		if (file->xingflags & XING_FLAG_FRAMES) {
+			printf("        %-26s%lu\n", "frames", file->xingframes);
+		}
+		if (file->xingflags & XING_FLAG_BYTES) {
+			printf("        %-26s%lu B\n", "bytes", file->xingbytes);
+		}
+		if (file->xingflags & XING_FLAG_MUSICLENGTH) {
+			printf("        %-26s%lu B\n", "MusicLength", file->musiclength);
+		}
 	}
 	printf("    %-30s%s\n", "ID3V1", strbool(file->id3&ID3V1));
 
@@ -248,8 +258,26 @@ file_final(file_info * file)
 
 	if (file->frames<MIN_FRAMES) file->errors |= ERR_LFRAMES;
 	if (file->alien_between) file->errors |= ERR_UBYTES;
-	if (file->musiclength && file->musiclength != (unsigned long)file->lengthcount) {
-		file->errors |= ERR_MUSICLENGTH;
+
+	/* check the Xing/LAME header values against the actual stream */
+	if ((file->xingflags & XING_FLAG_MUSICLENGTH) && file->musiclength &&
+			file->musiclength != (unsigned long)file->lengthcount) {
+		file->errors |= ERR_XINGHEADER;
+	}
+	if ((file->xingflags & XING_FLAG_BYTES) &&
+			file->xingbytes != (unsigned long)file->lengthcount) {
+		file->errors |= ERR_XINGHEADER;
+	}
+	if (file->xingflags & XING_FLAG_FRAMES) {
+		unsigned long xingframes = file->xingframes;
+		unsigned long actualframes = (unsigned long)file->frames;
+
+		/* Encoders disagree on whether the Xing frame itself is included
+		 * in the frame count, so allow a difference of one. */
+		if ((xingframes > actualframes && xingframes - actualframes > 1) ||
+		    (actualframes > xingframes && actualframes - xingframes > 1)) {
+			file->errors |= ERR_XINGHEADER;
+		}
 	}
 
 	file->ismp3file=(!((file->errors&ERR_EMPTY)||(file->errors&ERR_LFRAMES))); 

@@ -118,7 +118,7 @@
 #define ERR_INCONSISTENT	1<<1	/* non-consistent frame headers */
 #define ERR_INVALID		1<<2 	/* invalid frame header values */
 #define ERR_FRAMECRC		1<<3
-#define ERR_MUSICLENGTH		1<<4	/* MusicLength from LAME header is wrong */
+#define ERR_XINGHEADER		1<<4	/* Xing/LAME header values are inconsistent */
 #define ERR_NOFRAMES		1<<5	/* no frames found */
 #define ERR_LFRAMES		1<<6	/* not enough frames found */
 #define ERR_EMPTY		1<<7	/* empty file */

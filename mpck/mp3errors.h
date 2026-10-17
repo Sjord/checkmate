@@ -10,7 +10,7 @@ error_info errordescs[]={
 	{ERR_INCONSISTENT,	"INC", "inconsistent frame headers"},
 	{ERR_INVALID,		"INV", "invalid header values"},
 	{ERR_FRAMECRC,		"CRC", "CRC error"},
-	{ERR_MUSICLENGTH,	"MLN", "MusicLength mismatch"},
+	{ERR_XINGHEADER,	"XHD", "inconsistent Xing header values"},
 	{ERR_LONGFNAME,		"LFN", "filename too long"},
 	{ERR_BADFNAME,		"BFN", "filename contains strange characters"},
 	{ERR_NOFRAMES,		"NOF", "no frames found"},

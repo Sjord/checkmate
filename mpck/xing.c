@@ -32,12 +32,6 @@
 #include <string.h>
 #endif
 
-/* flags in the Xing header */
-#define XING_FLAG_FRAMES	0x0001
-#define XING_FLAG_BYTES		0x0002
-#define XING_FLAG_TOC		0x0004
-#define XING_FLAG_VBR_SCALE	0x0008
-
 /* offset of MusicLength within the LAME extension of the Xing header */
 #define LAME_MUSICLENGTH_OFFSET	28
 
@@ -74,6 +68,7 @@ xing_read(file_info * file, const frame_info * frame)
 	int savedpos;
 	char lame[4];
 	unsigned long flags;
+	unsigned long value;
 	unsigned long musiclength;
 
 	if (frame->layer != LAYER_3) return FALSE;
@@ -112,10 +107,26 @@ xing_read(file_info * file, const frame_info * frame)
 		return FALSE;
 	}
 
-	/* Skip the optional Xing fields to find the LAME extension. */
+	/* Read the optional Xing fields. */
 	offset += 8;
-	if (flags & XING_FLAG_FRAMES)    offset += 4;
-	if (flags & XING_FLAG_BYTES)     offset += 4;
+	if (flags & XING_FLAG_FRAMES) {
+		if (offset + 4 <= frameend &&
+				cfseek(file->fp, offset, SEEK_SET) == 0 &&
+				readbe32(file->fp, &value)) {
+			file->xingframes = value;
+			file->xingflags |= XING_FLAG_FRAMES;
+		}
+		offset += 4;
+	}
+	if (flags & XING_FLAG_BYTES) {
+		if (offset + 4 <= frameend &&
+				cfseek(file->fp, offset, SEEK_SET) == 0 &&
+				readbe32(file->fp, &value)) {
+			file->xingbytes = value;
+			file->xingflags |= XING_FLAG_BYTES;
+		}
+		offset += 4;
+	}
 	if (flags & XING_FLAG_TOC)       offset += 100;
 	if (flags & XING_FLAG_VBR_SCALE) offset += 4;
 
@@ -124,9 +135,9 @@ xing_read(file_info * file, const frame_info * frame)
 			cfread(lame, 4, file->fp) == 4 &&
 			memcmp(lame, "LAME", 4) == 0 &&
 			cfseek(file->fp, offset + LAME_MUSICLENGTH_OFFSET, SEEK_SET) == 0 &&
-			readbe32(file->fp, &musiclength) &&
-			musiclength) {
+			readbe32(file->fp, &musiclength)) {
 		file->musiclength = musiclength;
+		file->xingflags |= XING_FLAG_MUSICLENGTH;
 	}
 
 	cfseek(file->fp, savedpos, SEEK_SET);
