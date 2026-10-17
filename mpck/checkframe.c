@@ -32,6 +32,7 @@
 #include "options.h"
 #include "matrices.h"
 #include "layer2.h"
+#include "xing.h"
 #include "checkframe.h"
 
 #ifdef HAVE_ERRNO_H
@@ -322,6 +323,10 @@ checkframe(file_info * file, frame_info * frame)
 		file->errors |= ERR_INCONSISTENT;
 		setconsistent(file, frame);
 		return FALSE;
+	}
+
+	if (file->frames == 0) {
+		xing_read(file, frame);
 	}
 	return TRUE;
 }

@@ -37,6 +37,7 @@ struct _file_info {
 	char * filename;	/* filename of this file		*/
 	int length;		/* length of this file (in bytes)	*/
 	int lengthcount;	/* length of all frames			*/
+	unsigned long musiclength; /* MusicLength from the LAME header	*/
 	int time;		/* length of this file (in seconds)	*/
 	int msec;		/* milliseconds left (see time)		*/
 	int frames;		/* number of valid frames		*/

@@ -141,6 +141,9 @@ file_print_verbose(const file_info * file)
 {
 	printf("    %-30s%s\n", "stereo", strbool(file->stereo));
 	printf("    %-30s%d KiB\n", "size", file->length/1024);
+	if (file->musiclength) {
+		printf("    %-30s%lu B\n", "MusicLength", file->musiclength);
+	}
 	printf("    %-30s%s\n", "ID3V1", strbool(file->id3&ID3V1));
 
 	printf("    %-30s%s\n", "ID3V2", strbool(file->id3&ID3V2));
@@ -242,6 +245,9 @@ file_final(file_info * file)
 
 	if (file->frames<MIN_FRAMES) file->errors |= ERR_LFRAMES;
 	if (file->alien_between) file->errors |= ERR_UBYTES;
+	if (file->musiclength && file->musiclength != (unsigned long)file->lengthcount) {
+		file->errors |= ERR_MUSICLENGTH;
+	}
 
 	file->ismp3file=(!((file->errors&ERR_EMPTY)||(file->errors&ERR_LFRAMES))); 
 
