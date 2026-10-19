@@ -2,14 +2,16 @@ Source: checkmate
 Section: sound
 Priority: optional
 Maintainer: Sjoerd Langkemper <sjoerd-debian@linuxonly.nl>
-Build-Depends: debhelper (>= 4.0.0)
-Standards-Version: 3.6.2
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.3
+Homepage: https://github.com/Sjord/checkmate
+Rules-Requires-Root: no
 
 Package: mpck
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: checks MP3 files
- Mpck scans the MP3 file to see if the frames are where they are supposed 
- to be, if the frame headers are correct  and  if  the headers are consistent 
- throughout the file. It gives some statistics on the file like bitrate and 
- length, and a conclusion whether the file is good or bad.
+Description: check MPEG audio files for errors
+ Mpck scans MP3 files to verify that frames are where they are supposed
+ to be, that frame headers are correct, and that headers are consistent
+ throughout the file. It reports statistics such as bitrate and length,
+ and gives a conclusion whether each file is good or bad.
