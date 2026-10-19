@@ -215,6 +215,12 @@ make_bad_files() {
 	printf '\000\000\000\001' | dd of="$BAD/xingbytes.mp3" \
 		bs=1 seek=48 conv=notrunc 2>/dev/null
 
+	# Corrupt a TOC entry, which is covered by the LAME TagCRC.  This
+	# leaves the Xing fields and the LAME extension values intact.
+	cp "$ref_mp3" "$BAD/lamecrc.mp3"
+	printf '\001' | dd of="$BAD/lamecrc.mp3" \
+		bs=1 seek=52 conv=notrunc 2>/dev/null
+
 	# Corrupt audio payload without changing any frame headers.
 	cp "$ref_mp3" "$BAD/musiccrc.mp3"
 	printf '\377\377\377\377' | dd of="$BAD/musiccrc.mp3" \
@@ -222,6 +228,12 @@ make_bad_files() {
 }
 
 make_bad_files
+
+# A valid file with an old-style, unpopulated LAME extension.  MusicLength,
+# MusicCRC and TagCRC are zero, which must not be reported as a bad tag.
+cp "$GOOD/mp3_44100_128_c2.mp3" "$GOOD/mp3_44100_128_c2_lame_old.mp3"
+dd if=/dev/zero of="$GOOD/mp3_44100_128_c2_lame_old.mp3" \
+	bs=1 count=8 seek=184 conv=notrunc 2>/dev/null
 
 echo "gentestdata.sh: generated $generated files in $GOOD ($skipped combinations skipped)"
 exit 0

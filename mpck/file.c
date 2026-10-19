@@ -279,6 +279,9 @@ file_final(file_info * file)
 			file->errors |= ERR_XINGHEADER;
 		}
 	}
+	if (file->xingflags & XING_FLAG_LAMECRC) {
+		file->errors |= ERR_LAMECRC;
+	}
 	if ((file->xingflags & XING_FLAG_MUSICCRC) && file->musiccrccomputed &&
 			file->musiccrc != file->musiccrccalc) {
 		file->errors |= ERR_MUSICCRC;

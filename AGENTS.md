@@ -77,7 +77,8 @@ Windows).
    - **Xing/LAME header**: on the first valid frame, read the Xing or Info
      header and the LAME extension. Its frame count, byte count and
      MusicLength are compared with the actual frames and total frame length.
-     The LAME MusicCRC is checked against the music data after the tag frame.
+     The LAME TagCRC is validated against the tag frame, and the MusicCRC is
+     checked against the music data after the tag frame.
 5. Report per-file summary and aggregate totals.
 
 ## Error model

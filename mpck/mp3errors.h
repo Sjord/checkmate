@@ -11,6 +11,7 @@ error_info errordescs[]={
 	{ERR_INVALID,		"INV", "invalid header values"},
 	{ERR_FRAMECRC,		"CRC", "CRC error"},
 	{ERR_XINGHEADER,	"XHD", "inconsistent Xing header values"},
+	{ERR_LAMECRC,		"LTC", "LAME tag CRC error"},
 	{ERR_LONGFNAME,		"LFN", "filename too long"},
 	{ERR_BADFNAME,		"BFN", "filename contains strange characters"},
 	{ERR_MUSICCRC,		"MCR", "music data CRC error"},
@@ -19,4 +20,4 @@ error_info errordescs[]={
 	{ERR_EMPTY,		"EMP", "empty file"}
 };
 
-#define errordescs_siz 12
+#define errordescs_siz 13
