@@ -23,12 +23,22 @@ the file. It gives some statistics on the file, and a conclusion whether the
 file is good or bad.
 .SH OPTIONS
 .TP
+.B \-b --bytes BYTES
+Scan only the first
+.B BYTES
+bytes.
+.TP
 .B \-B --badonly
 Print statistics only for bad files.
 .TP
-.B \-e --extention=EXT
+.B \-e --extension=EXT
 Scan only files ending in 
 .B .EXT
+.TP
+.B \-f --frames FRAMES
+Scan only the first
+.B FRAMES
+frames.
 .TP
 .B \-h --help
 Display a help screen and quit.
@@ -55,7 +65,9 @@ Treat each directory recursively, checking all files in the directory. Normal
 operation is to ignore directories.
 .TP
 .B \-v --verbose
-Be verbose. 
+Be verbose. Use twice for
+.I super-duper-mega-power-ultra-verbosity
+which gives you information about each frame. Use with care.
 .TP
 .B \-V --version
 Print version and copyright information and exit.
@@ -88,10 +100,16 @@ The given file is a directory.
 Invalid argument, no filename supplied. 
 .TP
 .B 36 (ENAMETOOLONG)
-File extention or file name is too long.
+File extension or file name is too long.
+.SH BUGS
+.PP
+The -b and -f options make the statistics go all wrong. This is not really
+a bug, the program can only acquire statistics to the limit indicated by
+-b or -f.
+Mpck cannot read from stdin. CRC and ID3 support is buggy.
 .SH AUTHOR
 .TP
-Written by Sjoerd Langkemper <sjoerd-checkmate@linuxonly.nl>
+Written by Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>
 .SH COPYRIGHT
 .PP
 Copyright \(co 2006 Sjoerd Langkemper.

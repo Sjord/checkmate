@@ -39,3 +39,29 @@ jobs:
 
       - name: Test
         run: make check
+
+  debian-package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential debhelper fakeroot lintian
+
+      - name: Check build dependencies
+        run: dpkg-checkbuilddeps
+
+      - name: Build Debian package
+        run: dpkg-buildpackage -us -uc -b
+
+      - name: Check package with lintian
+        run: lintian --profile debian --display-info --fail-on error ../*.changes
+
+      - name: Install and smoke test package
+        run: |
+          sudo apt-get install -y ../mpck_*.deb
+          mpck --version
+          test -f /usr/share/man/man1/mpck.1.gz
