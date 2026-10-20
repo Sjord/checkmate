@@ -58,7 +58,8 @@ lastframelength(file_info * file, frame_info * frame)
 	int res;
 	int i = 0;
 
-	frame->length = MIN(frame->length, file->length - frame->offset);
+	frame->length = (int)MIN((int64_t)frame->length,
+			file->length - frame->offset);
 	
 	cfseek(file->fp, frame->offset, SEEK_SET);
 	while (i < frame->length) {
@@ -117,24 +118,26 @@ static int findlastframe(file_info * file)
 }
 
 static int
-calculate_musiccrc(file_info * file, int start, int end)
+calculate_musiccrc(file_info * file, int64_t start, int64_t end)
 {
 	char buf[65536];
 	int crc = 0;
-	int remaining = end - start;
-	int chunk;
-	int res;
+	int64_t remaining = end - start;
+	size_t chunk;
+	size_t res;
 
 	cfseek(file->fp, start, SEEK_SET);
 	while (remaining > 0) {
-		chunk = MIN(remaining, (int)sizeof(buf));
+		chunk = sizeof(buf);
+		if (remaining < (int64_t)chunk)
+			chunk = (size_t)remaining;
 		res = cfread(buf, chunk, file->fp);
 		if (res != chunk) {
 			offseterror(file, "read error");
 			return -1;
 		}
 		crc = crc16_music_update(crc, (unsigned char *)buf, chunk);
-		remaining -= chunk;
+		remaining -= (int64_t)chunk;
 	}
 	return crc;
 }
@@ -158,8 +161,8 @@ errno_t checkfile(char * filename, file_info * file)
 {
 	frame_info * frame;
 	errno_t _errno;
-	int musicstart = 0;
-	int musicend = 0;
+	int64_t musicstart = 0;
+	int64_t musicend = 0;
 	int musiccrc;
 	
 	file_clear(file);

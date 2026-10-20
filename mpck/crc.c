@@ -101,9 +101,9 @@ crc_init(void)
 }
 
 int
-crc16_music_update(int crc, const unsigned char *data, int length)
+crc16_music_update(int crc, const unsigned char *data, size_t length)
 {
-	int i = 0;
+	size_t i = 0;
 	unsigned int c;
 
 	crc_init();

@@ -145,13 +145,13 @@ file_print_verbose(const file_info * file)
 	if (file->xingflags) {
 		printf("    %-30s\n", "Xing tag");
 		if (file->xingflags & XING_FLAG_FRAMES) {
-			printf("        %-26s%lu\n", "frames", file->xingframes);
+			printf("        %-26s%zu\n", "frames", (size_t)file->xingframes);
 		}
 		if (file->xingflags & XING_FLAG_BYTES) {
-			printf("        %-26s%lu B\n", "bytes", file->xingbytes);
+			printf("        %-26s%zu B\n", "bytes", (size_t)file->xingbytes);
 		}
 		if (file->xingflags & XING_FLAG_MUSICLENGTH) {
-			printf("        %-26s%lu B\n", "MusicLength", file->musiclength);
+			printf("        %-26s%zu B\n", "MusicLength", (size_t)file->musiclength);
 		}
 	}
 	printf("    %-30s%s\n", "ID3V1", strbool(file->id3&ID3V1));
@@ -261,16 +261,16 @@ file_final(file_info * file)
 
 	/* check the Xing/LAME header values against the actual stream */
 	if ((file->xingflags & XING_FLAG_MUSICLENGTH) && file->musiclength &&
-			file->musiclength != (unsigned long)file->lengthcount) {
+			file->musiclength != file->lengthcount) {
 		file->errors |= ERR_XINGHEADER;
 	}
 	if ((file->xingflags & XING_FLAG_BYTES) &&
-			file->xingbytes != (unsigned long)file->lengthcount) {
+			file->xingbytes != file->lengthcount) {
 		file->errors |= ERR_XINGHEADER;
 	}
 	if (file->xingflags & XING_FLAG_FRAMES) {
-		unsigned long xingframes = file->xingframes;
-		unsigned long actualframes = (unsigned long)file->frames;
+		int64_t xingframes = file->xingframes;
+		int64_t actualframes = file->frames;
 
 		/* Encoders disagree on whether the Xing frame itself is included
 		 * in the frame count, so allow a difference of one. */
