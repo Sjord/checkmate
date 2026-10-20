@@ -35,15 +35,15 @@ typedef struct _file_info file_info;
 struct _file_info { 
 	CFILE * fp;		/* filepointer to this file		*/
 	char * filename;	/* filename of this file		*/
-	int length;		/* length of this file (in bytes)	*/
-	int lengthcount;	/* length of all frames			*/
+	int64_t length;		/* length of this file (in bytes)	*/
+	int64_t lengthcount;	/* length of all frames			*/
 	int time;		/* length of this file (in seconds)	*/
 	int msec;		/* milliseconds left (see time)		*/
-	int frames;		/* number of valid frames		*/
-	int alien_total;	/* total number of unidentifiable bytes	*/
-	int alien_before;	/* junk before all frames		*/
-	int alien_between;	/* junk between first and last frame	*/
-	int alien_after;	/* junk after all frames		*/
+	int64_t frames;		/* number of valid frames		*/
+	int64_t alien_total;	/* total number of unidentifiable bytes	*/
+	int64_t alien_before;	/* junk before all frames		*/
+	int64_t alien_between;	/* junk between first and last frame	*/
+	int64_t alien_after;	/* junk after all frames		*/
 	int id3;		/* bitwise OR of 0, ID3V1, ID3V2.	*/
 	size_t id3v2_size; 	/* total number of bytes in ID3v2 tag */
 	int ape;		/* bitwise OR of 0, APEV1, APEV2.	*/
@@ -52,13 +52,13 @@ struct _file_info {
 	int version;		/* MPEG version				*/
 	int layer;		/* layer				*/
 	int bitrate;		/* bitrate in bps			*/
-	int bitratecount;	/* add bitrates to calculate an average	*/
+	int64_t bitratecount;	/* add bitrates to calculate an average	*/
 	int stereo;		/* boolean				*/
 	int samplerate;		/* samplerate in Hertz			*/
 	int samples;		/* samples per frame			*/
 	int vbr;		/* variable bit rate (boolean)		*/
 	int errors;		/* is TRUE or >1 if errors are found	*/
-	int lastframe_offset;	/* offset of last frame			*/
+	int64_t lastframe_offset; /* offset of last frame			*/
 	int lastframe_length;	/* length of last frame			*/
 	int ismp3file;		/* TRUE if this file is an mp3 file	*/
 };

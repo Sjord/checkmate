@@ -3,6 +3,20 @@
 
 #include <stdio.h>
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#else
+#ifdef _WIN32
+typedef __int64 int64_t;
+#else
+typedef long long int64_t;
+#endif
+#endif
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -24,6 +38,9 @@
 
 typedef struct _io_funcs io_funcs;
 
+/* Sizes and buffer lengths are non-negative and use size_t. Positions and
+ * seek offsets are signed and use int64_t, also on platforms where off_t is
+ * only 32 bits. */
 typedef struct {
 	FILE * fp;
 	char * buffer;
@@ -42,8 +59,8 @@ CFILE *cfopen(const char *filename, char *mode);
 // use cfeof instead of feof because feof is a macro which messes things up.
 struct _io_funcs {
 	size_t (*cfread)(char *outbuf, size_t size, CFILE *c);
-	int (*cfseek)(CFILE *c, long offset, int whence);
-	size_t (*cftell)(CFILE *c);
+	int (*cfseek)(CFILE *c, int64_t offset, int whence);
+	int64_t (*cftell)(CFILE *c);
 	int (*cfeof)(CFILE *c);
 	int (*cfclose)(CFILE *c);
 };
