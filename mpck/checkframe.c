@@ -198,12 +198,10 @@ findframe(file_info * file, frame_info * frame)
 		ptr = buf;
 		res = cfread(ptr, 1, file->fp);
 		if (res <= 0) {
-			if (cfeof(file->fp)) {
-				return FALSE;
-			} else {
+			if (!cfeof(file->fp)) {
 				offseterror(file, "read error");
 			}
-			continue;
+			return FALSE;
 		}
 
 		if ((*ptr & 0xff) == 0xff) {

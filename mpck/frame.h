@@ -26,6 +26,8 @@
 #ifndef __FRAME_H__
 #define __FRAME_H__
 
+#include "bufio.h"
+
 /* structure which holds information for all frames */
 typedef struct _frame_info frame_info;
 
@@ -45,7 +47,7 @@ struct _frame_info {
 	int time;		/* time in miliseconds			*/
 	int samples;		/* number of samples			*/
 	int crc16;		/* crc16 (0==not available, or crc16 value) */
-	int offset;		/* offset of this frame			*/
+	int64_t offset;		/* offset of this frame			*/
 };
 
 /* prototypes */

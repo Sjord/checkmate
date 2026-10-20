@@ -28,6 +28,10 @@
 
 /* include files */
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
 #include "bufio.h"
 
 #ifdef HAVE_CONFIG_H
@@ -50,10 +54,6 @@
 #else /* _WIN32 */
 #define DIRSEP '/'
 #endif /* _WIN32 */
-
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
 
 /* package information */
 #ifndef VERSION

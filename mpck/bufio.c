@@ -69,8 +69,8 @@
 
 static CFILE * ub_fopen(const char * filename, char * mode, size_t filesize);
 static size_t ub_fread(char *outbuf, size_t size, CFILE *c);
-static int ub_fseek(CFILE *c, long offset, int whence);
-static size_t ub_ftell(CFILE *c);
+static int ub_fseek(CFILE *c, int64_t offset, int whence);
+static int64_t ub_ftell(CFILE *c);
 static int ub_feof(CFILE *c);
 static int ub_fclose(CFILE *c);
 
@@ -80,8 +80,8 @@ static int mm_fclose(CFILE * c);
 
 static CFILE * wb_fopen(const char * filename, char * mode, size_t filesize);
 static size_t wb_fread(char *outbuf, size_t size, CFILE *c);
-static int wb_fseek(CFILE *c, long offset, int whence);
-static size_t wb_ftell(CFILE *c);
+static int wb_fseek(CFILE *c, int64_t offset, int whence);
+static int64_t wb_ftell(CFILE *c);
 static int wb_feof(CFILE *c);
 static int wb_fclose(CFILE *c);
 
@@ -240,25 +240,25 @@ static size_t wb_fread(char * outbuf, size_t size, CFILE * c) {
 	return readnow;
 }
 
-static int wb_fsetpos(CFILE * c, size_t pos) {
-	if (pos>c->buflen) return -1;
+static int wb_fsetpos(CFILE * c, int64_t pos) {
+	if (pos < 0 || pos > (int64_t)c->buflen) return -1;
 	c->bufpnt=c->buffer+pos;
 	return 0;
 }
 
-static int wb_fseek(CFILE * c, long offset, int whence) {
+static int wb_fseek(CFILE * c, int64_t offset, int whence) {
 	if (whence == SEEK_SET) return wb_fsetpos(c, offset);
 	if (whence == SEEK_CUR) {
 		return wb_fsetpos(c, cftell(c)+offset);
 	}
 	if (whence == SEEK_END) {
-		return wb_fsetpos(c, c->buflen+offset);
+		return wb_fsetpos(c, (int64_t)c->buflen+offset);
 	}
 	return -1;
 }
 
-static size_t wb_ftell(CFILE * c) {
-	return c->bufpnt-c->buffer;
+static int64_t wb_ftell(CFILE * c) {
+	return (int64_t)(c->bufpnt-c->buffer);
 }
 
 static int wb_feof(CFILE * c) {
@@ -386,12 +386,20 @@ static size_t ub_fread(char * outbuf, size_t size, CFILE * c) {
 	return fread(outbuf, 1, size, c->fp);
 }
 
-static int ub_fseek(CFILE * c, long offset, int whence) {
-	return fseek(c->fp, offset, whence);
+static int ub_fseek(CFILE * c, int64_t offset, int whence) {
+#ifdef _WIN32
+	return _fseeki64(c->fp, offset, whence);
+#else
+	return fseeko(c->fp, (off_t)offset, whence);
+#endif
 }
 
-static size_t ub_ftell(CFILE * c) {
-	return ftell(c->fp);
+static int64_t ub_ftell(CFILE * c) {
+#ifdef _WIN32
+	return _ftelli64(c->fp);
+#else
+	return (int64_t)ftello(c->fp);
+#endif
 }
 
 static int ub_feof(CFILE * c) {

@@ -70,13 +70,13 @@ static void file_print_bitrate(const file_info * file)
 
 static void file_print_ubytes(const file_info * file)
 {
-	printf("    %-30s%d b (%d%%)\n", "unidentified", file->alien_total,
-			100*file->alien_total/file->length);
+	printf("    %-30s%zu b (%d%%)\n", "unidentified", (size_t)file->alien_total,
+			(int)(100*file->alien_total/file->length));
 	if (options_get_verbose()) {
 		if (file->alien_total>0) {
-			printf("        %-26s%d b\n", "before 1st frame", file->alien_before);
-			printf("        %-26s%d b\n", "between frames", file->alien_between);
-			printf("        %-26s%d b\n", "after last frame", file->alien_after);
+			printf("        %-26s%zu b\n", "before 1st frame", (size_t)file->alien_before);
+			printf("        %-26s%zu b\n", "between frames", (size_t)file->alien_between);
+			printf("        %-26s%zu b\n", "after last frame", (size_t)file->alien_after);
 		}
 	}
 }
@@ -88,7 +88,7 @@ file_print_basic(const file_info * file)
 	printf("    %-30s%d\n", "layer",	file->layer);
 	file_print_bitrate(file);
 	printf("    %-30s%d Hz\n", "samplerate", file->samplerate);
-	printf("    %-30s%d\n", "frames", 	file->frames);
+	printf("    %-30s%zu\n", "frames", 	(size_t)file->frames);
 	printf("    %-30s%d:%02d.%03d\n", "time", file->time/60, file->time%60, file->msec);
 	file_print_ubytes(file);
 }
@@ -131,7 +131,7 @@ file_print_lastframe(const file_info * file)
 	if (file->lastframe_offset == 0) {
 		printf("        %s\n", "not found");
 	} else {
-		printf("        %-26s%d b (0x%x)\n", "offset", file->lastframe_offset, file->lastframe_offset);
+		printf("        %-26s%zu b (0x%zx)\n", "offset", (size_t)file->lastframe_offset, (size_t)file->lastframe_offset);
 		printf("        %-26s%d\n", "length", file->lastframe_length);
 	}
 }
@@ -140,7 +140,7 @@ static void
 file_print_verbose(const file_info * file)
 {
 	printf("    %-30s%s\n", "stereo", strbool(file->stereo));
-	printf("    %-30s%d KiB\n", "size", file->length/1024);
+	printf("    %-30s%zu KiB\n", "size", (size_t)(file->length/1024));
 	printf("    %-30s%s\n", "ID3V1", strbool(file->id3&ID3V1));
 
 	printf("    %-30s%s\n", "ID3V2", strbool(file->id3&ID3V2));
@@ -222,12 +222,15 @@ file_final(file_info * file)
 	
 	/* calculate time and avg bitrate */
 	if (file->vbr) {
-		file->bitrate=8*file->lengthcount/file->frames*file->samplerate/file->samples;
+		/* use 64-bit arithmetic: 8 * lengthcount overflows an int
+		   for files larger than about 256 MiB */
+		file->bitrate=(int)(8*file->lengthcount/file->frames*file->samplerate/file->samples);
 	}
 	if (file->samplerate) {
-		
-		file->time=(file->frames*file->samples)/file->samplerate;
-		samplesleft=(file->frames*file->samples)%file->samplerate;
+		int64_t total_samples = (int64_t)file->frames*file->samples;
+
+		file->time=(int)(total_samples/file->samplerate);
+		samplesleft=(int)(total_samples%file->samplerate);
 		file->msec=(1000*samplesleft)/file->samplerate;
 	}
 	
@@ -292,7 +295,7 @@ file_print_xml(const file_info * file)
 {
 	printf("<file>\n");
 	printf("\t<filename>%s</filename>\n", file->filename);
-	printf("\t<size>%d</size>\n", file->length);
+	printf("\t<size>%zu</size>\n", (size_t)file->length);
 	if (file->ismp3file) {
 		printf("\t<MPEG>\n");
 		printf("\t\t<version>%s</version>\n", file_strversion(file));
@@ -302,7 +305,7 @@ file_print_xml(const file_info * file)
 		printf("\t\t<samplerate>%d</samplerate>\n", file->samplerate);
 		printf("\t\t<samples>%d</samples>\n", file->samples);
 		if (file->vbr) printf("\t\t<vbr />\n");
-		printf("\t\t<frames>%d</frames>\n", file->frames);
+		printf("\t\t<frames>%zu</frames>\n", (size_t)file->frames);
 		if (file->id3 & ID3V1) printf("\t\t<id3v1 />\n");
 		if (file->id3 & ID3V2) {
 			printf("\t\t<id3v2>\n");
@@ -325,10 +328,10 @@ file_print_xml(const file_info * file)
 	printf("\t<result>\n");
 	if (file->alien_total) {
 		printf("\t\t<unidentified>\n");
-		printf("\t\t\t<before>%d</before>\n", file->alien_before);
-		printf("\t\t\t<between>%d</between>\n", file->alien_between);
-		printf("\t\t\t<after>%d</after>\n", file->alien_after);
-		printf("\t\t\t<total>%d</total>\n", file->alien_total);
+		printf("\t\t\t<before>%zu</before>\n", (size_t)file->alien_before);
+		printf("\t\t\t<between>%zu</between>\n", (size_t)file->alien_between);
+		printf("\t\t\t<after>%zu</after>\n", (size_t)file->alien_after);
+		printf("\t\t\t<total>%zu</total>\n", (size_t)file->alien_total);
 		printf("\t\t</unidentified>\n");
 	}
 	if (file->errors) {

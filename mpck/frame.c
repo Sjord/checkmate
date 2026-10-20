@@ -68,7 +68,7 @@ void frame_print(const frame_info *fi)
         printf("    %-30s%d bps\n", "bitrate", fi->bitrate);
         printf("    %-30s%d Hz\n", "samplerate", fi->samplerate);
         printf("    %-30s%d b\n", "frame_length", fi->length);
-        printf("    %-30s%d b (0x%x)\n", "offset", fi->offset, fi->offset);
+        printf("    %-30s%zu b (0x%zx)\n", "offset", (size_t)fi->offset, (size_t)fi->offset);
         printf("    %-30s%d ms\n", "time", fi->time);
         printf("    %-30s%u\n", "crc16", fi->crc16);
 	printf("    %-30s%d\n", "padding", fi->padding);

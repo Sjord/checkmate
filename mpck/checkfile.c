@@ -44,11 +44,11 @@
 
 static void skipframe(file_info * file, frame_info * frame)
 {
-	int newpos = MIN(frame->offset + frame->length, file->length);
+	int64_t newpos = MIN(frame->offset + frame->length, file->length);
 	cfseek(file->fp, newpos, SEEK_SET);
 }
 
-static size_t
+static int
 lastframelength(file_info * file, frame_info * frame)
 {
 	char buf[4 + sizeof(int)];
@@ -64,7 +64,7 @@ lastframelength(file_info * file, frame_info * frame)
 		res = cfread(ptr, 1, file->fp);
 		if (res <= 0) {
 			offseterror(file, "read error");
-			continue;
+			break;
 		}
 		if (*ptr == 'T') {
 			res = cfread(++ptr, 2, file->fp);
@@ -92,7 +92,7 @@ lastframelength(file_info * file, frame_info * frame)
 
 static int findlastframe(file_info * file)
 {
-	int oldpos;
+	int64_t oldpos;
 	frame_info * frame;
 	frame = frame_create();
 	
@@ -125,7 +125,7 @@ static errno_t openfile(char * filename, file_info * file)
 		return errno_keep;
 	}
 	file->filename = filename;
-	file->length = cfilesize(file->fp);
+	file->length = (int64_t)cfilesize(file->fp);
 	return 0;
 }
 
