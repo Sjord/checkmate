@@ -40,20 +40,20 @@
 #define LAME_TAGCRC_OFFSET	34
 
 static int
-readbe32(CFILE * fp, unsigned long * value)
+readbe32(CFILE * fp, int64_t * value)
 {
 	unsigned char buf[4];
 
 	if (cfread((char *)buf, 4, fp) != 4) return FALSE;
-	*value = ((unsigned long)buf[0] << 24)
-	       | ((unsigned long)buf[1] << 16)
-	       | ((unsigned long)buf[2] << 8)
-	       |  (unsigned long)buf[3];
+	*value = ((int64_t)buf[0] << 24)
+	       | ((int64_t)buf[1] << 16)
+	       | ((int64_t)buf[2] << 8)
+	       |  (int64_t)buf[3];
 	return TRUE;
 }
 
 static int
-isxingsignature(CFILE * fp, int offset)
+isxingsignature(CFILE * fp, int64_t offset)
 {
 	char buf[4];
 
@@ -66,27 +66,29 @@ isxingsignature(CFILE * fp, int offset)
  * including the MusicCRC.  It can be used to distinguish a populated LAME
  * extension from an old one that only has zero fields. */
 static int
-lame_tagcrc_ok(file_info * file, int framestart, int lameoffset, int frameend)
+lame_tagcrc_ok(file_info * file, int64_t framestart, int64_t lameoffset, int64_t frameend)
 {
 	unsigned char buf[256];
 	unsigned int crc = 0;
 	unsigned int stored;
-	int pos;
-	int end;
-	int chunk;
-	int res;
+	int64_t pos;
+	int64_t end;
+	size_t chunk;
+	size_t res;
 
 	end = lameoffset + LAME_TAGCRC_OFFSET;
 	if (end + 2 > frameend || end <= framestart) return FALSE;
 
 	pos = framestart;
 	while (pos < end) {
-		chunk = MIN(end - pos, (int)sizeof(buf));
+		chunk = sizeof(buf);
+		if (end - pos < (int64_t)chunk)
+			chunk = (size_t)(end - pos);
 		if (cfseek(file->fp, pos, SEEK_SET) != 0) return FALSE;
 		res = cfread((char *)buf, chunk, file->fp);
 		if (res != chunk) return FALSE;
 		crc = crc16_music_update(crc, buf, chunk);
-		pos += chunk;
+		pos += (int64_t)chunk;
 	}
 
 	if (cfseek(file->fp, end, SEEK_SET) != 0) return FALSE;
@@ -98,10 +100,10 @@ lame_tagcrc_ok(file_info * file, int framestart, int lameoffset, int frameend)
 }
 
 static void
-parse_lame_tag(file_info * file, const frame_info * frame, int offset, int frameend)
+parse_lame_tag(file_info * file, const frame_info * frame, int64_t offset, int64_t frameend)
 {
 	unsigned char lame[LAME_TAG_SIZE];
-	unsigned long musiclength;
+	int64_t musiclength;
 	unsigned int musiccrc;
 	unsigned int tagcrc;
 	int res;
@@ -113,10 +115,10 @@ parse_lame_tag(file_info * file, const frame_info * frame, int offset, int frame
 	if (res != LAME_TAG_SIZE) return;
 	if (memcmp(lame, "LAME", 4) != 0) return;
 
-	musiclength = ((unsigned long)lame[LAME_MUSICLENGTH_OFFSET] << 24)
-	            | ((unsigned long)lame[LAME_MUSICLENGTH_OFFSET + 1] << 16)
-	            | ((unsigned long)lame[LAME_MUSICLENGTH_OFFSET + 2] << 8)
-	            |  (unsigned long)lame[LAME_MUSICLENGTH_OFFSET + 3];
+	musiclength = ((int64_t)lame[LAME_MUSICLENGTH_OFFSET] << 24)
+	            | ((int64_t)lame[LAME_MUSICLENGTH_OFFSET + 1] << 16)
+	            | ((int64_t)lame[LAME_MUSICLENGTH_OFFSET + 2] << 8)
+	            |  (int64_t)lame[LAME_MUSICLENGTH_OFFSET + 3];
 	musiccrc = ((unsigned int)lame[LAME_MUSICCRC_OFFSET] << 8)
 	         |  (unsigned int)lame[LAME_MUSICCRC_OFFSET + 1];
 	tagcrc = ((unsigned int)lame[LAME_TAGCRC_OFFSET] << 8)
@@ -144,12 +146,12 @@ parse_lame_tag(file_info * file, const frame_info * frame, int offset, int frame
 int
 xing_read(file_info * file, const frame_info * frame)
 {
-	int offset;
-	int framestart;
-	int frameend;
-	int savedpos;
-	unsigned long flags;
-	unsigned long value;
+	int64_t offset;
+	int64_t framestart;
+	int64_t frameend;
+	int64_t savedpos;
+	int64_t flags;
+	int64_t value;
 
 	if (frame->layer != LAYER_3) return FALSE;
 

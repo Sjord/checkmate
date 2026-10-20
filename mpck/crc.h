@@ -23,9 +23,11 @@
  * 
  */
 
+#include <stddef.h>
+
 #define CRC16_POLYNOMIAL 0x8005
 
 void crc_init(void);
 int crc16(unsigned char *data, int length);
 int crc16bits(unsigned char *data, int nbits);
-int crc16_music_update(int crc, const unsigned char *data, int length);
+int crc16_music_update(int crc, const unsigned char *data, size_t length);
