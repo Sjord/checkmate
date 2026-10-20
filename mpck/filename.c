@@ -36,8 +36,8 @@
  */
 int extension_match(const char * filename)
 {
-	char * lastdot;
-	char * extension = options_get_extension();
+	const char * lastdot;
+	const char * extension = options_get_extension();
 
 	if (extension == NULL) {
 		/* extension was not set */
