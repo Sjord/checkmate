@@ -7,7 +7,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "checkmate";
-  version = "0.21";
+  version = "0.22";
 
   # The repository does not ship a generated configure script, so
   # autoreconfHook runs autoconf/automake before the configure phase.

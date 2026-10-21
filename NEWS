@@ -1,5 +1,10 @@
 mpck
 
+0.22 (21-10-2026)
+    Added a test suite, validation of Xing/Info and LAME headers, support
+    for files larger than 2 GiB, and UTF-8 output and manifests on Windows.
+    Also includes build, packaging and documentation improvements.
+
 0.21 (22-06-2017)
     Finally support APE tags, which correctly identifies some files as OK
     instead of broken.
