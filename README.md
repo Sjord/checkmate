@@ -51,6 +51,19 @@ After that, it is the normal build method:
 
 For Windows there is a Visual Studio project in the `vc++` directory.
 
+#### Nix
+
+A Nix flake is included:
+
+    nix build            # build; the binary is in ./result/bin/mpck
+    nix run . -- FILE    # build and run mpck on FILE
+
+For a classic (non-flake) build, run:
+
+    nix-build            # or: nix-build default.nix
+
+The package definition itself lives in `default.nix`.
+
 ### Usage
 
     Usage: mpck [OPTION]... [FILE]...

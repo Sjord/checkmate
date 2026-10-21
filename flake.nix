@@ -1,26 +1,35 @@
-# If you run with Nix and you have "flakes" enabled,
-# you can just run "nix run" in this directory, and it will run the default executable here ("vanitygen++").
-# Also see the note(s) at the top of default.nix.
 {
-  inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixos-21.11;
-    # nixpkgs.url = "nixpkgs";
-    flake-utils.url = github:numtide/flake-utils;
-  };
+  description = "Checkmate MP3 checker";
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      rec {
-        packages.default = (import ./default.nix)
-          { pkgs = nixpkgs.legacyPackages.${system}; };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-        apps = rec {
-          default = checkmate;
-          checkmate = {
-            type = "app";
-            program = "${self.packages.${system}.default}/bin/mpck";
-          };
+  outputs =
+    { self, nixpkgs }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+    in
+    {
+      packages = forAllSystems (pkgs: rec {
+        default = checkmate;
+        checkmate = import ./default.nix { inherit pkgs; };
+      });
+
+      apps = forAllSystems (pkgs: {
+        default = {
+          type = "app";
+          program = "${self.packages.${pkgs.system}.default}/bin/mpck";
         };
-      }
-    );
+      });
+
+      checks = forAllSystems (pkgs: {
+        default = self.packages.${pkgs.system}.default;
+      });
+    };
 }
