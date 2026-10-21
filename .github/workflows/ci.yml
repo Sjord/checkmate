@@ -60,6 +60,18 @@ jobs:
       - name: Check package with lintian
         run: lintian --profile debian --display-info --fail-on error ../*.changes
 
+      - name: Collect Debian package
+        run: |
+          mkdir -p dist
+          cp ../*.deb ../*.changes ../*.buildinfo dist/
+
+      - name: Upload Debian package
+        uses: actions/upload-artifact@v4
+        with:
+          name: mpck-debian-package
+          path: dist/*
+          if-no-files-found: error
+
       - name: Install and smoke test package
         run: |
           sudo apt-get install -y ../mpck_*.deb
