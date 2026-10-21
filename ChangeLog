@@ -1,3 +1,12 @@
+version 0.22
+	* Add a test suite with generated MP2/MP3 fixtures; run it with make check.
+	* Read and validate the Xing/Info and LAME headers, including frame count,
+	  MusicLength, LAME tag CRC and music data CRC.
+	* Support files larger than 2 GiB when using Xing headers.
+	* Emit UTF-8 output and add UTF-8 manifests for the Windows programs.
+	* Fix filename string termination and other small bugs.
+	* Modernize Debian packaging and add a Nix flake and GitHub Actions CI.
+
 version 0.21
 	* Support the APE metadata tag format.
 	* Exit with the correct exit code.
