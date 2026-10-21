@@ -41,7 +41,7 @@ void
 print_version(void)
 {
 	printf("%s %s\n", PROGNAME, VERSION);
-	printf("Copyright (C) 2006 Sjoerd Langkemper\n");
+	printf("Copyright (C) 2003-2026 Sjoerd Langkemper\n");
 	printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
 	printf("You may redistribute copies of this program\n");
 	printf("under the terms of the GNU General Public License.\n");
