@@ -4,7 +4,7 @@ Upstream-Contact: Sjoerd Langkemper <sjoerd-mpck@linuxonly.nl>
 Source: https://github.com/Sjord/checkmate
 
 Files: *
-Copyright: 2006 Sjoerd Langkemper
+Copyright: 2003-2026 Sjoerd Langkemper
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
