@@ -41,15 +41,21 @@ jobs:
         run: make check
 
   debian-package:
+    name: Debian package (oldstable)
     runs-on: ubuntu-latest
+    # Build against Debian oldstable so the resulting glibc dependency is
+    # older than the current Debian/Ubuntu releases. The tag floats to the
+    # current oldstable release.
+    container: debian:oldstable
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install packaging tools
+      - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential debhelper fakeroot lintian
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential ca-certificates debhelper dpkg-dev fakeroot git lintian
+
+      - uses: actions/checkout@v4
 
       - name: Check build dependencies
         run: dpkg-checkbuilddeps
@@ -74,6 +80,6 @@ jobs:
 
       - name: Install and smoke test package
         run: |
-          sudo apt-get install -y ../mpck_*.deb
+          apt-get install -y ../mpck_*.deb
           mpck --version
           test -f /usr/share/man/man1/mpck.1.gz
