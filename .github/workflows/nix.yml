@@ -1,0 +1,53 @@
+name: Nix
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  flake:
+    name: Flake (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Check flake
+        run: nix flake check --print-build-logs
+
+      - name: Build the default package
+        run: nix build .#default --print-build-logs
+
+      - name: Run the built binary
+        run: ./result/bin/mpck --version
+
+      - name: Run through the flake app
+        run: nix run . -- --version
+
+  nix-build:
+    name: Legacy default.nix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          # Pin the same nixpkgs revision as flake.lock for the non-flake build.
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/cd4ea8d57de16f4810bc5f14207bac45fbf19f67.tar.gz
+
+      - name: Build with nix-build
+        run: nix-build --no-out-link default.nix
